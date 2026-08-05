@@ -19,20 +19,35 @@ description: Use when designing, implementing, reviewing, debugging, or evaluati
 5. Книжные принципы считай устойчивыми инженерными эвристиками. Актуальность моделей, SDK, API, протоколов, цен, лимитов и поддержки провайдеров проверяй по первичным текущим источникам.
 6. По умолчанию укладывай архитектурный ответ в 1200 слов. Расширяй его только по явному запросу; если деталей больше, приоритизируй решения, contracts и проверки, а не полный checklist.
 
-## Основная модель
+## С чего начать: маршрут по задаче
 
-Используй формулу:
+| Запрос выглядит как | Начни с | Добери при необходимости |
+|---|---|---|
+| спроектировать агента с нуля | [playbooks/design-agent.md](references/playbooks/design-agent.md) | [templates/agent-design.md](references/templates/agent-design.md), [patterns.md](references/patterns.md) |
+| разобрать trace, найти причину сбоя | [playbooks/diagnose-trace.md](references/playbooks/diagnose-trace.md) | [templates/trace-diagnosis.md](references/templates/trace-diagnosis.md), [antipatterns.md](references/antipatterns.md) |
+| review существующей агентной системы | [playbooks/harness-review.md](references/playbooks/harness-review.md) | [templates/harness-spec.md](references/templates/harness-spec.md) |
+| построить или починить evals | [playbooks/build-evals.md](references/playbooks/build-evals.md) | [templates/eval-plan.md](references/templates/eval-plan.md) |
+| память, RAG, самоулучшение | [playbooks/memory-design.md](references/playbooks/memory-design.md) | [templates/memory-policy.md](references/templates/memory-policy.md) |
+| голос, realtime, мультимодальность | [playbooks/realtime-latency.md](references/playbooks/realtime-latency.md) | [chapters/ch09](references/chapters/ch09-realtime-multimodal.md) |
+| один агент или несколько | [playbooks/multi-agent-choice.md](references/playbooks/multi-agent-choice.md) | [chapters/ch10](references/chapters/ch10-multi-agent.md) |
+| контракт инструмента, права, песочница | [templates/tool-contract.md](references/templates/tool-contract.md) | [chapters/ch04](references/chapters/ch04-tools.md) |
+| симптом известен, причина нет | [antipatterns.md](references/antipatterns.md) | playbook по нужной области |
+| что говорит книга по теме | [source-map.md](references/source-map.md) | нужный конспект главы |
+
+Загружай только релевантные файлы. Не помещай всю книгу в контекст одновременно.
+
+## Основная модель
 
 > **AI-агент = LLM + контекст + инструменты**
 
 - **LLM** принимает решения, но не хранит надёжное состояние системы.
-- **Контекст** определяет, что агент видит сейчас: инструкции, состояние, историю и результаты действий.
+- **Контекст** определяет, что агент видит сейчас: инструкции, состояние, историю и результаты действий; определения инструментов входят сюда же и занимают тот же бюджет.
 - **Инструменты** превращают намерение в наблюдаемое действие во внешнем мире.
 - **Harness** связывает три части в управляемый замкнутый контур.
 
 При сбое сначала локализуй дефект по этим четырём областям. Не начинай с замены модели, пока не проверены context lifecycle, tool contract и Harness.
 
-Источник: `references/source-book/chapter1.md:13`, `references/source-book/chapter1.md:146`, `references/source-book/chapter1.md:230`.
+Источники: `references/source-book/chapter1.md:13`, `references/source-book/chapter1.md:146`, `references/source-book/chapter1.md:230`.
 
 ## Выбери минимальную архитектуру
 
@@ -61,101 +76,74 @@ description: Use when designing, implementing, reviewing, debugging, or evaluati
 
 Каждое действие должно оставлять проверяемое наблюдение, которое возвращается в контекст. Устанавливай `max_steps`, deadline, budget, cancellation и terminal states. Скрывай промежуточную ошибку от пользователя лишь пока существует ограниченный путь восстановления; затем сообщай точный blocker.
 
-Источник: `references/source-book/chapter1.md:272-294`.
+Подробно: [chapters/ch01](references/chapters/ch01-agent-foundations.md). Источник: `references/source-book/chapter1.md:272-294`.
 
-## Спроектируй context lifecycle
+## Контекст
 
-1. Отдели **стабильный префикс** от **динамической траектории**:
-   - префикс: системные инструкции и стабильные tool definitions;
-   - траектория: сообщения, tool calls/results и новые наблюдения.
-2. Держи рабочее состояние явно: цель, принятые решения, ограничения, завершённые шаги, активный шаг, артефакты, тесты, риски и следующий шаг.
-3. Не используй transcript одновременно как журнал, память и source of truth. Полный event log может жить вне prompt; в контекст попадает нужная проекция.
-4. Применяй сжатие по уровням:
-   1. ограничить объём tool output, сохранив полный артефакт вне контекста;
-   2. удалить шум и дубликаты;
-   3. микро-сжать повторяющиеся API/tool results;
-   4. архивировать завершённые этапы в структурированное summary;
-   5. полностью пересобрать контекст только как circuit breaker.
+1. Отдели **стабильный префикс** (системные инструкции, tool definitions) от **динамической траектории**. Ничто изменяющееся каждый ход не живёт в префиксе: это ломает кэш и поднимает задержку.
+2. Держи рабочее состояние явно и проецируй его в конец контекста: цель, решения, ограничения, активный шаг, артефакты, тесты, риски, следующий шаг.
+3. Не используй transcript одновременно как журнал, память и source of truth.
+4. Сжимай по уровням: ограничить вывод инструмента → удалить шум → микро-сжать однотипное → архивировать этап в typed summary → пересобрать контекст как circuit breaker.
 5. При сжатии всегда сохраняй решения, ограничения, изменённые файлы, результаты тестов, идентификаторы артефактов, незавершённую работу и rollback plan.
-6. Для независимой подзадачи предпочитай изолированный дочерний контекст с узким входом и структурированным выходом. Не передавай ребёнку всю историю родителя.
+6. Для независимой подзадачи предпочитай изолированный дочерний контекст: изоляция дешевле сжатия.
 
-Источники: `references/source-book/chapter2.md:355`, `references/source-book/chapter2.md:401`, `references/source-book/chapter2.md:763`, `references/source-book/chapter2.md:936`, `references/source-book/chapter2.md:1017`, `references/source-book/chapter2.md:1054`.
+Подробно: [chapters/ch02](references/chapters/ch02-context-engineering.md). Источники: `references/source-book/chapter2.md:355`, `references/source-book/chapter2.md:401`, `references/source-book/chapter2.md:936`, `references/source-book/chapter2.md:1054`.
 
-## Спроектируй инструменты и безопасность
+## Инструменты и безопасность
 
-Для каждого инструмента зафиксируй:
+Для каждого инструмента зафиксируй: одну capability и точную schema; preconditions, side effects, timeout, retry semantics, idempotency key; ошибки как данные (код, причина, retryable, remediation); provenance результата; permissions; sandbox для недоверенного кода; human approval перед необратимым действием.
 
-- одну понятную capability и точную schema входа/выхода;
-- preconditions, side effects, timeout, retry semantics и idempotency key;
-- ошибки как данные: код, причина, retryable, remediation;
-- provenance результата и связь с конкретным вызовом;
-- read/write/network/secret permissions;
-- sandbox и resource limits для недоверенного кода;
-- human approval перед необратимыми или высокорисковыми действиями.
+Описание инструмента отвечает на вопрос «когда применять», а не только «что умеет», и содержит контрпримеры — чего инструмент не делает.
 
-Выбирай специализированный tool для стабильной операции со строгим контрактом. Выбирай Skill + универсальный executor для меняющегося процесса, который требует рассуждения. Не превращай универсальный shell/browser в неограниченный capability.
+Выбирай специализированный tool для стабильной операции со строгим контрактом; Skill + универсальный executor — для меняющегося процесса, требующего рассуждения. Не превращай универсальный shell/browser в неограниченный capability.
 
-Источники: `references/source-book/chapter4.md:14`, `references/source-book/chapter4.md:41`, `references/source-book/chapter4.md:347`, `references/source-book/chapter8.md:187`, `references/source-book/chapter8.md:236`, `references/source-book/chapter8.md:329`.
+Недоверенный контент (веб-страницы, документы, результаты инструментов, записи памяти) остаётся данными: он не размещается там, где живут инструкции, и не влияет на права. Enforcement — вне промпта.
 
-## Спроектируй память и самоулучшение
+Подробно: [chapters/ch04](references/chapters/ch04-tools.md), [chapters/ch05](references/chapters/ch05-coding-agents.md). Источники: `references/source-book/chapter4.md:14`, `references/source-book/chapter4.md:41`, `references/source-book/chapter2.md:655`, `references/source-book/chapter8.md:329`.
 
-Для запроса о самообучении/самоулучшении **явно сопоставь в ответе все три механизма**, прежде чем выбрать один:
+## Память и самоулучшение
 
-1. **Post-training** изменяет веса и требует тренировочного контура.
+Для запроса о самообучении **явно сопоставь в ответе все три механизма**, прежде чем выбрать один:
+
+1. **Post-training** изменяет веса и требует тренировочного контура и оценки.
 2. **In-context learning** действует только в текущем контексте.
-3. **Externalized learning** сохраняет опыт во внешних, версионируемых носителях без изменения весов.
+3. **Externalized learning** сохраняет опыт во внешних версионируемых носителях без изменения весов.
 
-Для безопасной первой версии предпочитай externalized learning:
+Для безопасной первой версии предпочитай externalized learning: факты → knowledge base; повторяемая параметризуемая операция → code/tool; меняющийся процесс → Skill; пользовательское состояние → typed memory с provenance и retention policy.
 
-- факты и подтверждённые знания → knowledge base;
-- повторяемая параметризуемая операция → code/tool;
-- меняющийся стратегический процесс → Skill;
-- пользовательское состояние → отдельная typed memory с provenance и retention policy.
+Не превращай сырой лог или единичную неудачу в правило. Проводи цепочку `episode → extraction → candidate → review/eval → promotion` и храни origin, supporting episodes, confidence, version, scope и rollback. Запись в память проходит ту же проверку доверия, что и внешний ввод, иначе инъекция переживёт сессию.
 
-Не превращай сырой лог или единичную неудачу в правило. Проводи цепочку `episode → extraction → candidate → review/eval → promotion`. Храни origin, supporting episodes, confidence, version, scope и rollback. Для новых инструментов используй `discover → inspect provenance → sandbox test → permission review → canary → promote`; опасные capability требуют approval.
-
-Источники: `references/source-book/chapter3.md:49`, `references/source-book/chapter3.md:94`, `references/source-book/chapter8.md:23`, `references/source-book/chapter8.md:53`, `references/source-book/chapter8.md:105`, `references/source-book/chapter8.md:113`, `references/source-book/chapter8.md:319`.
+Подробно: [chapters/ch03](references/chapters/ch03-memory-and-knowledge.md), [chapters/ch08](references/chapters/ch08-self-evolution.md), [chapters/ch07](references/chapters/ch07-post-training.md). Источники: `references/source-book/chapter3.md:49`, `references/source-book/chapter8.md:23`, `references/source-book/chapter8.md:319`.
 
 ## Построй eval-loop до оптимизации
 
 1. Зафиксируй baseline и версии модели, prompt, tools, data и среды.
-2. Собери задачи из реального распределения, граничные случаи и adversarial cases. Отдели development set от holdout.
-3. Используй внешне проверяемый outcome, а не самооценку агента. Где точного oracle нет, применяй rubric, pairwise evaluation и blinded judge; калибруй judge на человеческой выборке.
-4. Измеряй минимум:
-   - task success;
-   - constraint/safety violations;
-   - ошибки выбора/вызова инструментов и trajectory;
-   - latency, tokens, cost и число шагов;
-   - recovery, повторяемость и каскадные ошибки.
-5. Меняй один механизм за раз или проводи ablation. Для стохастической системы используй повторные прогоны, confidence intervals и заранее заданный release gate.
-6. Выпускай через shadow/canary, сохраняй rollback и отслеживай drift после релиза.
+2. Собери задачи из реального распределения, граничные и adversarial случаи. Отдели development set от holdout и не тюнись на holdout.
+3. Используй внешне проверяемый outcome, а не самооценку агента. Где точного oracle нет — rubric с весами, ловушками и вето, pairwise evaluation, blinded judge, калибровка на человеческой выборке.
+4. Измеряй минимум: task success (различая Pass@k и Pass^k), constraint violations отдельной метрикой, ошибки выбора и вызова инструментов, latency/tokens/cost, recovery и каскадные ошибки.
+5. Меняй один механизм за раз или проводи ablation; переключатели абляции закладывай до фиксации конфигурации в коде.
+6. Для стохастической системы измерь границу шума повторными прогонами: разница меньше неё решением не является. При сравнении многих вариантов повышай порог.
+7. Выпускай через shadow/canary, держи проверенный rollback, отслеживай drift после релиза.
 
 Если данных ещё нет, дай instrumentation plan и эксперимент; не заявляй улучшение заранее.
 
-Источники: `references/source-book/chapter6.md:71`, `references/source-book/chapter6.md:157`, `references/source-book/chapter6.md:239`, `references/source-book/chapter6.md:284`, `references/source-book/chapter6.md:520`, `references/source-book/chapter6.md:534`, `references/source-book/chapter6.md:563`, `references/source-book/chapter6.md:635`.
+Подробно: [chapters/ch06](references/chapters/ch06-evaluation.md). Источники: `references/source-book/chapter6.md:71`, `references/source-book/chapter6.md:239`, `references/source-book/chapter6.md:520`, `references/source-book/chapter6.md:563`.
 
 ## Realtime и multi-agent
 
-Для запроса о выборе голосовой архитектуры **явно сравни в ответе все три парадигмы**, даже если одна быстро исключается:
+Для запроса о голосовой архитектуре **явно сравни в ответе все три парадигмы**, даже если одна быстро исключается:
 
 - **Cascading**: streaming ASR → LLM/agent → streaming TTS; проще контролировать и измерять, хороший v1.
-- **Omni**: единая модель воспринимает/порождает несколько модальностей; меньше интерфейсных потерь, но сложнее наблюдаемость и контроль.
-- **Full-Duplex**: одновременное восприятие и выражение, barge-in и непрерывное управление; максимальная естественность и максимальная сложность гонок.
+- **Omni**: единая модель для нескольких модальностей; выигрыш в задержке, но не обязательно в точности.
+- **Full-Duplex**: одновременное восприятие и выражение, barge-in; максимальная естественность и максимальная сложность гонок.
 
-После сравнения задай измеримый latency budget. Если product SLA неизвестен, объяви конкретный provisional budget гипотезой (не отраслевым фактом), разложи его по стадиям и укажи, какими p50/p95 traces он будет откалиброван.
+Задай измеримый latency budget, разложенный по стадиям. Если product SLA неизвестен, объяви конкретный provisional budget гипотезой (не отраслевым фактом) и укажи, какими p50/p95 traces он будет откалиброван. Раздели fast interaction loop и slow reasoning; передавай `turn_id`, версию состояния, deadline, cancellation и structured result. Устаревший результат не озвучивается и не продолжает side effects. Отмена — не одно действие: остановка генерации, остановка вывода, отмена инструмента, отказ от повтора необратимого эффекта, компенсация обратимого.
 
-Раздели fast interaction loop и slow reasoning. Передавай `turn_id`, snapshot/version состояния, deadline, cancellation token, confidence и structured result. Устаревший результат не должен озвучиваться и не должен продолжать side effects.
+Для multi-agent зафиксируй две оси: shared или isolated contexts; peer, manager или decentralized topology. Раздели data plane (файлы, артефакты, версии, ownership) и control plane (задачи, сообщения, heartbeat, cancellation). Независимый verifier читает исходное evidence, а не пересказ proposer-а.
 
-Для multi-agent зафиксируй две оси:
+В сравнении single-agent и multi-agent отдельно проверяй каскадные ошибки: внедри правдоподобное неверное upstream evidence и измерь `false_accept`, `cascade_depth` и итоговый вред. `handoff failure` эту проверку не заменяет.
 
-- shared context или isolated contexts;
-- peer, manager или decentralized topology.
-
-Разделяй data plane (файлы, артефакты, версии, ownership) и control plane (задачи, сообщения, heartbeat, cancellation). Для shared filesystem используй ownership/worktrees/optimistic locking. Независимый verifier должен читать исходное evidence, а не пересказ proposer-а.
-
-В сравнении single-agent/multi-agent отдельно проверяй каскадные ошибки: внедри правдоподобное неверное upstream evidence/заключение и измерь, сколько ролей его принимает, усиливает и передаёт дальше (`false_accept`, `cascade_depth`, итоговый вред). `handoff failure` не заменяет эту проверку.
-
-Источники: `references/source-book/chapter9.md:28`, `references/source-book/chapter9.md:42`, `references/source-book/chapter9.md:149`, `references/source-book/chapter9.md:174`, `references/source-book/chapter9.md:192`, `references/source-book/chapter10.md:11`, `references/source-book/chapter10.md:15`, `references/source-book/chapter10.md:53`, `references/source-book/chapter10.md:206`, `references/source-book/chapter10.md:237`, `references/source-book/chapter10.md:481`.
+Подробно: [chapters/ch09](references/chapters/ch09-realtime-multimodal.md), [chapters/ch10](references/chapters/ch10-multi-agent.md). Источники: `references/source-book/chapter9.md:28`, `references/source-book/chapter9.md:192`, `references/source-book/chapter10.md:11`, `references/source-book/chapter10.md:481`.
 
 ## Формат результата
 
@@ -171,12 +159,12 @@ description: Use when designing, implementing, reviewing, debugging, or evaluati
 
 Не перегружай ответ универсальным checklist и не повторяй один механизм в нескольких разделах. Привязывай каждый механизм к наблюдаемому failure mode и проверке. По умолчанию держи результат не длиннее 1200 слов.
 
-## Навигация по материалам
+## Все материалы
 
-- Быстрый выбор архитектуры и проверок: [references/cheatsheet.md](references/cheatsheet.md)
-- Сквозные шаблоны: [references/patterns.md](references/patterns.md)
-- Термины: [references/glossary.md](references/glossary.md)
-- Точная карта источников: [references/source-map.md](references/source-map.md)
-- Подробные главы: [references/chapters/index.md](references/chapters/index.md)
+**Справочники:** [cheatsheet.md](references/cheatsheet.md) — быстрый выбор архитектуры и проверок · [patterns.md](references/patterns.md) — 16 паттернов «failure mode → механизм → проверка» · [antipatterns.md](references/antipatterns.md) — каталог ошибок по симптомам · [glossary.md](references/glossary.md) — термины · [source-map.md](references/source-map.md) — карта книги по темам.
 
-Загружай только релевантные reference-файлы. Не помещай всю книгу в контекст одновременно.
+**Конспекты глав:** [ch00 введение](references/chapters/ch00-introduction.md) · [ch01 основы, ReAct, Harness](references/chapters/ch01-agent-foundations.md) · [ch02 контекст, кэш, сжатие](references/chapters/ch02-context-engineering.md) · [ch03 память и RAG](references/chapters/ch03-memory-and-knowledge.md) · [ch04 инструменты и MCP](references/chapters/ch04-tools.md) · [ch05 coding-агенты и recovery](references/chapters/ch05-coding-agents.md) · [ch06 оценка](references/chapters/ch06-evaluation.md) · [ch07 постобучение](references/chapters/ch07-post-training.md) · [ch08 самоэволюция](references/chapters/ch08-self-evolution.md) · [ch09 realtime](references/chapters/ch09-realtime-multimodal.md) · [ch10 multi-agent](references/chapters/ch10-multi-agent.md) · [ch11 послесловие](references/chapters/ch11-afterword.md)
+
+**Процедуры:** [design-agent](references/playbooks/design-agent.md) · [diagnose-trace](references/playbooks/diagnose-trace.md) · [harness-review](references/playbooks/harness-review.md) · [build-evals](references/playbooks/build-evals.md) · [memory-design](references/playbooks/memory-design.md) · [realtime-latency](references/playbooks/realtime-latency.md) · [multi-agent-choice](references/playbooks/multi-agent-choice.md)
+
+**Артефакты:** [agent-design](references/templates/agent-design.md) · [harness-spec](references/templates/harness-spec.md) · [tool-contract](references/templates/tool-contract.md) · [eval-plan](references/templates/eval-plan.md) · [memory-policy](references/templates/memory-policy.md) · [trace-diagnosis](references/templates/trace-diagnosis.md)

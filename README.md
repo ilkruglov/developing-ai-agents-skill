@@ -121,20 +121,54 @@ claude plugin update developing-ai-agents@developing-ai-agents-skill
 
 ## Состав
 
-- `plugins/developing-ai-agents/skills/developing-ai-agents/` — skill,
-  инженерные patterns, справочные материалы и русский текст книги.
-- `plugins/developing-ai-agents/evals/` — набор проверочных задач.
-- `plugins/developing-ai-agents/benchmarks/v2/` — сохранённые результаты
-  benchmark.
-- `scripts/validate.py` — проверка структуры репозитория.
+- `SKILL.md` — ядро и маршрут по задаче: тип запроса → стартовый файл.
+- `references/playbooks/` — семь пошаговых процедур: проектирование, разбор
+  trace, review, evals, память, бюджет задержки, выбор multi-agent.
+- `references/templates/` — шесть заполняемых артефактов с примерами.
+- `references/chapters/` — двенадцать конспектов глав книги с проверенными
+  цитатами.
+- `references/patterns.md` — шестнадцать паттернов «failure mode → механизм →
+  проверка»; `references/antipatterns.md` — каталог ошибок по симптомам.
+- `references/source-book/` — русский текст книги; `references/source-map.md` и
+  `references/source-map.lock.json` — карта тем и фиксация якорей.
+- `plugins/developing-ai-agents/evals/` — быстрый набор, benchmark v2 и v3,
+  триггер-набор из 36 запросов.
+- `scripts/validate.py`, `scripts/build_source_lock.py` — проверки и генератор
+  lock-файла.
 
 ## Проверка
 
 ```bash
+python3 scripts/build_source_lock.py
 python3 scripts/validate.py
 python3 -m unittest discover -s tests -v
 claude plugin validate . --strict
 claude plugin validate plugins/developing-ai-agents --strict
+```
+
+## Проверка достоверности
+
+Каждое утверждение конспектов, приписанное книге, проверяется машинно —
+`scripts/validate.py` падает в CI при расхождении.
+
+1. **Lock якорей.** `references/source-map.lock.json` хранит sha256 строки
+   книги для каждого якоря. Любой сдвиг текста обнаруживается; валидатор не
+   обновляет lock самостоятельно, чтобы расхождение попадало в diff.
+2. **Якорь указывает на заголовок.** Ссылка в середину абзаца хрупка и
+   непроверяема; исключения перечисляются в lock с указанием причины.
+3. **Дословная цитата внутри секции якоря.** Цитата ищется от заголовка до
+   следующего заголовка любого уровня — цитата из соседнего подраздела
+   отклоняется. Дополнительно сверяется число начатых и разобранных цитат:
+   нераспознанная цитата опаснее неверной, поскольку выглядит подтверждённой.
+
+Сверх этого проверяются лимит `SKILL.md` в 300 строк, полнота маршрута (файл,
+не упомянутый в `SKILL.md`, агент не найдёт) и покрытие каждого playbook
+сценариями бенчмарка.
+
+Обновление lock после правки якорей:
+
+```bash
+python3 scripts/build_source_lock.py
 ```
 
 ## Результаты evals

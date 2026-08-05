@@ -2,10 +2,23 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import re
+import sys
 from pathlib import Path
 from urllib.parse import unquote, urlparse
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+
+from source_anchors import (
+    LOCAL_SOURCE_ANCHOR,
+    LOCK_RELATIVE_PATH,
+    anchor_key,
+    iter_skill_documents,
+    normalize,
+    section_text,
+)
 
 PLUGIN_NAME = "developing-ai-agents"
 MARKETPLACE_NAME = "developing-ai-agents-skill"
@@ -74,11 +87,19 @@ REQUIRED_ATTRIBUTIONS = {
     ),
 }
 NON_LOCAL_SOURCE_PATH = re.compile(r"(?<![-\w/])book/")
-LOCAL_SOURCE_ANCHOR = re.compile(
-    r"(?<![-\w/])(?P<path>references/source-book/[A-Za-z0-9._/-]+\.md):"
-    r"(?P<start>\d+)(?:-(?P<end>\d+))?"
-)
 MARKDOWN_LINK = re.compile(r"(?<!!)\[[^\]]*\]\((?P<target>[^)]+)\)")
+# Цитата закрывается последней кавычкой перед ссылкой, а не первой встреченной:
+# книга часто цитирует сама себя, и вложенные «...» иначе обрывали бы совпадение,
+# из-за чего такая строка молча переставала считаться цитатой и не проверялась.
+CHAPTER_QUOTE = re.compile(
+    r"^>\s*«(?P<quote>.{3,200})»\s*[—-]\s*`"
+    r"(?P<path>references/source-book/[A-Za-z0-9._/-]+\.md):(?P<start>\d+)`",
+    re.MULTILINE,
+)
+CHAPTER_QUOTE_MARKER = re.compile(r"^>\s*«", re.MULTILINE)
+CHAPTERS_DIRECTORY = SKILL_DIRECTORY / "references" / "chapters"
+SKILL_LINE_LIMIT = 300
+REFERENCE_PATH = re.compile(r"references/[A-Za-z0-9._/-]+\.md")
 SEMVER = re.compile(
     r"^(0|[1-9]\d*)\."
     r"(0|[1-9]\d*)\."
@@ -787,6 +808,187 @@ def validate_plugin_versions(root: Path, errors: list[str]) -> None:
         errors.append(f"plugin versions differ: {details}")
 
 
+def load_lock(root: Path, errors: list[str]) -> dict:
+    lock_path = root / LOCK_RELATIVE_PATH
+    if not lock_path.is_file():
+        errors.append(f"missing required file: {LOCK_RELATIVE_PATH.as_posix()}")
+        return {}
+    try:
+        return json.loads(lock_path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError as error:
+        errors.append(f"invalid JSON in {LOCK_RELATIVE_PATH.as_posix()}: {error}")
+        return {}
+
+
+def validate_source_lock(root: Path, lock: dict, errors: list[str]) -> None:
+    anchors = lock.get("anchors")
+    if not isinstance(anchors, dict):
+        if lock:
+            errors.append("invalid lock: anchors must be an object")
+        return
+
+    allowed_inline = lock.get("allowed_inline")
+    allowed_keys = (
+        {item.get("anchor") for item in allowed_inline if isinstance(item, dict)}
+        if isinstance(allowed_inline, list)
+        else set()
+    )
+
+    line_cache: dict[Path, list[str]] = {}
+    for document in iter_skill_documents(root):
+        relative_path = document.relative_to(root)
+        text = document.read_text(encoding="utf-8")
+        for match in LOCAL_SOURCE_ANCHOR.finditer(text):
+            source_path = root / SKILL_DIRECTORY / match.group("path")
+            if not source_path.is_file():
+                continue
+            start = int(match.group("start"))
+            key = anchor_key(match.group("path"), start)
+            entry = anchors.get(key)
+            if entry is None:
+                errors.append(
+                    f"anchor missing from lock: {key} (referenced in {relative_path})"
+                )
+                continue
+            if entry.get("kind") != "heading" and key not in allowed_keys:
+                errors.append(
+                    f"anchor is not a heading: {key} (referenced in {relative_path}); "
+                    "point at a section heading or add it to allowed_inline "
+                    "with a reason"
+                )
+            if source_path not in line_cache:
+                line_cache[source_path] = source_path.read_text(
+                    encoding="utf-8"
+                ).splitlines()
+            lines = line_cache[source_path]
+            if start > len(lines):
+                continue
+            digest = hashlib.sha256(lines[start - 1].encode("utf-8")).hexdigest()
+            if digest != entry.get("line_sha256"):
+                errors.append(
+                    f"anchor drift: {key} no longer matches the locked line; "
+                    "re-run scripts/build_source_lock.py and review the diff"
+                )
+
+
+def validate_chapter_quotes(root: Path, errors: list[str]) -> None:
+    chapters_root = root / CHAPTERS_DIRECTORY
+    if not chapters_root.is_dir():
+        return
+
+    line_cache: dict[Path, list[str]] = {}
+    for chapter_path in sorted(chapters_root.glob("*.md")):
+        relative_path = chapter_path.relative_to(root)
+        text = chapter_path.read_text(encoding="utf-8")
+
+        # Нераспознанная цитата опаснее неверной: она не проверяется и при этом
+        # выглядит как подтверждённая ссылка на книгу.
+        started = len(CHAPTER_QUOTE_MARKER.findall(text))
+        parsed = len(CHAPTER_QUOTE.findall(text))
+        if started == 0:
+            errors.append(
+                f"chapter summary without verified quotes: {relative_path}; "
+                "a summary that retells the book must cite it"
+            )
+        if started != parsed:
+            errors.append(
+                f"unparsed chapter quote in {relative_path}: "
+                f"{started} quote lines, {parsed} parsed; "
+                "expected format: > «текст» — `references/source-book/chapterN.md:LINE`"
+            )
+
+        for match in CHAPTER_QUOTE.finditer(text):
+            source_path = root / SKILL_DIRECTORY / match.group("path")
+            if not source_path.is_file():
+                errors.append(f"source anchor file missing: {match.group('path')}")
+                continue
+            if source_path not in line_cache:
+                line_cache[source_path] = source_path.read_text(
+                    encoding="utf-8"
+                ).splitlines()
+            start = int(match.group("start"))
+            haystack = section_text(line_cache[source_path], start)
+            needle = normalize(match.group("quote"))
+            if needle not in haystack:
+                errors.append(
+                    "quote not found in anchor section: "
+                    f"{relative_path} -> {match.group('path')}:{start}"
+                )
+
+
+def validate_benchmark_coverage(root: Path, errors: list[str]) -> None:
+    """Каждый playbook и шаблон обязан быть покрыт сценариями бенчмарка.
+
+    Без этой проверки новый playbook добавляется без eval, и его качество
+    остаётся непроверенным до первого реального запроса.
+    """
+    benchmark_path = root / PLUGIN_DIRECTORY / "evals" / "benchmark-v3.json"
+    if not benchmark_path.is_file():
+        errors.append(f"missing required file: {benchmark_path.relative_to(root)}")
+        return
+    try:
+        payload = json.loads(benchmark_path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError:
+        return  # об ошибке уже сообщила общая проверка JSON
+
+    scenarios = payload.get("evals")
+    if not isinstance(scenarios, list):
+        errors.append("invalid benchmark: evals must be a list")
+        return
+
+    covered: dict[str, int] = {}
+    for scenario in scenarios:
+        for target in scenario.get("covers", []):
+            covered[target] = covered.get(target, 0) + 1
+            if not (root / SKILL_DIRECTORY / target).is_file():
+                errors.append(
+                    f"benchmark covers a missing file: {target} "
+                    f"(scenario {scenario.get('name', '?')})"
+                )
+
+    for group, minimum in (("playbooks", 2), ("templates", 1)):
+        group_root = root / SKILL_DIRECTORY / "references" / group
+        if not group_root.is_dir():
+            continue
+        for path in sorted(group_root.glob("*.md")):
+            key = f"references/{group}/{path.name}"
+            if covered.get(key, 0) < minimum:
+                errors.append(
+                    f"insufficient benchmark coverage: {key} "
+                    f"covered by {covered.get(key, 0)} scenarios, need {minimum}"
+                )
+
+
+def validate_skill_routing(root: Path, errors: list[str]) -> None:
+    skill_path = root / SKILL_DIRECTORY / "SKILL.md"
+    if not skill_path.is_file():
+        return
+
+    text = skill_path.read_text(encoding="utf-8")
+    line_count = len(text.splitlines())
+    if line_count > SKILL_LINE_LIMIT:
+        errors.append(
+            f"SKILL.md exceeds {SKILL_LINE_LIMIT} lines: {line_count}; "
+            "move detail into references/"
+        )
+
+    listed = {
+        match.group(0)
+        for match in REFERENCE_PATH.finditer(text)
+        if "source-book/" not in match.group(0)
+    }
+    references_root = root / SKILL_DIRECTORY / "references"
+    present = {
+        path.relative_to(root / SKILL_DIRECTORY).as_posix()
+        for path in references_root.rglob("*.md")
+        if "source-book" not in path.parts
+    }
+    for missing in sorted(present - listed):
+        errors.append(f"reference file not listed in SKILL.md: {missing}")
+    for dangling in sorted(listed - present):
+        errors.append(f"SKILL.md lists missing reference file: {dangling}")
+
+
 def validate_repository(root: Path) -> list[str]:
     errors: list[str] = []
     line_counts: dict[Path, int] = {}
@@ -847,6 +1049,12 @@ def validate_repository(root: Path) -> list[str]:
     validate_claude_marketplace(root, errors)
     validate_claude_plugin_manifest(root, errors)
     validate_plugin_versions(root, errors)
+
+    lock = load_lock(root, errors)
+    validate_source_lock(root, lock, errors)
+    validate_chapter_quotes(root, errors)
+    validate_skill_routing(root, errors)
+    validate_benchmark_coverage(root, errors)
 
     for document_path in iter_source_anchor_documents(root):
         text = document_path.read_text(encoding="utf-8")

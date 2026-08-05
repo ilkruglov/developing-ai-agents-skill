@@ -1,5 +1,17 @@
 # Шпаргалка по разработке AI-агентов
 
+Быстрые таблицы для решения на месте. Если задача требует процедуры, а не одного решения, переходи к playbook:
+
+| Задача | Процедура |
+|---|---|
+| Спроектировать агента | `references/playbooks/design-agent.md` |
+| Разобрать trace | `references/playbooks/diagnose-trace.md` |
+| Провести review | `references/playbooks/harness-review.md` |
+| Построить evals | `references/playbooks/build-evals.md` |
+| Спроектировать память | `references/playbooks/memory-design.md` |
+| Задать бюджет задержки | `references/playbooks/realtime-latency.md` |
+| Выбрать между одним агентом и несколькими | `references/playbooks/multi-agent-choice.md` |
+
 ## 1. Нужен ли агент
 
 | Ситуация | Минимальный механизм |
@@ -26,6 +38,8 @@
 | Дорогой и медленный | steps, tool latency, prompt prefix/cache, retries | stage-level p50/p95 и token/tool budget |
 | Multi-agent ухудшает ответ | evidence independence, topology, handoff loss | equal-budget A/B и cascade-error trace |
 | «Самообучение» деградирует | promotion pipeline, poisoning, stale memory | versioned benchmark и rollback test |
+
+Расширенный каталог симптомов с причинами и заменами: `references/antipatterns.md`. Пошаговый разбор: `references/playbooks/diagnose-trace.md`.
 
 ## 3. Минимальный Harness v1
 

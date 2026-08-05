@@ -440,5 +440,306 @@ class ValidateRepositoryTests(unittest.TestCase):
         self.assertIn("invalid SKILL.md frontmatter", result.stdout)
 
 
+class SourceLockTests(unittest.TestCase):
+    @staticmethod
+    def lock_path(root: Path) -> Path:
+        return root / SKILL_DIRECTORY / "references" / "source-map.lock.json"
+
+    def write_lock(self, root: Path, lock: dict) -> None:
+        self.lock_path(root).write_text(
+            json.dumps(lock, ensure_ascii=False, indent=2) + "\n",
+            encoding="utf-8",
+        )
+
+    def test_rejects_anchor_missing_from_lock(self) -> None:
+        with repository_copy() as copied_root:
+            lock = json.loads(self.lock_path(copied_root).read_text(encoding="utf-8"))
+            lock["anchors"].pop("chapter1.md:13")
+            self.write_lock(copied_root, lock)
+
+            result = run_validator(copied_root)
+
+        self.assertNotEqual(0, result.returncode)
+        self.assertIn("anchor missing from lock", result.stdout)
+        self.assertIn("chapter1.md:13", result.stdout)
+
+    def test_rejects_anchor_drift(self) -> None:
+        with repository_copy() as copied_root:
+            lock = json.loads(self.lock_path(copied_root).read_text(encoding="utf-8"))
+            lock["anchors"]["chapter1.md:13"]["line_sha256"] = "0" * 64
+            self.write_lock(copied_root, lock)
+
+            result = run_validator(copied_root)
+
+        self.assertNotEqual(0, result.returncode)
+        self.assertIn("anchor drift", result.stdout)
+
+    def test_rejects_missing_lock_file(self) -> None:
+        with repository_copy() as copied_root:
+            self.lock_path(copied_root).unlink()
+
+            result = run_validator(copied_root)
+
+        self.assertNotEqual(0, result.returncode)
+        self.assertIn("source-map.lock.json", result.stdout)
+
+    def test_rejects_inline_anchor_without_allowlist(self) -> None:
+        with repository_copy() as copied_root:
+            skill_path = copied_root / SKILL_DIRECTORY / "SKILL.md"
+            skill_path.write_text(
+                skill_path.read_text(encoding="utf-8")
+                + "\n\nПроверка: `references/source-book/chapter1.md:15`.\n",
+                encoding="utf-8",
+            )
+            subprocess.run(
+                [sys.executable, str(copied_root / "scripts" / "build_source_lock.py")],
+                cwd=copied_root,
+                check=True,
+                capture_output=True,
+            )
+
+            result = run_validator(copied_root)
+
+        self.assertNotEqual(0, result.returncode)
+        self.assertIn("anchor is not a heading", result.stdout)
+        self.assertIn("chapter1.md:15", result.stdout)
+
+    def test_accepts_inline_anchor_listed_in_allowlist(self) -> None:
+        with repository_copy() as copied_root:
+            skill_path = copied_root / SKILL_DIRECTORY / "SKILL.md"
+            skill_path.write_text(
+                skill_path.read_text(encoding="utf-8")
+                + "\n\nПроверка: `references/source-book/chapter1.md:15`.\n",
+                encoding="utf-8",
+            )
+            subprocess.run(
+                [sys.executable, str(copied_root / "scripts" / "build_source_lock.py")],
+                cwd=copied_root,
+                check=True,
+                capture_output=True,
+            )
+            lock = json.loads(self.lock_path(copied_root).read_text(encoding="utf-8"))
+            lock["allowed_inline"] = [
+                {"anchor": "chapter1.md:15", "reason": "формула вводится в абзаце"}
+            ]
+            self.write_lock(copied_root, lock)
+
+            result = run_validator(copied_root)
+
+        self.assertNotIn("anchor is not a heading", result.stdout)
+
+    def test_rejects_anchor_range_beyond_file(self) -> None:
+        with repository_copy() as copied_root:
+            patterns_path = copied_root / SKILL_DIRECTORY / "references" / "patterns.md"
+            patterns_path.write_text(
+                patterns_path.read_text(encoding="utf-8")
+                + "\n\nИсточник: `references/source-book/chapter1.md:13-99999`.\n",
+                encoding="utf-8",
+            )
+
+            result = run_validator(copied_root)
+
+        self.assertNotEqual(0, result.returncode)
+        self.assertIn("source anchor out of range", result.stdout)
+
+
+class ChapterQuoteTests(unittest.TestCase):
+    @staticmethod
+    def chapter_path(root: Path) -> Path:
+        return (
+            root
+            / SKILL_DIRECTORY
+            / "references"
+            / "chapters"
+            / "ch01-agent-foundations.md"
+        )
+
+    @staticmethod
+    def book_lines(root: Path) -> list[str]:
+        book_path = (
+            root / SKILL_DIRECTORY / "references" / "source-book" / "chapter1.md"
+        )
+        return book_path.read_text(encoding="utf-8").splitlines()
+
+    def test_rejects_quote_absent_from_anchor_section(self) -> None:
+        with repository_copy() as copied_root:
+            path = self.chapter_path(copied_root)
+            path.write_text(
+                path.read_text(encoding="utf-8")
+                + "\n> «этой фразы нет ни в одной секции книги» — "
+                "`references/source-book/chapter1.md:13`\n",
+                encoding="utf-8",
+            )
+
+            result = run_validator(copied_root)
+
+        self.assertNotEqual(0, result.returncode)
+        self.assertIn("quote not found in anchor section", result.stdout)
+
+    def test_accepts_quote_present_in_anchor_section(self) -> None:
+        with repository_copy() as copied_root:
+            path = self.chapter_path(copied_root)
+            quote = self.book_lines(copied_root)[14].strip()[:60]
+            path.write_text(
+                path.read_text(encoding="utf-8")
+                + f"\n> «{quote}» — `references/source-book/chapter1.md:13`\n",
+                encoding="utf-8",
+            )
+
+            result = run_validator(copied_root)
+
+        self.assertEqual(0, result.returncode, result.stdout + result.stderr)
+
+    def test_checks_quote_containing_nested_guillemets(self) -> None:
+        with repository_copy() as copied_root:
+            path = self.chapter_path(copied_root)
+            path.write_text(
+                path.read_text(encoding="utf-8")
+                + "\n> «эта цитата содержит «вложенные» кавычки и в книге "
+                "отсутствует» — `references/source-book/chapter1.md:13`\n",
+                encoding="utf-8",
+            )
+
+            result = run_validator(copied_root)
+
+        self.assertNotEqual(0, result.returncode)
+        self.assertIn("quote not found in anchor section", result.stdout)
+
+    def test_rejects_chapter_summary_without_quotes(self) -> None:
+        with repository_copy() as copied_root:
+            path = (
+                copied_root
+                / SKILL_DIRECTORY
+                / "references"
+                / "chapters"
+                / "ch11-afterword.md"
+            )
+            path.write_text("# Послесловие\n\nБез цитат.\n", encoding="utf-8")
+
+            result = run_validator(copied_root)
+
+        self.assertNotEqual(0, result.returncode)
+        self.assertIn("chapter summary without verified quotes", result.stdout)
+
+    def test_rejects_quote_line_that_does_not_parse(self) -> None:
+        with repository_copy() as copied_root:
+            path = self.chapter_path(copied_root)
+            path.write_text(
+                path.read_text(encoding="utf-8")
+                + "\n> «цитата без ссылки на источник»\n",
+                encoding="utf-8",
+            )
+
+            result = run_validator(copied_root)
+
+        self.assertNotEqual(0, result.returncode)
+        self.assertIn("unparsed chapter quote", result.stdout)
+
+    def test_rejects_quote_taken_from_a_neighbouring_section(self) -> None:
+        with repository_copy() as copied_root:
+            path = self.chapter_path(copied_root)
+            lines = self.book_lines(copied_root)
+            foreign = next(
+                line.strip()
+                for line in lines[150:250]
+                if len(line.strip()) > 40 and not line.startswith("#")
+            )
+            path.write_text(
+                path.read_text(encoding="utf-8")
+                + f"\n> «{foreign[:60]}» — `references/source-book/chapter1.md:13`\n",
+                encoding="utf-8",
+            )
+
+            result = run_validator(copied_root)
+
+        self.assertNotEqual(0, result.returncode)
+        self.assertIn("quote not found in anchor section", result.stdout)
+
+
+class SkillRoutingTests(unittest.TestCase):
+    @staticmethod
+    def skill_path(root: Path) -> Path:
+        return root / SKILL_DIRECTORY / "SKILL.md"
+
+    def test_rejects_reference_file_missing_from_skill(self) -> None:
+        with repository_copy() as copied_root:
+            orphan_path = (
+                copied_root / SKILL_DIRECTORY / "references" / "orphan-note.md"
+            )
+            orphan_path.write_text("# Осиротевший файл\n", encoding="utf-8")
+
+            result = run_validator(copied_root)
+
+        self.assertNotEqual(0, result.returncode)
+        self.assertIn("reference file not listed in SKILL.md", result.stdout)
+        self.assertIn("orphan-note.md", result.stdout)
+
+    def test_rejects_skill_listing_missing_reference(self) -> None:
+        with repository_copy() as copied_root:
+            path = self.skill_path(copied_root)
+            path.write_text(
+                path.read_text(encoding="utf-8")
+                + "\n- `references/playbooks/nonexistent.md`\n",
+                encoding="utf-8",
+            )
+
+            result = run_validator(copied_root)
+
+        self.assertNotEqual(0, result.returncode)
+        self.assertIn("SKILL.md lists missing reference file", result.stdout)
+
+    def test_rejects_oversized_skill_document(self) -> None:
+        with repository_copy() as copied_root:
+            path = self.skill_path(copied_root)
+            path.write_text(
+                path.read_text(encoding="utf-8") + "строка\n" * 400,
+                encoding="utf-8",
+            )
+
+            result = run_validator(copied_root)
+
+        self.assertNotEqual(0, result.returncode)
+        self.assertIn("SKILL.md exceeds", result.stdout)
+
+
+class BenchmarkCoverageTests(unittest.TestCase):
+    def test_rejects_playbook_without_benchmark_coverage(self) -> None:
+        with repository_copy() as copied_root:
+            new_playbook = (
+                copied_root
+                / SKILL_DIRECTORY
+                / "references"
+                / "playbooks"
+                / "uncovered.md"
+            )
+            new_playbook.write_text("# Новый playbook\n", encoding="utf-8")
+            skill_path = copied_root / SKILL_DIRECTORY / "SKILL.md"
+            skill_path.write_text(
+                skill_path.read_text(encoding="utf-8")
+                + "\n- [uncovered](references/playbooks/uncovered.md)\n",
+                encoding="utf-8",
+            )
+
+            result = run_validator(copied_root)
+
+        self.assertNotEqual(0, result.returncode)
+        self.assertIn("insufficient benchmark coverage", result.stdout)
+
+    def test_rejects_benchmark_pointing_at_missing_file(self) -> None:
+        with repository_copy() as copied_root:
+            path = copied_root / PLUGIN_DIRECTORY / "evals" / "benchmark-v3.json"
+            payload = json.loads(path.read_text(encoding="utf-8"))
+            payload["evals"][0]["covers"].append("references/playbooks/ghost.md")
+            path.write_text(
+                json.dumps(payload, ensure_ascii=False, indent=2) + "\n",
+                encoding="utf-8",
+            )
+
+            result = run_validator(copied_root)
+
+        self.assertNotEqual(0, result.returncode)
+        self.assertIn("benchmark covers a missing file", result.stdout)
+
+
 if __name__ == "__main__":
     unittest.main()
