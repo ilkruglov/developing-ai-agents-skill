@@ -1,7 +1,7 @@
 # Developing AI Agents
 
-Плагин Codex с навыком `developing-ai-agents` для разработки и проверки
-AI-агентов. Материалы основаны на книге Bojie Li
+Плагин для Codex и Claude Code с навыком `developing-ai-agents` для разработки
+и проверки AI-агентов. Материалы основаны на книге Bojie Li
 «深入理解 AI Agent：设计原理与工程实践».
 
 Текст русского перевода хранится внутри плагина. Для работы с ним не требуется
@@ -9,12 +9,12 @@ AI-агентов. Материалы основаны на книге Bojie Li
 
 ## Установка
 
+### Codex
+
 ```bash
 codex plugin marketplace add ilkruglov/developing-ai-agents-skill
 codex plugin add developing-ai-agents@developing-ai-agents-skill
 ```
-
-После установки начните новую сессию Codex.
 
 Для обновления:
 
@@ -23,10 +23,32 @@ codex plugin marketplace upgrade developing-ai-agents-skill
 codex plugin add developing-ai-agents@developing-ai-agents-skill
 ```
 
+### Claude Code
+
+```bash
+claude plugin marketplace add ilkruglov/developing-ai-agents-skill
+claude plugin install developing-ai-agents@developing-ai-agents-skill
+```
+
+Для обновления:
+
+```bash
+claude plugin marketplace update developing-ai-agents-skill
+claude plugin update developing-ai-agents@developing-ai-agents-skill
+```
+
+После установки или обновления начните новую сессию Codex или Claude Code.
+
 ## Использование
 
 ```text
 Используй $developing-ai-agents, чтобы спроектировать агента для моей задачи.
+```
+
+В Claude Code skill также доступен как команда:
+
+```text
+/developing-ai-agents:developing-ai-agents Спроектируй агента для моей задачи.
 ```
 
 Skill применяется также при review, отладке и оценке существующих агентных
@@ -46,6 +68,8 @@ Skill применяется также при review, отладке и оце�
 ```bash
 python3 scripts/validate.py
 python3 -m unittest discover -s tests -v
+claude plugin validate . --strict
+claude plugin validate plugins/developing-ai-agents --strict
 ```
 
 ## Результаты evals

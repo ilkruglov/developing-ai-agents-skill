@@ -15,7 +15,9 @@ SKILL_DIRECTORY = PLUGIN_DIRECTORY / "skills" / PLUGIN_NAME
 
 REQUIRED_PATHS = (
     ".agents/plugins/marketplace.json",
+    ".claude-plugin/marketplace.json",
     str(PLUGIN_DIRECTORY / ".codex-plugin" / "plugin.json"),
+    str(PLUGIN_DIRECTORY / ".claude-plugin" / "plugin.json"),
     str(PLUGIN_DIRECTORY / "LICENSE"),
     str(PLUGIN_DIRECTORY / "NOTICE"),
     str(PLUGIN_DIRECTORY / "SOURCE.json"),
@@ -117,6 +119,34 @@ PLUGIN_INTERFACE_FIELDS = {
     "screenshots",
     "defaultPrompt",
     "default_prompt",
+}
+CLAUDE_MARKETPLACE_SCHEMA = "https://anthropic.com/claude-code/marketplace.schema.json"
+CLAUDE_PLUGIN_SCHEMA = "https://json.schemastore.org/claude-code-plugin-manifest.json"
+CLAUDE_MARKETPLACE_FIELDS = {
+    "$schema",
+    "name",
+    "description",
+    "owner",
+    "plugins",
+}
+CLAUDE_MARKETPLACE_PLUGIN_FIELDS = {
+    "name",
+    "source",
+    "description",
+    "version",
+    "category",
+}
+CLAUDE_PLUGIN_MANIFEST_FIELDS = {
+    "$schema",
+    "name",
+    "displayName",
+    "version",
+    "description",
+    "author",
+    "homepage",
+    "repository",
+    "license",
+    "keywords",
 }
 MARKETPLACE_INSTALLATION_POLICIES = {
     "NOT_AVAILABLE",
@@ -487,6 +517,276 @@ def validate_plugin_manifest(root: Path, errors: list[str]) -> None:
             )
 
 
+def validate_claude_marketplace(root: Path, errors: list[str]) -> None:
+    marketplace_path = root / ".claude-plugin" / "marketplace.json"
+    if not marketplace_path.is_file():
+        return
+    try:
+        marketplace = json.loads(marketplace_path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return
+    if not isinstance(marketplace, dict):
+        add_contract_error(
+            errors,
+            "Claude marketplace contract",
+            "root must be an object",
+        )
+        return
+
+    unknown_fields = set(marketplace) - CLAUDE_MARKETPLACE_FIELDS
+    if unknown_fields:
+        add_contract_error(
+            errors,
+            "Claude marketplace contract",
+            f"unsupported fields: {', '.join(sorted(unknown_fields))}",
+        )
+    if marketplace.get("$schema") != CLAUDE_MARKETPLACE_SCHEMA:
+        add_contract_error(
+            errors,
+            "Claude marketplace contract",
+            "unexpected $schema",
+        )
+    if marketplace.get("name") != MARKETPLACE_NAME:
+        add_contract_error(
+            errors,
+            "Claude marketplace contract",
+            f"name must be {MARKETPLACE_NAME}",
+        )
+    if not is_non_empty_string(marketplace.get("description")):
+        add_contract_error(
+            errors,
+            "Claude marketplace contract",
+            "description must be a non-empty string",
+        )
+
+    owner = marketplace.get("owner")
+    if not isinstance(owner, dict):
+        add_contract_error(
+            errors,
+            "Claude marketplace contract",
+            "owner must be an object",
+        )
+    else:
+        if set(owner) - {"name", "email"}:
+            add_contract_error(
+                errors,
+                "Claude marketplace contract",
+                "owner contains unsupported fields",
+            )
+        if not is_non_empty_string(owner.get("name")):
+            add_contract_error(
+                errors,
+                "Claude marketplace contract",
+                "owner.name must be a non-empty string",
+            )
+        if "email" in owner and not is_non_empty_string(owner["email"]):
+            add_contract_error(
+                errors,
+                "Claude marketplace contract",
+                "owner.email must be a non-empty string",
+            )
+
+    plugins = marketplace.get("plugins")
+    if not isinstance(plugins, list):
+        add_contract_error(
+            errors,
+            "Claude marketplace contract",
+            "plugins must be an array",
+        )
+        return
+    entry = next(
+        (
+            value
+            for value in plugins
+            if isinstance(value, dict) and value.get("name") == PLUGIN_NAME
+        ),
+        None,
+    )
+    if not isinstance(entry, dict):
+        add_contract_error(
+            errors,
+            "Claude marketplace contract",
+            f"missing plugin entry {PLUGIN_NAME}",
+        )
+        return
+
+    unknown_entry_fields = set(entry) - CLAUDE_MARKETPLACE_PLUGIN_FIELDS
+    if unknown_entry_fields:
+        add_contract_error(
+            errors,
+            "Claude marketplace contract",
+            "plugin entry contains unsupported fields: "
+            f"{', '.join(sorted(unknown_entry_fields))}",
+        )
+    source = entry.get("source")
+    resolved_source = root / str(source).removeprefix("./")
+    if source != PLUGIN_SOURCE or not resolved_source.is_dir():
+        errors.append(
+            "invalid Claude marketplace source: expected "
+            f"{PLUGIN_NAME} at {PLUGIN_SOURCE}"
+        )
+    if not is_non_empty_string(entry.get("description")):
+        add_contract_error(
+            errors,
+            "Claude marketplace contract",
+            "plugin description must be a non-empty string",
+        )
+    version = entry.get("version")
+    if not isinstance(version, str) or SEMVER.fullmatch(version) is None:
+        add_contract_error(
+            errors,
+            "Claude marketplace contract",
+            "plugin version must be strict semver",
+        )
+    if not is_non_empty_string(entry.get("category")):
+        add_contract_error(
+            errors,
+            "Claude marketplace contract",
+            "plugin category must be a non-empty string",
+        )
+
+
+def validate_claude_plugin_manifest(root: Path, errors: list[str]) -> None:
+    manifest_path = root / PLUGIN_DIRECTORY / ".claude-plugin" / "plugin.json"
+    if not manifest_path.is_file():
+        return
+    try:
+        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return
+    if not isinstance(manifest, dict):
+        add_contract_error(
+            errors,
+            "Claude plugin manifest",
+            "root must be an object",
+        )
+        return
+
+    unknown_fields = set(manifest) - CLAUDE_PLUGIN_MANIFEST_FIELDS
+    if unknown_fields:
+        add_contract_error(
+            errors,
+            "Claude plugin manifest",
+            f"unsupported fields: {', '.join(sorted(unknown_fields))}",
+        )
+    if manifest.get("$schema") != CLAUDE_PLUGIN_SCHEMA:
+        add_contract_error(
+            errors,
+            "Claude plugin manifest",
+            "unexpected $schema",
+        )
+    if manifest.get("name") != PLUGIN_NAME:
+        add_contract_error(
+            errors,
+            "Claude plugin manifest",
+            f"name must be {PLUGIN_NAME}",
+        )
+    for field in ("displayName", "description", "license"):
+        if not is_non_empty_string(manifest.get(field)):
+            add_contract_error(
+                errors,
+                "Claude plugin manifest",
+                f"{field} must be a non-empty string",
+            )
+    version = manifest.get("version")
+    if not isinstance(version, str) or SEMVER.fullmatch(version) is None:
+        add_contract_error(
+            errors,
+            "Claude plugin manifest",
+            "version must be strict semver",
+        )
+
+    author = manifest.get("author")
+    if not isinstance(author, dict):
+        add_contract_error(
+            errors,
+            "Claude plugin manifest",
+            "author must be an object",
+        )
+    else:
+        if set(author) - {"name", "email", "url"}:
+            add_contract_error(
+                errors,
+                "Claude plugin manifest",
+                "author contains unsupported fields",
+            )
+        if not is_non_empty_string(author.get("name")):
+            add_contract_error(
+                errors,
+                "Claude plugin manifest",
+                "author.name must be a non-empty string",
+            )
+        if "email" in author and not is_non_empty_string(author["email"]):
+            add_contract_error(
+                errors,
+                "Claude plugin manifest",
+                "author.email must be a non-empty string",
+            )
+        if "url" in author and not is_https_url(author["url"]):
+            add_contract_error(
+                errors,
+                "Claude plugin manifest",
+                "author.url must be an absolute HTTPS URL",
+            )
+
+    for field in ("homepage", "repository"):
+        if not is_https_url(manifest.get(field)):
+            add_contract_error(
+                errors,
+                "Claude plugin manifest",
+                f"{field} must be an absolute HTTPS URL",
+            )
+    keywords = manifest.get("keywords")
+    if not isinstance(keywords, list) or not all(
+        is_non_empty_string(keyword) for keyword in keywords
+    ):
+        add_contract_error(
+            errors,
+            "Claude plugin manifest",
+            "keywords must be an array of strings",
+        )
+
+
+def validate_plugin_versions(root: Path, errors: list[str]) -> None:
+    paths = {
+        "Codex": root / PLUGIN_DIRECTORY / ".codex-plugin" / "plugin.json",
+        "Claude": root / PLUGIN_DIRECTORY / ".claude-plugin" / "plugin.json",
+        "Claude marketplace": root / ".claude-plugin" / "marketplace.json",
+    }
+    versions: dict[str, str] = {}
+    for label, path in paths.items():
+        if not path.is_file():
+            return
+        try:
+            payload = json.loads(path.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError):
+            return
+        if not isinstance(payload, dict):
+            return
+        if label == "Claude marketplace":
+            plugins = payload.get("plugins")
+            if not isinstance(plugins, list):
+                return
+            entry = next(
+                (
+                    value
+                    for value in plugins
+                    if isinstance(value, dict) and value.get("name") == PLUGIN_NAME
+                ),
+                None,
+            )
+            version = entry.get("version") if isinstance(entry, dict) else None
+        else:
+            version = payload.get("version")
+        if not isinstance(version, str):
+            return
+        versions[label] = version
+
+    if len(set(versions.values())) != 1:
+        details = ", ".join(f"{label}={version}" for label, version in versions.items())
+        errors.append(f"plugin versions differ: {details}")
+
+
 def validate_repository(root: Path) -> list[str]:
     errors: list[str] = []
     line_counts: dict[Path, int] = {}
@@ -544,6 +844,9 @@ def validate_repository(root: Path) -> list[str]:
 
     validate_marketplace(root, errors)
     validate_plugin_manifest(root, errors)
+    validate_claude_marketplace(root, errors)
+    validate_claude_plugin_manifest(root, errors)
+    validate_plugin_versions(root, errors)
 
     for document_path in iter_source_anchor_documents(root):
         text = document_path.read_text(encoding="utf-8")

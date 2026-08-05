@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
+  "name": "developing-ai-agents",
+  "displayName": "Разработка AI-агентов",
+  "version": "0.3.0",
+  "description": "Skill для разработки и проверки AI-агентов по книге Bojie Li.",
+  "author": {
+    "name": "ilkruglov",
+    "url": "https://github.com/ilkruglov"
+  },
+  "homepage": "https://github.com/ilkruglov/developing-ai-agents-skill",
+  "repository": "https://github.com/ilkruglov/developing-ai-agents-skill",
+  "license": "Apache-2.0",
+  "keywords": ["ai-agents", "agent-skills", "evaluation"]
+}

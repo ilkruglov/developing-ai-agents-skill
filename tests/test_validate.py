@@ -69,6 +69,30 @@ class ValidateRepositoryTests(unittest.TestCase):
         self.assertIn("missing required file", result.stdout)
         self.assertIn(".agents/plugins/marketplace.json", result.stdout)
 
+    def test_rejects_missing_claude_marketplace_manifest(self) -> None:
+        with repository_copy() as copied_root:
+            marketplace_path = copied_root / ".claude-plugin" / "marketplace.json"
+            marketplace_path.unlink(missing_ok=True)
+
+            result = run_validator(copied_root)
+
+        self.assertNotEqual(0, result.returncode)
+        self.assertIn("missing required file", result.stdout)
+        self.assertIn(".claude-plugin/marketplace.json", result.stdout)
+
+    def test_rejects_missing_claude_plugin_manifest(self) -> None:
+        with repository_copy() as copied_root:
+            manifest_path = (
+                copied_root / PLUGIN_DIRECTORY / ".claude-plugin" / "plugin.json"
+            )
+            manifest_path.unlink(missing_ok=True)
+
+            result = run_validator(copied_root)
+
+        self.assertNotEqual(0, result.returncode)
+        self.assertIn("missing required file", result.stdout)
+        self.assertIn(".claude-plugin/plugin.json", result.stdout)
+
     def test_rejects_marketplace_source_that_does_not_resolve(self) -> None:
         with repository_copy() as copied_root:
             marketplace_path = copied_root / ".agents" / "plugins" / "marketplace.json"
@@ -113,6 +137,36 @@ class ValidateRepositoryTests(unittest.TestCase):
 
         self.assertNotEqual(0, result.returncode)
         self.assertIn("invalid marketplace contract", result.stdout)
+
+    def test_rejects_invalid_claude_marketplace_source(self) -> None:
+        with repository_copy() as copied_root:
+            marketplace_path = copied_root / ".claude-plugin" / "marketplace.json"
+            payload = json.loads(marketplace_path.read_text(encoding="utf-8"))
+            payload["plugins"][0]["source"] = "./plugins/missing"
+            marketplace_path.write_text(
+                json.dumps(payload, ensure_ascii=False, indent=2) + "\n",
+                encoding="utf-8",
+            )
+
+            result = run_validator(copied_root)
+
+        self.assertNotEqual(0, result.returncode)
+        self.assertIn("invalid Claude marketplace source", result.stdout)
+
+    def test_rejects_invalid_claude_marketplace_owner(self) -> None:
+        with repository_copy() as copied_root:
+            marketplace_path = copied_root / ".claude-plugin" / "marketplace.json"
+            payload = json.loads(marketplace_path.read_text(encoding="utf-8"))
+            payload["owner"] = {}
+            marketplace_path.write_text(
+                json.dumps(payload, ensure_ascii=False, indent=2) + "\n",
+                encoding="utf-8",
+            )
+
+            result = run_validator(copied_root)
+
+        self.assertNotEqual(0, result.returncode)
+        self.assertIn("invalid Claude marketplace contract", result.stdout)
 
     def test_rejects_missing_bundled_skill(self) -> None:
         with repository_copy() as copied_root:
@@ -204,6 +258,55 @@ class ValidateRepositoryTests(unittest.TestCase):
 
         self.assertNotEqual(0, result.returncode)
         self.assertIn("invalid plugin manifest", result.stdout)
+
+    def test_rejects_invalid_claude_plugin_manifest_contract(self) -> None:
+        with repository_copy() as copied_root:
+            manifest_path = (
+                copied_root / PLUGIN_DIRECTORY / ".claude-plugin" / "plugin.json"
+            )
+            payload = json.loads(manifest_path.read_text(encoding="utf-8"))
+            payload["version"] = "v0.2"
+            manifest_path.write_text(
+                json.dumps(payload, ensure_ascii=False, indent=2) + "\n",
+                encoding="utf-8",
+            )
+
+            result = run_validator(copied_root)
+
+        self.assertNotEqual(0, result.returncode)
+        self.assertIn("invalid Claude plugin manifest", result.stdout)
+
+    def test_rejects_unsynchronized_plugin_versions(self) -> None:
+        with repository_copy() as copied_root:
+            manifest_path = (
+                copied_root / PLUGIN_DIRECTORY / ".claude-plugin" / "plugin.json"
+            )
+            payload = json.loads(manifest_path.read_text(encoding="utf-8"))
+            payload["version"] = "0.2.1"
+            manifest_path.write_text(
+                json.dumps(payload, ensure_ascii=False, indent=2) + "\n",
+                encoding="utf-8",
+            )
+
+            result = run_validator(copied_root)
+
+        self.assertNotEqual(0, result.returncode)
+        self.assertIn("plugin versions differ", result.stdout)
+
+    def test_rejects_unsynchronized_claude_marketplace_version(self) -> None:
+        with repository_copy() as copied_root:
+            marketplace_path = copied_root / ".claude-plugin" / "marketplace.json"
+            payload = json.loads(marketplace_path.read_text(encoding="utf-8"))
+            payload["plugins"][0]["version"] = "0.2.1"
+            marketplace_path.write_text(
+                json.dumps(payload, ensure_ascii=False, indent=2) + "\n",
+                encoding="utf-8",
+            )
+
+            result = run_validator(copied_root)
+
+        self.assertNotEqual(0, result.returncode)
+        self.assertIn("plugin versions differ", result.stdout)
 
     def test_rejects_non_local_book_anchor(self) -> None:
         with repository_copy() as copied_root:
