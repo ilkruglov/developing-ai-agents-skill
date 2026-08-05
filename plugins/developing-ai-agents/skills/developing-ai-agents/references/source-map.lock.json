@@ -180,16 +180,6 @@
       "line_text": "## Проектирование контекста с учётом KV-кэша",
       "kind": "heading"
     },
-    "chapter2.md:488": {
-      "line_sha256": "f8cfde418bb1750e176523b5808d2002aa92517eb9c27b70bfeae2bac60c2459",
-      "line_text": "### Принципы работы и ограничения KV-кэша",
-      "kind": "heading"
-    },
-    "chapter2.md:518": {
-      "line_sha256": "205b6aa3ae0e6cdb7f84a8beb3f7afba0fb7b0711132bd8a9d944d775ab2be38",
-      "line_text": "### KV-кэш и Prompt Cache: два уровня кэширования",
-      "kind": "heading"
-    },
     "chapter2.md:524": {
       "line_sha256": "ca04019f23396bbbff5010655a1898db1d0972b04c3831559a0465a99fb7365c",
       "line_text": "### Кэш как архитектурное ограничение",
@@ -225,19 +215,9 @@
       "line_text": "### Реализация Skills и связанные компромиссы",
       "kind": "heading"
     },
-    "chapter2.md:745": {
-      "line_sha256": "78cecf114c5766153639ee2f07e2388c6feee94cca5aee85fd21df3cee462285",
-      "line_text": "### Связь Skills с инструментами",
-      "kind": "heading"
-    },
     "chapter2.md:763": {
       "line_sha256": "7ae20d0d6310cf7d1cd5afe8f2d1db37809a33f423c8d624544458dcea21f1ee",
       "line_text": "## Панель состояния AI-агента: расширение управления траекторией агента с помощью метаданных",
-      "kind": "heading"
-    },
-    "chapter2.md:777": {
-      "line_sha256": "307606a0b40f3994babef214c53ea58f12f993523468917d1b877f6842dfb188",
-      "line_text": "### Теоретические основы панели состояния агента",
       "kind": "heading"
     },
     "chapter2.md:842": {
@@ -258,16 +238,6 @@
     "chapter2.md:887": {
       "line_sha256": "0f8e31e4b6bb0ebd2aa48e0e3fed370e0e9a93369734f7284ae35496cc46e925",
       "line_text": "### Два способа обновления состояния и их влияние на кэш",
-      "kind": "heading"
-    },
-    "chapter2.md:9": {
-      "line_sha256": "ff4d42fbee618441a7ae4478e93c718e360cf827efe3c55ac1d48de3909fc2b9",
-      "line_text": "## Контекст: ключевой фактор, определяющий предел возможностей AI-агента",
-      "kind": "heading"
-    },
-    "chapter2.md:916": {
-      "line_sha256": "8132d58521117b85f8f27622ca7c741187d83fbf897a10e7b4fdc6a48bd43034",
-      "line_text": "### От показаний к стратегии: восприятие физического времени агентом",
       "kind": "heading"
     },
     "chapter2.md:936": {
