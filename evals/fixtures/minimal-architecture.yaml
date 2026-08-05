@@ -1,0 +1,22 @@
+product: invoice_dispute_resolution
+monthly_cases: 50000
+workflow:
+  - extract invoice_id and dispute_reason
+  - read invoice and customer contract
+  - apply versioned refund policy
+  - calculate allowed_amount
+  - request human approval if allowed_amount > 500_USD
+  - execute refund
+  - notify customer
+known_variation:
+  - free-form customer language
+  - missing documents require clarification
+fixed_constraints:
+  - refund policy is executable and versioned
+  - refund API supports idempotency keys
+  - every refund must be externally auditable
+proposal_from_team:
+  agents: 5
+  roles: [planner, policy_expert, calculator, critic, executor]
+  shared_context: full_transcript
+  autonomous_refunds: true

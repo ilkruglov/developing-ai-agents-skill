@@ -1,0 +1,23 @@
+model: frozen-base-v1
+sample_size: 2000
+failures:
+  invalid_json_arguments:
+    rate: 0.12
+    observation: tool schema allows free-form nested strings and examples contain invalid JSON
+  wrong_tool_selection:
+    rate: 0.04
+    observation: two tools have overlapping descriptions
+  long_horizon_failure:
+    rate: 0.18
+    observation: final outcome is machine-verifiable; trajectories vary from 3 to 20 steps
+  environment_failure:
+    rate: 0.09
+    observation: test sandbox intermittently returns empty tool results
+available_data:
+  clean_demonstrations_for_argument_format: 50000
+  preference_pairs: 3000
+  interactive_training_environment: not_yet_reproducible
+  final_outcome_oracle: available
+team_proposal:
+  method: reinforcement_learning
+  change_prompt_tools_and_model_together: true

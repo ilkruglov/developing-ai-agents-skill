@@ -1,0 +1,2 @@
+# Preserve bundled source text byte-for-byte from the pinned translation commit.
+references/source-book/*.md whitespace=-blank-at-eol

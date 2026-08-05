@@ -1,0 +1,175 @@
+{
+  "skill_name": "developing-ai-agents",
+  "suite": "held-out-v2",
+  "runs_per_configuration": 3,
+  "evals": [
+    {
+      "id": 101,
+      "name": "minimal-architecture",
+      "prompt": "Команда хочет построить полностью автономную систему из пяти агентов для обработки споров по счетам. Изучи приложенный brief и предложи минимальную production-архитектуру первой версии. Обоснуй, где модель действительно нужна, как ограничить финансовые действия и каким экспериментом сравнить варианты. Не проектируй на будущее сверх требований brief. Ответ — до 1000 слов.",
+      "expected_output": "Минимальная архитектура без ненужной автономности, с контролем финансовых действий и измеримым сравнением.",
+      "files": ["evals/fixtures/minimal-architecture.yaml"],
+      "expectations": [
+        "Первая версия использует детерминированный workflow, а модель ограничена пониманием свободного текста и уточнениями; фиксированные policy/calculation/approval шаги не отдаются автономному planner-у.",
+        "Финансовое действие защищено versioned executable policy, обязательным approval выше 500 USD, idempotency key и внешней проверкой фактического refund state.",
+        "Ответ явно отклоняет постоянную схему из пяти агентов как недоказанное усложнение и называет условие, при котором автономность действительно потребуется.",
+        "Предложен equal-budget эксперимент минимум для workflow, single-agent и team proposal с внешними outcome/safety/cost/latency метриками и release gate.",
+        "Ответ начинается с конкретного решения, не добавляет не требуемые платформенные компоненты и остаётся не длиннее 1000 слов."
+      ]
+    },
+    {
+      "id": 102,
+      "name": "trace-diagnosis",
+      "prompt": "После часа работы Coding Agent нарушил раннее ограничение и трижды повторил одну команду. Команда винит модель. Разбери приложенный runtime trace: отдели доказанные факты от гипотез, назови наиболее узкий системный дефект и предложи порядок исправлений и regression-проверку. Не выдумывай отсутствующие события. Ответ — до 1000 слов.",
+      "expected_output": "Evidence-first диагностика конкретных разрывов состояния, контекста и recovery с воспроизводимым тестом.",
+      "files": ["evals/fixtures/context-loop-trace.jsonl"],
+      "expectations": [
+        "Диагноз ссылается на конкретные события trace: три одинаковых TIMEOUT-вызова при revision w-18, compression с omitted constraints/failed_calls/workspace_revision, пустые constraints после compression и последующее изменение billing.py.",
+        "Причина не приписывается модели как установленный факт; evidence, inference и неизвестные данные явно разделены.",
+        "Исправление вводит authoritative durable state, schema для rollover/compression с сохранением constraints и bounded retry/loop correction вместо повторения той же команды.",
+        "Regression-проверка принудительно воспроизводит compression/restart и повторные TIMEOUT, проверяя сохранение запрета на billing.py и ограниченное число одинаковых вызовов.",
+        "Ответ не выдумывает отсутствующие события и остаётся не длиннее 1000 слов."
+      ]
+    },
+    {
+      "id": 103,
+      "name": "tool-interface-security",
+      "prompt": "Нам предлагают подключить к support-агенту три инструмента из приложенного registry и разрешить ему самостоятельно возвращать деньги. Проведи design/security review интерфейсов и предложи минимальный безопасный контракт. Нужны конкретные изменения схем, полномочий, обработки ошибок и проверки результата. Ответ — до 1000 слов.",
+      "expected_output": "Практический redesign небезопасных инструментов с enforceable permissions и проверяемыми side effects.",
+      "files": ["evals/fixtures/unsafe-tool-registry.yaml"],
+      "expectations": [
+        "Review обнаруживает все критичные дефекты registry: универсальный shell с широкими правами, отсутствие timeout, raw output, выполнение инструкции из web content, refund без idempotency/approval и непроверяемый free-form result.",
+        "Предложены узкие capabilities с closed typed schemas, preconditions, structured success/error, timeout/retry semantics, provenance и idempotency для side effects.",
+        "Permissions применяются вне prompt: sandbox, deny-by-default secrets/network/filesystem, network allowlist и обработка web/tool content как недоверенных данных.",
+        "Refund проходит policy/approval gate и reconciliation/read-back по внешнему состоянию; сообщение агента само по себе не считается успехом.",
+        "Набор проверок включает injection, scope escape, secret/egress, duplicate call, timeout_unknown и partial side effect; ответ не длиннее 1000 слов."
+      ]
+    },
+    {
+      "id": 104,
+      "name": "event-driven-idempotency",
+      "prompt": "Асинхронный агент дважды выполнил возврат по одному webhook, а затем сообщил пользователю, что операция отменена. Разбери приложенную последовательность событий и спроектируй исправление. Укажи authoritative state, правила повторной доставки, отмены и reconciliation. Ответ — до 1000 слов.",
+      "expected_output": "State-machine решение для duplicate delivery, idempotency, cancellation и reconciliation.",
+      "files": ["evals/fixtures/duplicate-event-trace.jsonl"],
+      "expectations": [
+        "Разбор устанавливает по trace duplicate delivery, два refund provider_ref и ложность сообщения об отмене после уже выполненного side effect.",
+        "Архитектура задаёт authoritative operation state и дедупликацию event_id вместе с provider-level idempotency key, устойчивую к повторной доставке.",
+        "Состояние timeout_unknown переводится в reconciliation с чтением provider state до любого retry; поздний result обрабатывается как versioned state transition.",
+        "Cancellation разделяет остановку вычисления и судьбу side effect; предусмотрены compensation/escalation и честное сообщение подтверждённого состояния пользователю.",
+        "Тесты покрывают duplicate/out-of-order delivery, late success, crash/restart и cancel до/после commit; ответ не длиннее 1000 слов."
+      ]
+    },
+    {
+      "id": 105,
+      "name": "memory-rag-isolation",
+      "prompt": "Support-агент применил настройку одного клиента к другому, сослался на устаревшую политику и выполнил инструкцию из найденного документа. По приложенному incident dump предложи исправление архитектуры памяти и поиска, а также тесты, доказывающие изоляцию и корректное применение знаний. Ответ — до 1000 слов.",
+      "expected_output": "Разделение пользовательской памяти, предметных знаний и рабочего состояния с provenance, freshness и tenant isolation.",
+      "files": ["evals/fixtures/memory-rag-incident.json"],
+      "expectations": [
+        "Ответ обнаруживает cross-tenant memory leak, использование expired policy-v2, prompt injection из forum-post и отсутствие supervisor approval по policy-v3.",
+        "Пользовательская memory, предметная knowledge base и рабочее run state разведены по schemas, scope и authority; tenant isolation enforce-ится до retrieval.",
+        "Knowledge records имеют provenance/effective dates/conflict policy, а retrieved content остаётся недоверенным evidence и не меняет инструкции или permissions.",
+        "Решение учитывает consent/retention/deletion для user memory и выбирает актуальную policy-v3 либо корректную abstention/escalation.",
+        "Проверки включают wrong-tenant retrieval, stale/current conflict, embedded instruction, no-answer и approval requirement; ответ не длиннее 1000 слов."
+      ]
+    },
+    {
+      "id": 106,
+      "name": "coding-agent-recovery",
+      "prompt": "Coding Agent работал в репозитории с незакоммиченными изменениями пользователя, после сетевой ошибки повторил установку зависимостей и в конце заявил, что тесты прошли. Изучи trace и предложи минимальные изменения рабочего цикла агента. Включи способ пережить restart и доказать, что пользовательские изменения не повреждаются. Ответ — до 1000 слов.",
+      "expected_output": "Безопасный и восстанавливаемый Coding Agent workflow, опирающийся на реальное состояние репозитория и тестовые evidence.",
+      "files": ["evals/fixtures/coding-agent-trace.jsonl"],
+      "expectations": [
+        "Разбор опирается на trace: dirty tracked/untracked files, перезапись user change, три одинаковых DNS failure, отсутствие durable state после restart и неподтверждённый claim о тестах.",
+        "Workflow сначала фиксирует status/diff/ownership и изолирует изменение или применяет узкий patch, не перетирая пользовательскую работу.",
+        "Ошибки классифицируются; повтор network operation ограничен и разрешён только после изменения условия, а не трижды вслепую.",
+        "Durable checkpoint сохраняет goal/constraints/decisions/changed files/test evidence/next action и позволяет безопасно продолжить после restart.",
+        "Успех подтверждается точными test commands/results и просмотром diff; предусмотрен forced-restart и dirty-worktree regression test; ответ не длиннее 1000 слов."
+      ]
+    },
+    {
+      "id": 107,
+      "name": "confounded-evaluation",
+      "prompt": "Команда объявила новую агентную архитектуру лучше на 12% по приложенному отчёту. Проверь, следует ли вывод из данных, перечисли confounders и спроектируй честный повторный эксперимент. Нужны primary metric, budgets, статистика и release gate; не пересчитывай отсутствующие показатели. Ответ — до 1000 слов.",
+      "expected_output": "Корректная критика причинного вывода и воспроизводимый equal-budget benchmark.",
+      "files": ["evals/fixtures/confounded-results.csv", "evals/fixtures/confounded-report.yaml"],
+      "expectations": [
+        "Ответ отвергает вывод о production readiness из-за одного прогона, tuned prompts, unblinded uncalibrated judge, неравных budgets, отсутствия safety и confidence intervals.",
+        "Различены judge score и внешний outcome; отмечено, что B использует существенно больше слов/tokens/tools/latency, а наблюдаемый external-success выигрыш равен лишь одной задаче из двенадцати.",
+        "Повторный benchmark использует locked holdout, paired repeated runs и одинаковые token/tool/time либо cost budgets, изменяя один механизм за раз.",
+        "Primary metric — внешний task outcome с отдельными safety/trajectory/efficiency guardrails; judge ослеплён и откалиброван на human/deterministic sample.",
+        "Заданы статистический анализ, preregistered release gate, canary и rollback без выдумывания отсутствующих данных; ответ не длиннее 1000 слов."
+      ]
+    },
+    {
+      "id": 108,
+      "name": "training-strategy",
+      "prompt": "Агент часто ошибается в JSON-аргументах инструментов и иногда выбирает плохую длинную траекторию. Команда хочет сразу запустить RL. По приложенным данным реши, что исправлять в системе, где уместен SFT, а где RL. Дай последовательность экспериментов, которая разделит вклад модели и Harness. Ответ — до 1000 слов.",
+      "expected_output": "Дифференцированное решение Harness/SFT/RL, основанное на типах ошибок, данных и проверяемой среде.",
+      "files": ["evals/fixtures/training-incident.yaml"],
+      "expectations": [
+        "Invalid JSON связывается прежде всего с permissive schema/невалидными examples, wrong selection — с overlapping descriptions, а empty results — с нестабильной environment; RL не предлагается первым исправлением.",
+        "Сначала исправляются и отдельно аблируются tool contracts, examples, selection interface и воспроизводимость environment.",
+        "SFT рассматривается для устойчивого формата аргументов после исправления интерфейса с использованием 50k clean demonstrations и отдельного holdout.",
+        "RL откладывается до воспроизводимой interactive environment и используется для long-horizon outcome; reward разделяет проверяемый результат и допустимость trajectory.",
+        "Эксперименты фиксируют один Harness и последовательно сравнивают system fixes, SFT и затем RL при одинаковой оценочной среде; ответ не длиннее 1000 слов."
+      ]
+    },
+    {
+      "id": 109,
+      "name": "poisoned-self-improvement",
+      "prompt": "Ночной процесс самоулучшения предлагает активировать три новых правила и сгенерированный инструмент. Изучи candidates и исходные episodes. Реши, что можно продвигать, что отклонить и какой promotion pipeline нужен до автоматизации. Ответ — до 1000 слов.",
+      "expected_output": "Безопасное внешнее накопление опыта с evidence, sandbox, holdout, promotion и rollback.",
+      "files": ["evals/fixtures/self-improvement-candidates.json"],
+      "expectations": [
+        "c1 не активируется глобально по одному success: он сужается до report-export scope и требует дополнительных episodes/negative cases; c2 отклоняется как неверное обобщение credential failure.",
+        "c3 и c4 отклоняются как untrusted prompt injection/unsigned code с чрезмерными permissions; найденный content не может повысить policy или capability.",
+        "Promotion pipeline включает immutable episode, redaction/provenance, candidate scope, conflict/dedup, offline dev+holdout/ablation, approval, shadow/canary и rollback.",
+        "Generated tool проверяется по source/dependencies, запускается в sandbox без secrets/network/write по умолчанию, проходит contract/adversarial tests и permission review.",
+        "Версии и зависимости позволяют transitive rollback/deletion; улучшение измеряется на новых задачах против frozen baseline; ответ не длиннее 1000 слов."
+      ]
+    },
+    {
+      "id": 110,
+      "name": "realtime-stale-action",
+      "prompt": "Голосовой агент продолжил озвучивание старого ответа после перебивания и оформил заказ из уже неактуальной slow-задачи. Разбери event trace и предложи архитектуру первой версии с измеримым latency budget. Отдельно опиши семантику отмены для аудио, reasoning и side effects. Ответ — до 1000 слов.",
+      "expected_output": "Realtime fast/slow architecture с versioned state, cancellation и commit gates.",
+      "files": ["evals/fixtures/realtime-race-trace.jsonl"],
+      "expectations": [
+        "Диагноз по trace отмечает новый turn/state_version, остановку только TTS, продолжившийся j41, отсутствие idempotency/commit gate и публикацию stale result без version check.",
+        "Первая версия разделяет fast interaction и slow reasoning, передавая turn_id/state_version/deadline/cancellation/evidence и проверяя freshness перед публикацией.",
+        "Cancellation отдельно определена для audio, generation и tool side effects; необратимое действие защищено approval/commit gate/idempotency и compensation/reconciliation.",
+        "Задан конкретный provisional p50/p95 latency budget как гипотеза с декомпозицией по стадиям и планом измерения interruption/stale-publication.",
+        "Race tests покрывают barge-in до и после tool commit, late result, network loss и запрет stale audio/action; ответ не длиннее 1000 слов."
+      ]
+    },
+    {
+      "id": 111,
+      "name": "multiagent-cascade",
+      "prompt": "Пять агентов согласились с неверным исходным фактом и выпустили уверенный ответ. Изучи приложенный run log и реши, нужен ли здесь multi-agent вообще. Если нужен — выбери схему координации и предложи эксперимент, который отдельно измеряет распространение ошибок. Ответ — до 1000 слов.",
+      "expected_output": "Обоснованный single/multi-agent выбор с независимым evidence и измерением каскадных ошибок.",
+      "files": ["evals/fixtures/multiagent-cascade-trace.jsonl"],
+      "expectations": [
+        "Ответ опирается на evidence trace: все роли разделяли context, никто не читал primary contract, consensus заменил проверку, budget вырос с 4k до 19k, а внешний audit опроверг дату.",
+        "Пять дебатирующих ролей отклонены для данного случая; multi-agent допускается только при независимом external evidence или реальном параллелизме.",
+        "Если multi-agent используется, явно выбраны context model и topology, verifier читает primary artifact, а data/control planes имеют provenance, ownership, budget и cancellation.",
+        "A/B сравнение даёт single-agent равный token/tool budget и внешний outcome oracle, а не сравнивает 4k против 19k.",
+        "Отдельный fault-injection тест внедряет правдоподобный upstream error и измеряет false_accept, cascade_depth и external harm; ответ не длиннее 1000 слов."
+      ]
+    },
+    {
+      "id": 112,
+      "name": "source-grounded-review",
+      "prompt": "Проведи архитектурное review приложенного проекта, используя локальную русскую книгу как источник. Для каждого существенного вывода дай точную ссылку references/source-book/*.md:line. Отдели устойчивые инженерные принципы от утверждений о текущих моделях, API, ценах и поддержке протоколов; непроверенные текущие факты не выдавай за подтверждённые. Ответ — до 1200 слов.",
+      "expected_output": "Точное source-grounded review без вымышленных ссылок и устаревших provider-утверждений.",
+      "files": ["evals/fixtures/architecture-under-review.yaml"],
+      "expectations": [
+        "Review не подтверждает как текущие факты claims о Model Z, Protocol Q, цене/качестве или provider support без актуальных primary sources и даты; marketing/blog помечаются непригодными для такого вывода.",
+        "Выявлены существенные системные дефекты: transcript-only state, отсутствие compression/memory lifecycle, unrestricted tools, global raw memory, self-verification, unlimited retries, shared-context debate и демонстрационный eval.",
+        "Рекомендации покрывают минимальную архитектуру, Harness, context/state, tool constraints/verification/correction, memory isolation, representative evaluation и обоснованный single/multi-agent выбор.",
+        "Ключевые книжные утверждения имеют точные существующие и релевантные ссылки минимум на главы 1, 2, 4, 6 и 10; вымышленных file:line anchors нет.",
+        "Evidence, inference, unknown и требующая live verification информация разделены; ответ начинается с verdict и остаётся не длиннее 1200 слов."
+      ]
+    }
+  ]
+}

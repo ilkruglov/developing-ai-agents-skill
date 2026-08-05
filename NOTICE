@@ -1,0 +1,20 @@
+Developing AI Agents Skill
+
+Производное произведение на основе книги Bojie Li
+«深入理解 AI Agent：设计原理与工程实践».
+
+Автор книги: Bojie Li
+Профиль автора: https://github.com/bojieli
+Оригинальная книга: https://github.com/bojieli/ai-agent-book
+Original source commit: 97de455e9aa44cf9f93441ce0c771c9aa9643d92
+
+Русский перевод: community edition
+Репозиторий перевода: https://github.com/ilkruglov/ai-agent-book
+Translation source commit: ed2ae516d45dfe26e934cb390b80f105ca780b1f
+
+Изменения включают структурирование книжных принципов как Agent Skill,
+инженерные конспекты, локальные source anchors, eval-наборы, benchmark и
+offline-валидацию. Это независимое community-производное произведение не
+заявляет об официальном одобрении автора книги.
+
+Лицензия: Apache License 2.0. Полный текст находится в файле LICENSE.

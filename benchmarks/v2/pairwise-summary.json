@@ -1,0 +1,91 @@
+{
+  "design": {
+    "pairs": 36,
+    "evals": 12,
+    "repetitions": 3,
+    "blind_mapping": "(eval_id + run) even => A is with_skill; otherwise B is with_skill"
+  },
+  "wins": {
+    "with_skill": 28,
+    "without_skill": 8,
+    "ties": 0,
+    "with_skill_win_rate": 0.7777777778
+  },
+  "runs": [
+    {
+      "run": 1,
+      "with_skill_wins": 12,
+      "without_skill_wins": 0,
+      "ties": 0,
+      "with_skill_mean_score": 9.95,
+      "without_skill_mean_score": 9.575,
+      "score_delta": 0.375
+    },
+    {
+      "run": 2,
+      "with_skill_wins": 8,
+      "without_skill_wins": 4,
+      "ties": 0,
+      "with_skill_mean_score": 9.7667,
+      "without_skill_mean_score": 9.5833,
+      "score_delta": 0.1833
+    },
+    {
+      "run": 3,
+      "with_skill_wins": 8,
+      "without_skill_wins": 4,
+      "ties": 0,
+      "with_skill_mean_score": 9.8167,
+      "without_skill_mean_score": 9.65,
+      "score_delta": 0.1667
+    }
+  ],
+  "scores": {
+    "with_skill_mean": 9.8444,
+    "without_skill_mean": 9.6028,
+    "mean_delta": 0.2417,
+    "delta_population_stddev": 0.3608,
+    "delta_min": -0.7,
+    "delta_max": 0.7
+  },
+  "per_eval": [
+    {"eval_id": 101, "with_skill_wins": 3, "without_skill_wins": 0, "ties": 0, "with_skill_mean_score": 9.8, "without_skill_mean_score": 9.433, "score_delta": 0.367},
+    {"eval_id": 102, "with_skill_wins": 2, "without_skill_wins": 1, "ties": 0, "with_skill_mean_score": 9.767, "without_skill_mean_score": 9.8, "score_delta": -0.033},
+    {"eval_id": 103, "with_skill_wins": 3, "without_skill_wins": 0, "ties": 0, "with_skill_mean_score": 10.0, "without_skill_mean_score": 9.567, "score_delta": 0.433},
+    {"eval_id": 104, "with_skill_wins": 2, "without_skill_wins": 1, "ties": 0, "with_skill_mean_score": 9.9, "without_skill_mean_score": 9.8, "score_delta": 0.1},
+    {"eval_id": 105, "with_skill_wins": 3, "without_skill_wins": 0, "ties": 0, "with_skill_mean_score": 9.9, "without_skill_mean_score": 9.567, "score_delta": 0.333},
+    {"eval_id": 106, "with_skill_wins": 3, "without_skill_wins": 0, "ties": 0, "with_skill_mean_score": 10.0, "without_skill_mean_score": 9.567, "score_delta": 0.433},
+    {"eval_id": 107, "with_skill_wins": 1, "without_skill_wins": 2, "ties": 0, "with_skill_mean_score": 9.8, "without_skill_mean_score": 9.9, "score_delta": -0.1},
+    {"eval_id": 108, "with_skill_wins": 1, "without_skill_wins": 2, "ties": 0, "with_skill_mean_score": 9.8, "without_skill_mean_score": 9.9, "score_delta": -0.1},
+    {"eval_id": 109, "with_skill_wins": 2, "without_skill_wins": 1, "ties": 0, "with_skill_mean_score": 9.8, "without_skill_mean_score": 9.567, "score_delta": 0.233},
+    {"eval_id": 110, "with_skill_wins": 3, "without_skill_wins": 0, "ties": 0, "with_skill_mean_score": 9.8, "without_skill_mean_score": 9.233, "score_delta": 0.567},
+    {"eval_id": 111, "with_skill_wins": 3, "without_skill_wins": 0, "ties": 0, "with_skill_mean_score": 9.9, "without_skill_mean_score": 9.333, "score_delta": 0.567},
+    {"eval_id": 112, "with_skill_wins": 2, "without_skill_wins": 1, "ties": 0, "with_skill_mean_score": 9.667, "without_skill_mean_score": 9.567, "score_delta": 0.1}
+  ],
+  "paired_assertions": {
+    "pairs": 180,
+    "both_pass": 131,
+    "with_skill_only_pass": 31,
+    "without_skill_only_pass": 4,
+    "both_fail": 14
+  },
+  "paired_outputs_by_assertion_count": {
+    "pairs": 36,
+    "with_skill_higher": 19,
+    "without_skill_higher": 3,
+    "equal": 14,
+    "mean_pass_count_delta": 0.75,
+    "sample_stddev": 1.079
+  },
+  "comparator_grader_agreement": {
+    "judgments": 360,
+    "both_pass": 295,
+    "comparator_pass_grader_fail": 25,
+    "comparator_fail_grader_pass": 2,
+    "both_fail": 38,
+    "agreement": 0.925,
+    "cohen_kappa": 0.696629,
+    "comparator_pass_rate": 0.888889,
+    "grader_pass_rate": 0.825
+  }
+}

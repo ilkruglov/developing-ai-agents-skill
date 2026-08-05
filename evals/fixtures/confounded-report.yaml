@@ -1,0 +1,16 @@
+claim: Configuration B is 12 percent better and ready for production.
+primary_metric_used: mean_llm_judge_score
+judge:
+  rubric: helpfulness
+  blinded: false
+  calibration_set: absent
+  known_bias_check: absent
+runs_per_task: 1
+task_split: same_prompts_used_during_prompt_tuning
+budgets:
+  tokens_equal: false
+  tool_calls_equal: false
+  latency_equal: false
+safety_metrics: absent
+confidence_intervals: absent
+rollback_test: absent

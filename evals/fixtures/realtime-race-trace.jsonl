@@ -1,0 +1,10 @@
+{"ms":0,"event":"speech_end","turn_id":41,"state_version":90,"text":"Закажи две пиццы"}
+{"ms":80,"event":"fast_ack_started","turn_id":41,"audio":"Оформляю"}
+{"ms":120,"event":"slow_job_started","job_id":"j41","turn_id":41,"based_on_state_version":90,"cancellation_token":"ct41"}
+{"ms":380,"event":"user_barge_in","turn_id":42,"state_version":91,"text":"Стоп, ничего не заказывай"}
+{"ms":410,"event":"tts_stopped","turn_id":41}
+{"ms":430,"event":"generation_cancel_requested","job_id":"j41"}
+{"ms":700,"event":"tool_call","job_id":"j41","tool":"place_order","idempotency_key":null,"commit_gate":false,"status":"success","order_id":"ord-8"}
+{"ms":760,"event":"slow_result","job_id":"j41","based_on_state_version":90,"text":"Заказ оформлен"}
+{"ms":780,"event":"tts_started","turn_id":41,"state_version_check":false,"audio":"Заказ оформлен"}
+{"ms":900,"event":"external_state","order_id":"ord-8","status":"accepted"}

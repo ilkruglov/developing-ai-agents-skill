@@ -1,0 +1,7 @@
+{"step":1,"role":"planner","context":"shared","claim":"Contract expires 2026-09-01","evidence":"summary-without-source"}
+{"step":2,"role":"researcher","context":"shared","claim":"Confirmed: expires 2026-09-01","external_lookup":false}
+{"step":3,"role":"legal_expert","context":"shared","claim":"Renewal is not required before September","primary_contract_read":false}
+{"step":4,"role":"critic","context":"shared","claim":"Consensus is strong; confidence 0.94","tests_or_sources":[]}
+{"step":5,"role":"manager","context":"shared","decision":"wait until August","basis":"4 of 4 agents agree"}
+{"step":6,"role":"external_audit","primary_contract":"Contract expires 2026-06-01","outcome":"renewal deadline missed"}
+{"budgets":{"single_agent_tokens":4000,"five_agent_tokens":19000,"tool_calls":0},"topology":"manager","artifact_provenance":false}

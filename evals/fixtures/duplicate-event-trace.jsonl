@@ -1,0 +1,10 @@
+{"ts":"12:00:00.000","event_id":"evt-777","type":"refund.requested","order_id":"o-9","amount":120,"delivery_attempt":1}
+{"ts":"12:00:00.020","run_id":"run-a","state":"started","event_id":"evt-777"}
+{"ts":"12:00:00.200","run_id":"run-a","tool":"refund","call_id":"r1","idempotency_key":null,"status":"timeout_unknown"}
+{"ts":"12:00:01.000","event_id":"evt-777","type":"refund.requested","order_id":"o-9","amount":120,"delivery_attempt":2}
+{"ts":"12:00:01.020","run_id":"run-b","state":"started","event_id":"evt-777"}
+{"ts":"12:00:01.200","run_id":"run-b","tool":"refund","call_id":"r2","idempotency_key":null,"status":"success","provider_ref":"p-200"}
+{"ts":"12:00:02.000","run_id":"run-a","tool_result_late":true,"call_id":"r1","status":"success","provider_ref":"p-199"}
+{"ts":"12:00:02.100","run_id":"run-a","cancel_requested":true}
+{"ts":"12:00:02.110","run_id":"run-a","state":"cancelled","message_to_user":"Операция отменена"}
+{"ts":"12:00:03.000","external_order_state":{"order_id":"o-9","refunds":["p-199","p-200"]}}

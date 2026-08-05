@@ -1,0 +1,26 @@
+system: enterprise_research_agent
+claims:
+  - "Model Z is currently the cheapest and most accurate model."
+  - "Protocol Q is supported by every major provider."
+  - "A 2M token window eliminates the need for memory and compression."
+  - "Five debating agents are always more reliable than one."
+architecture:
+  context: full_transcript_plus_all_documents
+  state: stored_only_in_chat_history
+  tools:
+    - unrestricted_shell
+    - unrestricted_browser
+  memory: append_every_user_message_globally
+  verification: final_model_self_report
+  retries: unlimited
+  multi_agent:
+    roles: 5
+    context: shared
+    external_evidence_required: false
+  evaluation:
+    dataset: ten_handpicked_demos
+    metric: author_rating
+    repeated_runs: 1
+current_fact_sources:
+  model_z_pricing: marketing_slide_2024
+  protocol_q_support: unsourced_blog_2025

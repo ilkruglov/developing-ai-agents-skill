@@ -1,0 +1,30 @@
+{
+  "skill_name": "developing-ai-agents",
+  "queries": [
+    {"id":"p01","query":"Наш автономный помощник зацикливается на одинаковых командах и после сжатия забывает ограничения. Нужно найти архитектурную причину и исправить runtime.","should_trigger":true,"reason":"Диагностика long-running agent и context lifecycle."},
+    {"id":"p02","query":"Не понимаю, нужен ли здесь workflow, один агент или команда агентов. Спроектируй минимальный вариант и критерий выбора.","should_trigger":true,"reason":"Выбор агентной архитектуры."},
+    {"id":"p03","query":"Нужно построить честный benchmark для tool-using assistant: реальные outcomes, повторы, budgets и release gate.","should_trigger":true,"reason":"Оценка AI-агента."},
+    {"id":"p04","query":"Support-бот путает память пользователей, RAG приносит устаревшие правила, а найденные страницы пытаются менять инструкции.","should_trigger":true,"reason":"Agent memory, RAG и prompt-injection boundary."},
+    {"id":"p05","query":"Проектируем голосового помощника с barge-in: быстрый ответ должен жить отдельно от долгого reasoning и tool calls.","should_trigger":true,"reason":"Realtime agent architecture."},
+    {"id":"p06","query":"Пять ролей голосуют за ответ, но ошибки усиливаются. Нужна схема координации и независимой проверки multi-agent.","should_trigger":true,"reason":"Multi-agent coordination and cascading errors."},
+    {"id":"p07","query":"Хотим, чтобы помощник превращал успешные стратегии в Skills и создавал новые tools, но не мог повысить себе права.","should_trigger":true,"reason":"Safe agent self-evolution."},
+    {"id":"p08","query":"У агента проблемы с форматом tool calls и длинными траекториями. Реши, что чинить в Harness, а что обучать через SFT или RL.","should_trigger":true,"reason":"Agent post-training decision."},
+    {"id":"p09","query":"Собери production workflow Coding Agent: dirty worktree, sandbox, checkpoints, restart и доказательство прохождения тестов.","should_trigger":true,"reason":"Coding Agent engineering."},
+    {"id":"p10","query":"Проведи review MCP/tool registry для агента: schemas, permissions, idempotency, approvals и проверка side effects.","should_trigger":true,"reason":"Agent tool-interface design."},
+    {"id":"p11","query":"Асинхронный помощник получает дубли webhook и поздние результаты после cancel. Нужна state machine и recovery.","should_trigger":true,"reason":"Event-driven agent Harness."},
+    {"id":"p12","query":"Оцени архитектуру исследовательского агента по книге: context, tools, память, verifier и границы актуальности provider-фактов.","should_trigger":true,"reason":"Source-grounded agent review."},
+    {"id":"n01","query":"Напиши типизированную Python-функцию, которая читает CSV и группирует строки по customer_id.","should_trigger":false,"reason":"Обычная задача программирования без агентной системы."},
+    {"id":"n02","query":"Исправь отступы и цвета в React-компоненте карточки статистики.","should_trigger":false,"reason":"Frontend-правка без агентной архитектуры."},
+    {"id":"n03","query":"Переведи этот абзац книги с китайского на русский, сохранив термины из glossary.","should_trigger":false,"reason":"Перевод, не разработка агента."},
+    {"id":"n04","query":"Кратко перескажи статью об истории AI-агентов для школьника.","should_trigger":false,"reason":"Простой пересказ, не проектирование."},
+    {"id":"n05","query":"Напиши вежливое письмо клиенту о переносе встречи на пятницу.","should_trigger":false,"reason":"Обычная текстовая задача."},
+    {"id":"n06","query":"Составь SQL-запрос с оконной функцией для недельного retention.","should_trigger":false,"reason":"Обычный SQL без agent runtime."},
+    {"id":"n07","query":"Объясни двумя абзацами, что в общем смысле называют AI-агентом.","should_trigger":false,"reason":"Простое концептуальное объяснение."},
+    {"id":"n08","query":"Какая погода завтра в Москве?",
+      "should_trigger":false,"reason":"Информационный запрос, не agent engineering."},
+    {"id":"n09","query":"Добавь unit test для Rust-функции вычисления медианы массива.","should_trigger":false,"reason":"Локальная кодовая задача без агента."},
+    {"id":"n10","query":"Создай квадратный логотип для кофейни в стиле линогравюры.","should_trigger":false,"reason":"Генерация изображения."},
+    {"id":"n11","query":"Сконвертируй Markdown-файл в PDF и сохрани оглавление.","should_trigger":false,"reason":"Преобразование документа."},
+    {"id":"n12","query":"Установи skill из указанного GitHub-репозитория в Codex.","should_trigger":false,"reason":"Установка skill, а не разработка AI-агента."}
+  ]
+}

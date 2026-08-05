@@ -1,0 +1,4 @@
+interface:
+  display_name: "Разработка AI-агентов"
+  short_description: "Проектирование и проверка AI-агентов"
+  default_prompt: "Используй $developing-ai-agents, чтобы спроектировать надёжного AI-агента для моей задачи."
