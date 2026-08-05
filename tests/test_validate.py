@@ -99,6 +99,21 @@ class ValidateRepositoryTests(unittest.TestCase):
         self.assertNotEqual(0, result.returncode)
         self.assertIn("invalid marketplace name", result.stdout)
 
+    def test_rejects_invalid_marketplace_contract(self) -> None:
+        with repository_copy() as copied_root:
+            marketplace_path = copied_root / ".agents" / "plugins" / "marketplace.json"
+            payload = json.loads(marketplace_path.read_text(encoding="utf-8"))
+            del payload["plugins"][0]["policy"]["installation"]
+            marketplace_path.write_text(
+                json.dumps(payload, ensure_ascii=False, indent=2) + "\n",
+                encoding="utf-8",
+            )
+
+            result = run_validator(copied_root)
+
+        self.assertNotEqual(0, result.returncode)
+        self.assertIn("invalid marketplace contract", result.stdout)
+
     def test_rejects_missing_bundled_skill(self) -> None:
         with repository_copy() as copied_root:
             skill_path = copied_root / SKILL_DIRECTORY / "SKILL.md"
@@ -146,6 +161,40 @@ class ValidateRepositoryTests(unittest.TestCase):
             )
             payload = json.loads(manifest_path.read_text(encoding="utf-8"))
             payload["name"] = "wrong-plugin"
+            manifest_path.write_text(
+                json.dumps(payload, ensure_ascii=False, indent=2) + "\n",
+                encoding="utf-8",
+            )
+
+            result = run_validator(copied_root)
+
+        self.assertNotEqual(0, result.returncode)
+        self.assertIn("invalid plugin manifest", result.stdout)
+
+    def test_rejects_invalid_plugin_manifest_contract(self) -> None:
+        with repository_copy() as copied_root:
+            manifest_path = (
+                copied_root / PLUGIN_DIRECTORY / ".codex-plugin" / "plugin.json"
+            )
+            payload = json.loads(manifest_path.read_text(encoding="utf-8"))
+            payload["version"] = "v0.2"
+            manifest_path.write_text(
+                json.dumps(payload, ensure_ascii=False, indent=2) + "\n",
+                encoding="utf-8",
+            )
+
+            result = run_validator(copied_root)
+
+        self.assertNotEqual(0, result.returncode)
+        self.assertIn("invalid plugin manifest", result.stdout)
+
+    def test_rejects_unsupported_plugin_manifest_field(self) -> None:
+        with repository_copy() as copied_root:
+            manifest_path = (
+                copied_root / PLUGIN_DIRECTORY / ".codex-plugin" / "plugin.json"
+            )
+            payload = json.loads(manifest_path.read_text(encoding="utf-8"))
+            payload["hooks"] = "./hooks.json"
             manifest_path.write_text(
                 json.dumps(payload, ensure_ascii=False, indent=2) + "\n",
                 encoding="utf-8",
@@ -212,6 +261,19 @@ class ValidateRepositoryTests(unittest.TestCase):
 
         self.assertNotEqual(0, result.returncode)
         self.assertIn("broken Markdown link", result.stdout)
+
+    def test_ignores_markdown_under_tmp(self) -> None:
+        with repository_copy() as copied_root:
+            temporary_markdown = copied_root / ".tmp" / "race.md"
+            temporary_markdown.parent.mkdir(parents=True)
+            temporary_markdown.write_text(
+                "[Transient broken link](missing-file.md)\n",
+                encoding="utf-8",
+            )
+
+            result = run_validator(copied_root)
+
+        self.assertEqual(0, result.returncode, result.stdout + result.stderr)
 
     def test_rejects_missing_author_attribution(self) -> None:
         with repository_copy() as copied_root:
