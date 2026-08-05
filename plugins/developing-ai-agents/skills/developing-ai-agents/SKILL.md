@@ -176,6 +176,18 @@ description: Use when designing, implementing, reviewing, debugging, or evaluati
 - Быстрый выбор архитектуры и проверок: [references/cheatsheet.md](references/cheatsheet.md)
 - Сквозные шаблоны: [references/patterns.md](references/patterns.md)
 - Каталог ошибок по симптомам: [references/antipatterns.md](references/antipatterns.md)
+
+Пошаговые процедуры под типовые задачи:
+
+| Задача | Playbook |
+|---|---|
+| Спроектировать агента с нуля | [references/playbooks/design-agent.md](references/playbooks/design-agent.md) |
+| Разобрать trace и найти причину | [references/playbooks/diagnose-trace.md](references/playbooks/diagnose-trace.md) |
+| Провести review существующей системы | [references/playbooks/harness-review.md](references/playbooks/harness-review.md) |
+| Построить или починить evals | [references/playbooks/build-evals.md](references/playbooks/build-evals.md) |
+| Спроектировать память и самоулучшение | [references/playbooks/memory-design.md](references/playbooks/memory-design.md) |
+| Задать бюджет задержки для realtime | [references/playbooks/realtime-latency.md](references/playbooks/realtime-latency.md) |
+| Решить, нужно ли несколько агентов | [references/playbooks/multi-agent-choice.md](references/playbooks/multi-agent-choice.md) |
 - Термины: [references/glossary.md](references/glossary.md)
 - Точная карта источников: [references/source-map.md](references/source-map.md)
 
