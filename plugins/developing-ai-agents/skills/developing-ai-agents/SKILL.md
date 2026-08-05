@@ -188,6 +188,17 @@ description: Use when designing, implementing, reviewing, debugging, or evaluati
 | Спроектировать память и самоулучшение | [references/playbooks/memory-design.md](references/playbooks/memory-design.md) |
 | Задать бюджет задержки для realtime | [references/playbooks/realtime-latency.md](references/playbooks/realtime-latency.md) |
 | Решить, нужно ли несколько агентов | [references/playbooks/multi-agent-choice.md](references/playbooks/multi-agent-choice.md) |
+
+Заполняемые артефакты:
+
+| Артефакт | Шаблон |
+|---|---|
+| Проект агента | [references/templates/agent-design.md](references/templates/agent-design.md) |
+| Спецификация Harness | [references/templates/harness-spec.md](references/templates/harness-spec.md) |
+| Контракт инструмента | [references/templates/tool-contract.md](references/templates/tool-contract.md) |
+| План оценки | [references/templates/eval-plan.md](references/templates/eval-plan.md) |
+| Политика памяти | [references/templates/memory-policy.md](references/templates/memory-policy.md) |
+| Разбор trace | [references/templates/trace-diagnosis.md](references/templates/trace-diagnosis.md) |
 - Термины: [references/glossary.md](references/glossary.md)
 - Точная карта источников: [references/source-map.md](references/source-map.md)
 
