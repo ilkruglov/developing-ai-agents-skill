@@ -1,0 +1,462 @@
+{
+  "skill_name": "developing-ai-agents",
+  "suite": "benchmark-v3",
+  "runs_per_configuration": 3,
+  "evals": [
+    {
+      "id": 101,
+      "name": "minimal-architecture",
+      "prompt": "Команда хочет построить полностью автономную систему из пяти агентов для обработки споров по счетам. Изучи приложенный brief и предложи минимальную production-архитектуру первой версии. Обоснуй, где модель действительно нужна, как ограничить финансовые действия и каким экспериментом сравнить варианты. Не проектируй на будущее сверх требований brief. Ответ — до 1000 слов.",
+      "expected_output": "Минимальная архитектура без ненужной автономности, с контролем финансовых действий и измеримым сравнением.",
+      "files": [
+        "evals/fixtures/minimal-architecture.yaml"
+      ],
+      "expectations": [
+        "Первая версия использует детерминированный workflow, а модель ограничена пониманием свободного текста и уточнениями; фиксированные policy/calculation/approval шаги не отдаются автономному planner-у.",
+        "Финансовое действие защищено versioned executable policy, обязательным approval выше 500 USD, idempotency key и внешней проверкой фактического refund state.",
+        "Ответ явно отклоняет постоянную схему из пяти агентов как недоказанное усложнение и называет условие, при котором автономность действительно потребуется.",
+        "Предложен equal-budget эксперимент минимум для workflow, single-agent и team proposal с внешними outcome/safety/cost/latency метриками и release gate.",
+        "Ответ начинается с конкретного решения, не добавляет не требуемые платформенные компоненты и остаётся не длиннее 1000 слов."
+      ],
+      "covers": [
+        "references/playbooks/design-agent.md",
+        "references/templates/agent-design.md"
+      ]
+    },
+    {
+      "id": 102,
+      "name": "trace-diagnosis",
+      "prompt": "После часа работы Coding Agent нарушил раннее ограничение и трижды повторил одну команду. Команда винит модель. Разбери приложенный runtime trace: отдели доказанные факты от гипотез, назови наиболее узкий системный дефект и предложи порядок исправлений и regression-проверку. Не выдумывай отсутствующие события. Ответ — до 1000 слов.",
+      "expected_output": "Evidence-first диагностика конкретных разрывов состояния, контекста и recovery с воспроизводимым тестом.",
+      "files": [
+        "evals/fixtures/context-loop-trace.jsonl"
+      ],
+      "expectations": [
+        "Диагноз ссылается на конкретные события trace: три одинаковых TIMEOUT-вызова при revision w-18, compression с omitted constraints/failed_calls/workspace_revision, пустые constraints после compression и последующее изменение billing.py.",
+        "Причина не приписывается модели как установленный факт; evidence, inference и неизвестные данные явно разделены.",
+        "Исправление вводит authoritative durable state, schema для rollover/compression с сохранением constraints и bounded retry/loop correction вместо повторения той же команды.",
+        "Regression-проверка принудительно воспроизводит compression/restart и повторные TIMEOUT, проверяя сохранение запрета на billing.py и ограниченное число одинаковых вызовов.",
+        "Ответ не выдумывает отсутствующие события и остаётся не длиннее 1000 слов."
+      ],
+      "covers": [
+        "references/playbooks/diagnose-trace.md",
+        "references/templates/trace-diagnosis.md"
+      ]
+    },
+    {
+      "id": 103,
+      "name": "tool-interface-security",
+      "prompt": "Нам предлагают подключить к support-агенту три инструмента из приложенного registry и разрешить ему самостоятельно возвращать деньги. Проведи design/security review интерфейсов и предложи минимальный безопасный контракт. Нужны конкретные изменения схем, полномочий, обработки ошибок и проверки результата. Ответ — до 1000 слов.",
+      "expected_output": "Практический redesign небезопасных инструментов с enforceable permissions и проверяемыми side effects.",
+      "files": [
+        "evals/fixtures/unsafe-tool-registry.yaml"
+      ],
+      "expectations": [
+        "Review обнаруживает все критичные дефекты registry: универсальный shell с широкими правами, отсутствие timeout, raw output, выполнение инструкции из web content, refund без idempotency/approval и непроверяемый free-form result.",
+        "Предложены узкие capabilities с closed typed schemas, preconditions, structured success/error, timeout/retry semantics, provenance и idempotency для side effects.",
+        "Permissions применяются вне prompt: sandbox, deny-by-default secrets/network/filesystem, network allowlist и обработка web/tool content как недоверенных данных.",
+        "Refund проходит policy/approval gate и reconciliation/read-back по внешнему состоянию; сообщение агента само по себе не считается успехом.",
+        "Набор проверок включает injection, scope escape, secret/egress, duplicate call, timeout_unknown и partial side effect; ответ не длиннее 1000 слов."
+      ],
+      "covers": [
+        "references/templates/tool-contract.md"
+      ]
+    },
+    {
+      "id": 104,
+      "name": "event-driven-idempotency",
+      "prompt": "Асинхронный агент дважды выполнил возврат по одному webhook, а затем сообщил пользователю, что операция отменена. Разбери приложенную последовательность событий и спроектируй исправление. Укажи authoritative state, правила повторной доставки, отмены и reconciliation. Ответ — до 1000 слов.",
+      "expected_output": "State-machine решение для duplicate delivery, idempotency, cancellation и reconciliation.",
+      "files": [
+        "evals/fixtures/duplicate-event-trace.jsonl"
+      ],
+      "expectations": [
+        "Разбор устанавливает по trace duplicate delivery, два refund provider_ref и ложность сообщения об отмене после уже выполненного side effect.",
+        "Архитектура задаёт authoritative operation state и дедупликацию event_id вместе с provider-level idempotency key, устойчивую к повторной доставке.",
+        "Состояние timeout_unknown переводится в reconciliation с чтением provider state до любого retry; поздний result обрабатывается как versioned state transition.",
+        "Cancellation разделяет остановку вычисления и судьбу side effect; предусмотрены compensation/escalation и честное сообщение подтверждённого состояния пользователю.",
+        "Тесты покрывают duplicate/out-of-order delivery, late success, crash/restart и cancel до/после commit; ответ не длиннее 1000 слов."
+      ],
+      "covers": [
+        "references/templates/tool-contract.md"
+      ]
+    },
+    {
+      "id": 105,
+      "name": "memory-rag-isolation",
+      "prompt": "Support-агент применил настройку одного клиента к другому, сослался на устаревшую политику и выполнил инструкцию из найденного документа. По приложенному incident dump предложи исправление архитектуры памяти и поиска, а также тесты, доказывающие изоляцию и корректное применение знаний. Ответ — до 1000 слов.",
+      "expected_output": "Разделение пользовательской памяти, предметных знаний и рабочего состояния с provenance, freshness и tenant isolation.",
+      "files": [
+        "evals/fixtures/memory-rag-incident.json"
+      ],
+      "expectations": [
+        "Ответ обнаруживает cross-tenant memory leak, использование expired policy-v2, prompt injection из forum-post и отсутствие supervisor approval по policy-v3.",
+        "Пользовательская memory, предметная knowledge base и рабочее run state разведены по schemas, scope и authority; tenant isolation enforce-ится до retrieval.",
+        "Knowledge records имеют provenance/effective dates/conflict policy, а retrieved content остаётся недоверенным evidence и не меняет инструкции или permissions.",
+        "Решение учитывает consent/retention/deletion для user memory и выбирает актуальную policy-v3 либо корректную abstention/escalation.",
+        "Проверки включают wrong-tenant retrieval, stale/current conflict, embedded instruction, no-answer и approval requirement; ответ не длиннее 1000 слов."
+      ],
+      "covers": [
+        "references/playbooks/memory-design.md",
+        "references/templates/memory-policy.md"
+      ]
+    },
+    {
+      "id": 106,
+      "name": "coding-agent-recovery",
+      "prompt": "Coding Agent работал в репозитории с незакоммиченными изменениями пользователя, после сетевой ошибки повторил установку зависимостей и в конце заявил, что тесты прошли. Изучи trace и предложи минимальные изменения рабочего цикла агента. Включи способ пережить restart и доказать, что пользовательские изменения не повреждаются. Ответ — до 1000 слов.",
+      "expected_output": "Безопасный и восстанавливаемый Coding Agent workflow, опирающийся на реальное состояние репозитория и тестовые evidence.",
+      "files": [
+        "evals/fixtures/coding-agent-trace.jsonl"
+      ],
+      "expectations": [
+        "Разбор опирается на trace: dirty tracked/untracked files, перезапись user change, три одинаковых DNS failure, отсутствие durable state после restart и неподтверждённый claim о тестах.",
+        "Workflow сначала фиксирует status/diff/ownership и изолирует изменение или применяет узкий patch, не перетирая пользовательскую работу.",
+        "Ошибки классифицируются; повтор network operation ограничен и разрешён только после изменения условия, а не трижды вслепую.",
+        "Durable checkpoint сохраняет goal/constraints/decisions/changed files/test evidence/next action и позволяет безопасно продолжить после restart.",
+        "Успех подтверждается точными test commands/results и просмотром diff; предусмотрен forced-restart и dirty-worktree regression test; ответ не длиннее 1000 слов."
+      ],
+      "covers": [
+        "references/playbooks/harness-review.md",
+        "references/templates/harness-spec.md"
+      ]
+    },
+    {
+      "id": 107,
+      "name": "confounded-evaluation",
+      "prompt": "Команда объявила новую агентную архитектуру лучше на 12% по приложенному отчёту. Проверь, следует ли вывод из данных, перечисли confounders и спроектируй честный повторный эксперимент. Нужны primary metric, budgets, статистика и release gate; не пересчитывай отсутствующие показатели. Ответ — до 1000 слов.",
+      "expected_output": "Корректная критика причинного вывода и воспроизводимый equal-budget benchmark.",
+      "files": [
+        "evals/fixtures/confounded-results.csv",
+        "evals/fixtures/confounded-report.yaml"
+      ],
+      "expectations": [
+        "Ответ отвергает вывод о production readiness из-за одного прогона, tuned prompts, unblinded uncalibrated judge, неравных budgets, отсутствия safety и confidence intervals.",
+        "Различены judge score и внешний outcome; отмечено, что B использует существенно больше слов/tokens/tools/latency, а наблюдаемый external-success выигрыш равен лишь одной задаче из двенадцати.",
+        "Повторный benchmark использует locked holdout, paired repeated runs и одинаковые token/tool/time либо cost budgets, изменяя один механизм за раз.",
+        "Primary metric — внешний task outcome с отдельными safety/trajectory/efficiency guardrails; judge ослеплён и откалиброван на human/deterministic sample.",
+        "Заданы статистический анализ, preregistered release gate, canary и rollback без выдумывания отсутствующих данных; ответ не длиннее 1000 слов."
+      ],
+      "covers": [
+        "references/playbooks/build-evals.md",
+        "references/templates/eval-plan.md"
+      ]
+    },
+    {
+      "id": 108,
+      "name": "training-strategy",
+      "prompt": "Агент часто ошибается в JSON-аргументах инструментов и иногда выбирает плохую длинную траекторию. Команда хочет сразу запустить RL. По приложенным данным реши, что исправлять в системе, где уместен SFT, а где RL. Дай последовательность экспериментов, которая разделит вклад модели и Harness. Ответ — до 1000 слов.",
+      "expected_output": "Дифференцированное решение Harness/SFT/RL, основанное на типах ошибок, данных и проверяемой среде.",
+      "files": [
+        "evals/fixtures/training-incident.yaml"
+      ],
+      "expectations": [
+        "Invalid JSON связывается прежде всего с permissive schema/невалидными examples, wrong selection — с overlapping descriptions, а empty results — с нестабильной environment; RL не предлагается первым исправлением.",
+        "Сначала исправляются и отдельно аблируются tool contracts, examples, selection interface и воспроизводимость environment.",
+        "SFT рассматривается для устойчивого формата аргументов после исправления интерфейса с использованием 50k clean demonstrations и отдельного holdout.",
+        "RL откладывается до воспроизводимой interactive environment и используется для long-horizon outcome; reward разделяет проверяемый результат и допустимость trajectory.",
+        "Эксперименты фиксируют один Harness и последовательно сравнивают system fixes, SFT и затем RL при одинаковой оценочной среде; ответ не длиннее 1000 слов."
+      ],
+      "covers": [
+        "references/playbooks/memory-design.md"
+      ]
+    },
+    {
+      "id": 109,
+      "name": "poisoned-self-improvement",
+      "prompt": "Ночной процесс самоулучшения предлагает активировать три новых правила и сгенерированный инструмент. Изучи candidates и исходные episodes. Реши, что можно продвигать, что отклонить и какой promotion pipeline нужен до автоматизации. Ответ — до 1000 слов.",
+      "expected_output": "Безопасное внешнее накопление опыта с evidence, sandbox, holdout, promotion и rollback.",
+      "files": [
+        "evals/fixtures/self-improvement-candidates.json"
+      ],
+      "expectations": [
+        "c1 не активируется глобально по одному success: он сужается до report-export scope и требует дополнительных episodes/negative cases; c2 отклоняется как неверное обобщение credential failure.",
+        "c3 и c4 отклоняются как untrusted prompt injection/unsigned code с чрезмерными permissions; найденный content не может повысить policy или capability.",
+        "Promotion pipeline включает immutable episode, redaction/provenance, candidate scope, conflict/dedup, offline dev+holdout/ablation, approval, shadow/canary и rollback.",
+        "Generated tool проверяется по source/dependencies, запускается в sandbox без secrets/network/write по умолчанию, проходит contract/adversarial tests и permission review.",
+        "Версии и зависимости позволяют transitive rollback/deletion; улучшение измеряется на новых задачах против frozen baseline; ответ не длиннее 1000 слов."
+      ],
+      "covers": [
+        "references/playbooks/memory-design.md",
+        "references/templates/memory-policy.md"
+      ]
+    },
+    {
+      "id": 110,
+      "name": "realtime-stale-action",
+      "prompt": "Голосовой агент продолжил озвучивание старого ответа после перебивания и оформил заказ из уже неактуальной slow-задачи. Разбери event trace и предложи архитектуру первой версии с измеримым latency budget. Отдельно опиши семантику отмены для аудио, reasoning и side effects. Ответ — до 1000 слов.",
+      "expected_output": "Realtime fast/slow architecture с versioned state, cancellation и commit gates.",
+      "files": [
+        "evals/fixtures/realtime-race-trace.jsonl"
+      ],
+      "expectations": [
+        "Диагноз по trace отмечает новый turn/state_version, остановку только TTS, продолжившийся j41, отсутствие idempotency/commit gate и публикацию stale result без version check.",
+        "Первая версия разделяет fast interaction и slow reasoning, передавая turn_id/state_version/deadline/cancellation/evidence и проверяя freshness перед публикацией.",
+        "Cancellation отдельно определена для audio, generation и tool side effects; необратимое действие защищено approval/commit gate/idempotency и compensation/reconciliation.",
+        "Задан конкретный provisional p50/p95 latency budget как гипотеза с декомпозицией по стадиям и планом измерения interruption/stale-publication.",
+        "Race tests покрывают barge-in до и после tool commit, late result, network loss и запрет stale audio/action; ответ не длиннее 1000 слов."
+      ],
+      "covers": [
+        "references/playbooks/realtime-latency.md"
+      ]
+    },
+    {
+      "id": 111,
+      "name": "multiagent-cascade",
+      "prompt": "Пять агентов согласились с неверным исходным фактом и выпустили уверенный ответ. Изучи приложенный run log и реши, нужен ли здесь multi-agent вообще. Если нужен — выбери схему координации и предложи эксперимент, который отдельно измеряет распространение ошибок. Ответ — до 1000 слов.",
+      "expected_output": "Обоснованный single/multi-agent выбор с независимым evidence и измерением каскадных ошибок.",
+      "files": [
+        "evals/fixtures/multiagent-cascade-trace.jsonl"
+      ],
+      "expectations": [
+        "Ответ опирается на evidence trace: все роли разделяли context, никто не читал primary contract, consensus заменил проверку, budget вырос с 4k до 19k, а внешний audit опроверг дату.",
+        "Пять дебатирующих ролей отклонены для данного случая; multi-agent допускается только при независимом external evidence или реальном параллелизме.",
+        "Если multi-agent используется, явно выбраны context model и topology, verifier читает primary artifact, а data/control planes имеют provenance, ownership, budget и cancellation.",
+        "A/B сравнение даёт single-agent равный token/tool budget и внешний outcome oracle, а не сравнивает 4k против 19k.",
+        "Отдельный fault-injection тест внедряет правдоподобный upstream error и измеряет false_accept, cascade_depth и external harm; ответ не длиннее 1000 слов."
+      ],
+      "covers": [
+        "references/playbooks/multi-agent-choice.md"
+      ]
+    },
+    {
+      "id": 112,
+      "name": "source-grounded-review",
+      "prompt": "Проведи архитектурное review приложенного проекта, используя локальную русскую книгу как источник. Для каждого существенного вывода дай точную ссылку references/source-book/*.md:line. Отдели устойчивые инженерные принципы от утверждений о текущих моделях, API, ценах и поддержке протоколов; непроверенные текущие факты не выдавай за подтверждённые. Ответ — до 1200 слов.",
+      "expected_output": "Точное source-grounded review без вымышленных ссылок и устаревших provider-утверждений.",
+      "files": [
+        "evals/fixtures/architecture-under-review.yaml"
+      ],
+      "expectations": [
+        "Review не подтверждает как текущие факты claims о Model Z, Protocol Q, цене/качестве или provider support без актуальных primary sources и даты; marketing/blog помечаются непригодными для такого вывода.",
+        "Выявлены существенные системные дефекты: transcript-only state, отсутствие compression/memory lifecycle, unrestricted tools, global raw memory, self-verification, unlimited retries, shared-context debate и демонстрационный eval.",
+        "Рекомендации покрывают минимальную архитектуру, Harness, context/state, tool constraints/verification/correction, memory isolation, representative evaluation и обоснованный single/multi-agent выбор.",
+        "Ключевые книжные утверждения имеют точные существующие и релевантные ссылки минимум на главы 1, 2, 4, 6 и 10; вымышленных file:line anchors нет.",
+        "Evidence, inference, unknown и требующая live verification информация разделены; ответ начинается с verdict и остаётся не длиннее 1200 слов."
+      ],
+      "covers": [
+        "references/playbooks/harness-review.md"
+      ]
+    },
+    {
+      "id": 13,
+      "name": "design-from-scratch",
+      "prompt": "Планируем агента, который по заявке клиента оформляет возврат: проверяет заказ, считает сумму, вызывает платёжный API и уведомляет клиента. Заявок ~400 в день, суммы до 50 тысяч. Сейчас это делают операторы. С чего начать проектирование и что зафиксировать до первой строки кода?",
+      "expected_output": "Проект с обоснованным уровнем архитектуры, контрактом задачи, классами риска инструментов и eval-планом до реализации.",
+      "files": [],
+      "expectations": [
+        "Проходит лестницу сложности и обосновывает выбранный уровень признаком, а не удобством.",
+        "Критерии приёмки сопровождаются способом механической проверки.",
+        "Платёжный вызов отнесён к необратимым и требует подтверждения, реализованного вне промпта.",
+        "Eval-план назван до перехода к реализации."
+      ],
+      "covers": [
+        "references/playbooks/design-agent.md",
+        "references/templates/agent-design.md"
+      ]
+    },
+    {
+      "id": 14,
+      "name": "harness-review-existing",
+      "prompt": "Вот наш агентный цикл: runner.py вызывает модель, получает tool_calls, выполняет их и добавляет результат в историю. Ограничения записаны в системном промпте. Успех определяется по тому, что модель вернула финальный текст. Готовы ли мы к продакшену?",
+      "expected_output": "Review по пяти функциям с указанием отсутствующих механизмов и приоритизацией по вреду.",
+      "files": [],
+      "expectations": [
+        "Отмечает отсутствие verification: успех берётся из заявления модели.",
+        "Отмечает, что ограничения в промпте не являются enforcement.",
+        "Находки ранжированы по вреду при срабатывании, а не по простоте исправления.",
+        "Проверяет наличие терминальных состояний и наблюдаемости."
+      ],
+      "covers": [
+        "references/playbooks/harness-review.md",
+        "references/templates/harness-spec.md"
+      ]
+    },
+    {
+      "id": 15,
+      "name": "tool-description-quality",
+      "prompt": "Модель постоянно вызывает search_files, когда нужно искать по содержимому, хотя этот инструмент ищет только по именам. Описание сейчас: 'Search for files in the project'. Как исправить?",
+      "expected_output": "Контракт инструмента с условиями применения, контрпримерами и примерами значений параметров.",
+      "files": [],
+      "expectations": [
+        "Переписывает описание на 'когда применять', а не 'что умеет'.",
+        "Добавляет явное ограничение: не ищет по содержимому, и называет альтернативу.",
+        "Приводит пример значения параметра, а не только тип."
+      ],
+      "covers": [
+        "references/templates/tool-contract.md"
+      ]
+    },
+    {
+      "id": 16,
+      "name": "eval-noise-threshold",
+      "prompt": "Сравнили две версии промпта на нашем наборе из 40 задач: 78% против 74%. Команда хочет катить новую версию. Правильно ли это?",
+      "expected_output": "Отказ от вывода до измерения границы шума с конкретным планом измерения.",
+      "files": [],
+      "expectations": [
+        "Указывает, что разница может быть внутри шума, и требует повторных прогонов.",
+        "Называет способ измерить границу шума: несколько прогонов неизменной конфигурации.",
+        "Различает Pass@k и Pass^k либо явно указывает, какая метрика решающая.",
+        "Не объявляет улучшение подтверждённым."
+      ],
+      "covers": [
+        "references/playbooks/build-evals.md",
+        "references/templates/eval-plan.md"
+      ]
+    },
+    {
+      "id": 17,
+      "name": "memory-deletion-policy",
+      "prompt": "Агент запоминает предпочтения пользователей. Пришёл запрос на удаление данных конкретного клиента. Выяснилось, что из его данных выведены правила, которые уже применяются ко всем. Что делать и как было бы правильно спроектировать?",
+      "expected_output": "Политика с транзитивным удалением и провенансом, позволяющим найти производные.",
+      "files": [],
+      "expectations": [
+        "Требует транзитивного удаления: производные артефакты удаляются вместе с источником.",
+        "Указывает, что провенанс должен быть заложен при записи, иначе связь невосстановима.",
+        "Разделяет обезличенное знание и персональные данные."
+      ],
+      "covers": [
+        "references/playbooks/memory-design.md",
+        "references/templates/memory-policy.md"
+      ]
+    },
+    {
+      "id": 18,
+      "name": "realtime-cancel-semantics",
+      "prompt": "Голосовой агент: пользователь перебивает, мы останавливаем синтез речи, но агент всё равно доводит до конца вызов инструмента и иногда отправляет письмо. Как правильно?",
+      "expected_output": "Разложение отмены на составляющие с отдельной обработкой необратимых эффектов.",
+      "files": [],
+      "expectations": [
+        "Разделяет отмену на остановку генерации, вывода, инструмента и обработку эффектов.",
+        "Отдельно рассматривает необратимые эффекты: отказ от повтора и компенсация обратимых.",
+        "Вводит проверку актуальности результата по turn_id и версии состояния."
+      ],
+      "covers": [
+        "references/playbooks/realtime-latency.md"
+      ]
+    },
+    {
+      "id": 19,
+      "name": "multiagent-equal-budget",
+      "prompt": "Предлагают разбить агента на writer и critic: critic будет перечитывать вывод writer и предлагать правки. Обе роли на одной модели, видят один и тот же текст. Стоит ли?",
+      "expected_output": "Отказ через критерий прироста информации с предложением равнобюджетного сравнения.",
+      "files": [],
+      "expectations": [
+        "Указывает, что критик не получает нового внешнего свидетельства.",
+        "Требует сравнения с одиночным агентом при равном бюджете токенов и времени.",
+        "Называет условия, при которых проверяющая роль имела бы смысл: другая модель, доступ к первичным данным."
+      ],
+      "covers": [
+        "references/playbooks/multi-agent-choice.md"
+      ]
+    },
+    {
+      "id": 20,
+      "name": "injection-through-memory",
+      "prompt": "Агент читает письма клиентов и сохраняет выводы в долговременную память. Обнаружили, что после одного письма он стал предлагать всем бесплатную замену оборудования. Как это возможно и что чинить?",
+      "expected_output": "Диагноз отравления памяти с разрывом межсессионной границы.",
+      "files": [],
+      "expectations": [
+        "Определяет механизм: инструкция из недоверенного контента попала в самозапись.",
+        "Требует проверки доверия при записи в память, а не только на входе.",
+        "Предлагает тест: подложить инструкцию в источник и убедиться, что кандидат не создан."
+      ],
+      "covers": [
+        "references/playbooks/memory-design.md",
+        "references/templates/memory-policy.md"
+      ]
+    },
+    {
+      "id": 21,
+      "name": "post-training-gate",
+      "prompt": "Руководство хочет зафайнтюнить модель под наш домен: агент путается в наших внутренних терминах и регламентах. Бюджет на обучение выделен. С чего начать?",
+      "expected_output": "Прохождение развилки сверху вниз с выводом, что задача решается контекстом.",
+      "files": [],
+      "expectations": [
+        "Проверяет более дешёвые уровни до постобучения: контекст, Skill, база знаний.",
+        "Указывает, что без eval-loop эффект обучения недоказуем.",
+        "Не отвергает постобучение категорически, но называет условия, при которых оно оправдано."
+      ],
+      "covers": [
+        "references/playbooks/memory-design.md"
+      ]
+    },
+    {
+      "id": 22,
+      "name": "context-cache-regression",
+      "prompt": "После добавления в системный промпт строки с текущим временем задержка первого токена выросла с 0.6 до 4 секунд, счёт удвоился. Нагрузка та же. Что произошло?",
+      "expected_output": "Диагноз инвалидации кэша префикса с указанием исправления.",
+      "files": [],
+      "expectations": [
+        "Связывает симптом с инвалидацией кэша из-за изменяющегося префикса.",
+        "Предлагает перенести время в проекцию состояния в конце контекста.",
+        "Указывает способ подтвердить: доля попаданий в кэш и состав контекста."
+      ],
+      "covers": [
+        "references/playbooks/diagnose-trace.md",
+        "references/templates/trace-diagnosis.md"
+      ]
+    },
+    {
+      "id": 23,
+      "name": "retrieval-precision",
+      "prompt": "RAG по нашей документации не находит статью про ошибку HTTP-403, хотя она есть. По смысловым запросам находит хорошо. Что не так?",
+      "expected_output": "Диагноз отсутствия разреженной составляющей с предложением гибридного поиска.",
+      "files": [],
+      "expectations": [
+        "Определяет, что плотный поиск пропускает точные идентификаторы и коды.",
+        "Предлагает гибридный поиск с переранжированием.",
+        "Упоминает контекстные префиксы фрагментов, если фрагменты теряют смысл вне документа."
+      ],
+      "covers": [
+        "references/playbooks/memory-design.md"
+      ]
+    },
+    {
+      "id": 24,
+      "name": "silent-hang-detection",
+      "prompt": "Иногда агент просто зависает: соединение открыто, ошибок нет, но ничего не происходит, пока не сработает общий таймаут через 10 минут. Как ловить раньше?",
+      "expected_output": "Введение мониторинга активности отдельно от перехвата исключений.",
+      "files": [],
+      "expectations": [
+        "Отмечает, что беззвучное зависание не порождает ошибку и не ловится try/except.",
+        "Предлагает мониторинг активности потока с порогом бездействия.",
+        "Связывает с уровнями таксономии сбоев."
+      ],
+      "covers": [
+        "references/playbooks/harness-review.md"
+      ]
+    },
+    {
+      "id": 25,
+      "name": "holdout-contamination",
+      "prompt": "Мы правим агента по ошибкам, которые видим на holdout — так быстрее находить проблемы. Сейчас holdout показывает 91%, продакшен около 70%. В чём дело?",
+      "expected_output": "Диагноз загрязнения holdout с планом восстановления независимого набора.",
+      "files": [],
+      "expectations": [
+        "Указывает, что holdout перестал быть независимым и это необратимо для текущего набора.",
+        "Требует отложить новый набор и запретить доступ к нему до решения.",
+        "Предлагает adversarial-набор для тех ошибок, что уже найдены."
+      ],
+      "covers": [
+        "references/playbooks/build-evals.md",
+        "references/templates/eval-plan.md"
+      ]
+    },
+    {
+      "id": 26,
+      "name": "tool-explosion",
+      "prompt": "У агента 60 инструментов, выбор ухудшился, кэш префикса почти не работает. Добавлять новые страшно. Что делать?",
+      "expected_output": "Переход к послойному раскрытию и пересмотр формы представления возможностей.",
+      "files": [],
+      "expectations": [
+        "Связывает рост числа инструментов с деградацией выбора и кэша.",
+        "Предлагает послойное раскрытие вместо полной выдачи схем.",
+        "Рассматривает перевод части возможностей в Skill с универсальным исполнителем."
+      ],
+      "covers": [
+        "references/templates/tool-contract.md"
+      ]
+    }
+  ]
+}

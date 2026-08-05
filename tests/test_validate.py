@@ -702,5 +702,44 @@ class SkillRoutingTests(unittest.TestCase):
         self.assertIn("SKILL.md exceeds", result.stdout)
 
 
+class BenchmarkCoverageTests(unittest.TestCase):
+    def test_rejects_playbook_without_benchmark_coverage(self) -> None:
+        with repository_copy() as copied_root:
+            new_playbook = (
+                copied_root
+                / SKILL_DIRECTORY
+                / "references"
+                / "playbooks"
+                / "uncovered.md"
+            )
+            new_playbook.write_text("# Новый playbook\n", encoding="utf-8")
+            skill_path = copied_root / SKILL_DIRECTORY / "SKILL.md"
+            skill_path.write_text(
+                skill_path.read_text(encoding="utf-8")
+                + "\n- [uncovered](references/playbooks/uncovered.md)\n",
+                encoding="utf-8",
+            )
+
+            result = run_validator(copied_root)
+
+        self.assertNotEqual(0, result.returncode)
+        self.assertIn("insufficient benchmark coverage", result.stdout)
+
+    def test_rejects_benchmark_pointing_at_missing_file(self) -> None:
+        with repository_copy() as copied_root:
+            path = copied_root / PLUGIN_DIRECTORY / "evals" / "benchmark-v3.json"
+            payload = json.loads(path.read_text(encoding="utf-8"))
+            payload["evals"][0]["covers"].append("references/playbooks/ghost.md")
+            path.write_text(
+                json.dumps(payload, ensure_ascii=False, indent=2) + "\n",
+                encoding="utf-8",
+            )
+
+            result = run_validator(copied_root)
+
+        self.assertNotEqual(0, result.returncode)
+        self.assertIn("benchmark covers a missing file", result.stdout)
+
+
 if __name__ == "__main__":
     unittest.main()

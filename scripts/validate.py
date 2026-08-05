@@ -916,6 +916,49 @@ def validate_chapter_quotes(root: Path, errors: list[str]) -> None:
                 )
 
 
+def validate_benchmark_coverage(root: Path, errors: list[str]) -> None:
+    """Каждый playbook и шаблон обязан быть покрыт сценариями бенчмарка.
+
+    Без этой проверки новый playbook добавляется без eval, и его качество
+    остаётся непроверенным до первого реального запроса.
+    """
+    benchmark_path = root / PLUGIN_DIRECTORY / "evals" / "benchmark-v3.json"
+    if not benchmark_path.is_file():
+        errors.append(f"missing required file: {benchmark_path.relative_to(root)}")
+        return
+    try:
+        payload = json.loads(benchmark_path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError:
+        return  # об ошибке уже сообщила общая проверка JSON
+
+    scenarios = payload.get("evals")
+    if not isinstance(scenarios, list):
+        errors.append("invalid benchmark: evals must be a list")
+        return
+
+    covered: dict[str, int] = {}
+    for scenario in scenarios:
+        for target in scenario.get("covers", []):
+            covered[target] = covered.get(target, 0) + 1
+            if not (root / SKILL_DIRECTORY / target).is_file():
+                errors.append(
+                    f"benchmark covers a missing file: {target} "
+                    f"(scenario {scenario.get('name', '?')})"
+                )
+
+    for group, minimum in (("playbooks", 2), ("templates", 1)):
+        group_root = root / SKILL_DIRECTORY / "references" / group
+        if not group_root.is_dir():
+            continue
+        for path in sorted(group_root.glob("*.md")):
+            key = f"references/{group}/{path.name}"
+            if covered.get(key, 0) < minimum:
+                errors.append(
+                    f"insufficient benchmark coverage: {key} "
+                    f"covered by {covered.get(key, 0)} scenarios, need {minimum}"
+                )
+
+
 def validate_skill_routing(root: Path, errors: list[str]) -> None:
     skill_path = root / SKILL_DIRECTORY / "SKILL.md"
     if not skill_path.is_file():
@@ -1011,6 +1054,7 @@ def validate_repository(root: Path) -> list[str]:
     validate_source_lock(root, lock, errors)
     validate_chapter_quotes(root, errors)
     validate_skill_routing(root, errors)
+    validate_benchmark_coverage(root, errors)
 
     for document_path in iter_source_anchor_documents(root):
         text = document_path.read_text(encoding="utf-8")

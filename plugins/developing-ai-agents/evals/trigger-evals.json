@@ -1,30 +1,221 @@
 {
   "skill_name": "developing-ai-agents",
   "queries": [
-    {"id":"p01","query":"Наш автономный помощник зацикливается на одинаковых командах и после сжатия забывает ограничения. Нужно найти архитектурную причину и исправить runtime.","should_trigger":true,"reason":"Диагностика long-running agent и context lifecycle."},
-    {"id":"p02","query":"Не понимаю, нужен ли здесь workflow, один агент или команда агентов. Спроектируй минимальный вариант и критерий выбора.","should_trigger":true,"reason":"Выбор агентной архитектуры."},
-    {"id":"p03","query":"Нужно построить честный benchmark для tool-using assistant: реальные outcomes, повторы, budgets и release gate.","should_trigger":true,"reason":"Оценка AI-агента."},
-    {"id":"p04","query":"Support-бот путает память пользователей, RAG приносит устаревшие правила, а найденные страницы пытаются менять инструкции.","should_trigger":true,"reason":"Agent memory, RAG и prompt-injection boundary."},
-    {"id":"p05","query":"Проектируем голосового помощника с barge-in: быстрый ответ должен жить отдельно от долгого reasoning и tool calls.","should_trigger":true,"reason":"Realtime agent architecture."},
-    {"id":"p06","query":"Пять ролей голосуют за ответ, но ошибки усиливаются. Нужна схема координации и независимой проверки multi-agent.","should_trigger":true,"reason":"Multi-agent coordination and cascading errors."},
-    {"id":"p07","query":"Хотим, чтобы помощник превращал успешные стратегии в Skills и создавал новые tools, но не мог повысить себе права.","should_trigger":true,"reason":"Safe agent self-evolution."},
-    {"id":"p08","query":"У агента проблемы с форматом tool calls и длинными траекториями. Реши, что чинить в Harness, а что обучать через SFT или RL.","should_trigger":true,"reason":"Agent post-training decision."},
-    {"id":"p09","query":"Собери production workflow Coding Agent: dirty worktree, sandbox, checkpoints, restart и доказательство прохождения тестов.","should_trigger":true,"reason":"Coding Agent engineering."},
-    {"id":"p10","query":"Проведи review MCP/tool registry для агента: schemas, permissions, idempotency, approvals и проверка side effects.","should_trigger":true,"reason":"Agent tool-interface design."},
-    {"id":"p11","query":"Асинхронный помощник получает дубли webhook и поздние результаты после cancel. Нужна state machine и recovery.","should_trigger":true,"reason":"Event-driven agent Harness."},
-    {"id":"p12","query":"Оцени архитектуру исследовательского агента по книге: context, tools, память, verifier и границы актуальности provider-фактов.","should_trigger":true,"reason":"Source-grounded agent review."},
-    {"id":"n01","query":"Напиши типизированную Python-функцию, которая читает CSV и группирует строки по customer_id.","should_trigger":false,"reason":"Обычная задача программирования без агентной системы."},
-    {"id":"n02","query":"Исправь отступы и цвета в React-компоненте карточки статистики.","should_trigger":false,"reason":"Frontend-правка без агентной архитектуры."},
-    {"id":"n03","query":"Переведи этот абзац книги с китайского на русский, сохранив термины из glossary.","should_trigger":false,"reason":"Перевод, не разработка агента."},
-    {"id":"n04","query":"Кратко перескажи статью об истории AI-агентов для школьника.","should_trigger":false,"reason":"Простой пересказ, не проектирование."},
-    {"id":"n05","query":"Напиши вежливое письмо клиенту о переносе встречи на пятницу.","should_trigger":false,"reason":"Обычная текстовая задача."},
-    {"id":"n06","query":"Составь SQL-запрос с оконной функцией для недельного retention.","should_trigger":false,"reason":"Обычный SQL без agent runtime."},
-    {"id":"n07","query":"Объясни двумя абзацами, что в общем смысле называют AI-агентом.","should_trigger":false,"reason":"Простое концептуальное объяснение."},
-    {"id":"n08","query":"Какая погода завтра в Москве?",
-      "should_trigger":false,"reason":"Информационный запрос, не agent engineering."},
-    {"id":"n09","query":"Добавь unit test для Rust-функции вычисления медианы массива.","should_trigger":false,"reason":"Локальная кодовая задача без агента."},
-    {"id":"n10","query":"Создай квадратный логотип для кофейни в стиле линогравюры.","should_trigger":false,"reason":"Генерация изображения."},
-    {"id":"n11","query":"Сконвертируй Markdown-файл в PDF и сохрани оглавление.","should_trigger":false,"reason":"Преобразование документа."},
-    {"id":"n12","query":"Установи skill из указанного GitHub-репозитория в Codex.","should_trigger":false,"reason":"Установка skill, а не разработка AI-агента."}
+    {
+      "id": "p01",
+      "query": "Наш автономный помощник зацикливается на одинаковых командах и после сжатия забывает ограничения. Нужно найти архитектурную причину и исправить runtime.",
+      "should_trigger": true,
+      "reason": "Диагностика long-running agent и context lifecycle."
+    },
+    {
+      "id": "p02",
+      "query": "Не понимаю, нужен ли здесь workflow, один агент или команда агентов. Спроектируй минимальный вариант и критерий выбора.",
+      "should_trigger": true,
+      "reason": "Выбор агентной архитектуры."
+    },
+    {
+      "id": "p03",
+      "query": "Нужно построить честный benchmark для tool-using assistant: реальные outcomes, повторы, budgets и release gate.",
+      "should_trigger": true,
+      "reason": "Оценка AI-агента."
+    },
+    {
+      "id": "p04",
+      "query": "Support-бот путает память пользователей, RAG приносит устаревшие правила, а найденные страницы пытаются менять инструкции.",
+      "should_trigger": true,
+      "reason": "Agent memory, RAG и prompt-injection boundary."
+    },
+    {
+      "id": "p05",
+      "query": "Проектируем голосового помощника с barge-in: быстрый ответ должен жить отдельно от долгого reasoning и tool calls.",
+      "should_trigger": true,
+      "reason": "Realtime agent architecture."
+    },
+    {
+      "id": "p06",
+      "query": "Пять ролей голосуют за ответ, но ошибки усиливаются. Нужна схема координации и независимой проверки multi-agent.",
+      "should_trigger": true,
+      "reason": "Multi-agent coordination and cascading errors."
+    },
+    {
+      "id": "p07",
+      "query": "Хотим, чтобы помощник превращал успешные стратегии в Skills и создавал новые tools, но не мог повысить себе права.",
+      "should_trigger": true,
+      "reason": "Safe agent self-evolution."
+    },
+    {
+      "id": "p08",
+      "query": "У агента проблемы с форматом tool calls и длинными траекториями. Реши, что чинить в Harness, а что обучать через SFT или RL.",
+      "should_trigger": true,
+      "reason": "Agent post-training decision."
+    },
+    {
+      "id": "p09",
+      "query": "Собери production workflow Coding Agent: dirty worktree, sandbox, checkpoints, restart и доказательство прохождения тестов.",
+      "should_trigger": true,
+      "reason": "Coding Agent engineering."
+    },
+    {
+      "id": "p10",
+      "query": "Проведи review MCP/tool registry для агента: schemas, permissions, idempotency, approvals и проверка side effects.",
+      "should_trigger": true,
+      "reason": "Agent tool-interface design."
+    },
+    {
+      "id": "p11",
+      "query": "Асинхронный помощник получает дубли webhook и поздние результаты после cancel. Нужна state machine и recovery.",
+      "should_trigger": true,
+      "reason": "Event-driven agent Harness."
+    },
+    {
+      "id": "p12",
+      "query": "Оцени архитектуру исследовательского агента по книге: context, tools, память, verifier и границы актуальности provider-фактов.",
+      "should_trigger": true,
+      "reason": "Source-grounded agent review."
+    },
+    {
+      "id": "p13",
+      "query": "у нас ассистент по возвратам, в 6% случаев клиент получает два одинаковых письма. таймауты почтового шлюза выросли на прошлой неделе. как найти причину, трассы есть",
+      "should_trigger": true,
+      "reason": "Разбор trace: повтор без классификации ошибки и идемпотентности."
+    },
+    {
+      "id": "p14",
+      "query": "Хочу, чтобы наш бот запоминал предпочтения клиентов между обращениями и не выяснял одно и то же заново. Что и где хранить, чтобы потом можно было удалить по запросу?",
+      "should_trigger": true,
+      "reason": "Проектирование памяти с provenance и удалением."
+    },
+    {
+      "id": "p15",
+      "query": "нужно понять, стал ли новый промпт лучше. прогнали на 40 задачах, стало 78% против 74%. можно катить?",
+      "should_trigger": true,
+      "reason": "Статистическая значимость и релизный гейт."
+    },
+    {
+      "id": "p16",
+      "query": "делаем голосового помощника для колл-центра, хотим чтобы можно было перебивать. с чего начать архитектуру и какой лимит задержки закладывать",
+      "should_trigger": true,
+      "reason": "Выбор realtime-парадигмы и бюджет задержки."
+    },
+    {
+      "id": "p17",
+      "query": "Есть агент, который сам ставит себе задачи и создаёт инструменты через pip install. Безопасно ли это и что проверить перед запуском в прод?",
+      "should_trigger": true,
+      "reason": "Границы безопасности самоэволюции."
+    },
+    {
+      "id": "p18",
+      "query": "коллега предлагает разбить нашего агента на пять ролей: планировщик, исполнитель, критик, редактор и координатор. звучит красиво, но я не уверен что это не оверинжиниринг",
+      "should_trigger": true,
+      "reason": "Критерий пользы multi-agent через прирост информации."
+    },
+    {
+      "id": "n01",
+      "query": "Оптимизируй промпт для суммаризации новостных статей: сейчас модель слишком многословна и добавляет свои оценки. Вот текущий промпт и три примера вывода.",
+      "should_trigger": false,
+      "reason": "Одиночный вызов LLM без агентного цикла, инструментов и внешних действий."
+    },
+    {
+      "id": "n02",
+      "query": "Настрой retry с экспоненциальной задержкой для нашего HTTP-клиента в микросервисе billing-api, сейчас при 503 падает сразу.",
+      "should_trigger": false,
+      "reason": "Надёжность обычного сервиса: retry без агента и без модели."
+    },
+    {
+      "id": "n03",
+      "query": "Помоги выбрать векторную БД для поиска по внутренней документации: 200к документов, нужен фильтр по отделам. Сравниваем Qdrant и pgvector.",
+      "should_trigger": false,
+      "reason": "Инфраструктурный выбор хранилища без агентной системы."
+    },
+    {
+      "id": "n04",
+      "query": "У нас flaky-тест в CI, падает примерно раз в десять прогонов на разных шагах. Как локализовать?",
+      "should_trigger": false,
+      "reason": "Отладка обычных тестов; ключевые слова про надёжность совпадают, предмет другой."
+    },
+    {
+      "id": "n05",
+      "query": "Спроектируй очередь задач на Celery с воркерами и приоритетами: воркеры должны переживать рестарт и не выполнять задачу дважды.",
+      "should_trigger": false,
+      "reason": "Идемпотентность и воркеры без LLM: классическая распределённая система."
+    },
+    {
+      "id": "n06",
+      "query": "Замерь p95 задержки нашего REST API и найди узкое место, есть трейсы из Jaeger за сутки.",
+      "should_trigger": false,
+      "reason": "Профилирование обычного API; бюджет задержки не относится к realtime-агенту."
+    },
+    {
+      "id": "n07",
+      "query": "Настрой A/B-тест для лендинга: две версии заголовка, нужно понять, какая конверсия выше и сколько ждать.",
+      "should_trigger": false,
+      "reason": "Продуктовый эксперимент, не оценка агента."
+    },
+    {
+      "id": "n08",
+      "query": "Как кэшировать ответы модели, чтобы снизить счёт за API? Много повторяющихся запросов к одному и тому же тексту.",
+      "should_trigger": false,
+      "reason": "Кэширование вызовов LLM без агентной архитектуры."
+    },
+    {
+      "id": "n09",
+      "query": "Сделай FAQ-бота на правилах: двадцать вопросов, ответы фиксированные, никаких внешних вызовов.",
+      "should_trigger": false,
+      "reason": "Правиловый бот без цикла, инструментов и внешних действий."
+    },
+    {
+      "id": "n10",
+      "query": "Напиши ETL на Airflow: выгрузка из Postgres, трансформация, загрузка в ClickHouse, с ретраями на каждом шаге.",
+      "should_trigger": false,
+      "reason": "Детерминированный конвейер данных; оркестрация без агента."
+    },
+    {
+      "id": "n11",
+      "query": "Переведи этот абзац книги с китайского на русский, сохранив термины из glossary.",
+      "should_trigger": false,
+      "reason": "Перевод текста, не проектирование системы."
+    },
+    {
+      "id": "n12",
+      "query": "Установи skill из указанного GitHub-репозитория в Codex.",
+      "should_trigger": false,
+      "reason": "Операция с инструментом, а не разработка агента."
+    },
+    {
+      "id": "n13",
+      "query": "Нужен воркер, который читает из Kafka и пишет в Postgres с at-least-once семантикой, дубли недопустимы.",
+      "should_trigger": false,
+      "reason": "Идемпотентность в потоковой обработке без LLM."
+    },
+    {
+      "id": "n14",
+      "query": "Настрой алерты в Prometheus: p99 задержки выше 300 мс и error rate выше 1% за пять минут.",
+      "should_trigger": false,
+      "reason": "Мониторинг сервиса; метрики не относятся к оценке агента."
+    },
+    {
+      "id": "n15",
+      "query": "Отрефактори модуль payments.py на 800 строк: слишком много ответственностей в одном классе.",
+      "should_trigger": false,
+      "reason": "Рефакторинг обычного кода."
+    },
+    {
+      "id": "n16",
+      "query": "Объясни, чем embeddings отличаются от токенов и зачем нужна нормализация векторов.",
+      "should_trigger": false,
+      "reason": "Концептуальный вопрос об LLM без проектирования системы."
+    },
+    {
+      "id": "n17",
+      "query": "Сделай CLI-обёртку над нашим внутренним API с автодополнением команд в zsh.",
+      "should_trigger": false,
+      "reason": "Разработка инструмента для человека, не для агента."
+    },
+    {
+      "id": "n18",
+      "query": "Напиши документацию по OpenAPI-спеке для наших пятнадцати эндпоинтов.",
+      "should_trigger": false,
+      "reason": "Написание документации."
+    }
   ]
 }
