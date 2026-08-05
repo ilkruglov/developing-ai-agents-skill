@@ -88,11 +88,15 @@ REQUIRED_ATTRIBUTIONS = {
 }
 NON_LOCAL_SOURCE_PATH = re.compile(r"(?<![-\w/])book/")
 MARKDOWN_LINK = re.compile(r"(?<!!)\[[^\]]*\]\((?P<target>[^)]+)\)")
+# Цитата закрывается последней кавычкой перед ссылкой, а не первой встреченной:
+# книга часто цитирует сама себя, и вложенные «...» иначе обрывали бы совпадение,
+# из-за чего такая строка молча переставала считаться цитатой и не проверялась.
 CHAPTER_QUOTE = re.compile(
-    r"^>\s*«(?P<quote>[^»]{3,200})»\s*[—-]\s*`"
+    r"^>\s*«(?P<quote>.{3,200})»\s*[—-]\s*`"
     r"(?P<path>references/source-book/[A-Za-z0-9._/-]+\.md):(?P<start>\d+)`",
     re.MULTILINE,
 )
+CHAPTER_QUOTE_MARKER = re.compile(r"^>\s*«", re.MULTILINE)
 CHAPTERS_DIRECTORY = SKILL_DIRECTORY / "references" / "chapters"
 SKILL_LINE_LIMIT = 300
 REFERENCE_PATH = re.compile(r"references/[A-Za-z0-9._/-]+\.md")
@@ -876,6 +880,18 @@ def validate_chapter_quotes(root: Path, errors: list[str]) -> None:
     for chapter_path in sorted(chapters_root.glob("*.md")):
         relative_path = chapter_path.relative_to(root)
         text = chapter_path.read_text(encoding="utf-8")
+
+        # Нераспознанная цитата опаснее неверной: она не проверяется и при этом
+        # выглядит как подтверждённая ссылка на книгу.
+        started = len(CHAPTER_QUOTE_MARKER.findall(text))
+        parsed = len(CHAPTER_QUOTE.findall(text))
+        if started != parsed:
+            errors.append(
+                f"unparsed chapter quote in {relative_path}: "
+                f"{started} quote lines, {parsed} parsed; "
+                "expected format: > «текст» — `references/source-book/chapterN.md:LINE`"
+            )
+
         for match in CHAPTER_QUOTE.finditer(text):
             source_path = root / SKILL_DIRECTORY / match.group("path")
             if not source_path.is_file():

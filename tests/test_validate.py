@@ -590,6 +590,35 @@ class ChapterQuoteTests(unittest.TestCase):
 
         self.assertEqual(0, result.returncode, result.stdout + result.stderr)
 
+    def test_checks_quote_containing_nested_guillemets(self) -> None:
+        with repository_copy() as copied_root:
+            path = self.chapter_path(copied_root)
+            path.write_text(
+                path.read_text(encoding="utf-8")
+                + "\n> «эта цитата содержит «вложенные» кавычки и в книге "
+                "отсутствует» — `references/source-book/chapter1.md:13`\n",
+                encoding="utf-8",
+            )
+
+            result = run_validator(copied_root)
+
+        self.assertNotEqual(0, result.returncode)
+        self.assertIn("quote not found in anchor section", result.stdout)
+
+    def test_rejects_quote_line_that_does_not_parse(self) -> None:
+        with repository_copy() as copied_root:
+            path = self.chapter_path(copied_root)
+            path.write_text(
+                path.read_text(encoding="utf-8")
+                + "\n> «цитата без ссылки на источник»\n",
+                encoding="utf-8",
+            )
+
+            result = run_validator(copied_root)
+
+        self.assertNotEqual(0, result.returncode)
+        self.assertIn("unparsed chapter quote", result.stdout)
+
     def test_rejects_quote_taken_from_a_neighbouring_section(self) -> None:
         with repository_copy() as copied_root:
             path = self.chapter_path(copied_root)

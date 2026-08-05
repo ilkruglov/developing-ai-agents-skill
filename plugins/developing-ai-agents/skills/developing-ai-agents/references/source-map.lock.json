@@ -300,11 +300,6 @@
       "line_text": "### Четыре формата хранения пользовательской памяти",
       "kind": "heading"
     },
-    "chapter4.md:102": {
-      "line_sha256": "093ed4a6ccda0dccee81d75d5559181f8ec86f3f379107cd7bdbdbdaf6d778e9",
-      "line_text": "### Эволюция проектирования инструментов",
-      "kind": "heading"
-    },
     "chapter4.md:110": {
       "line_sha256": "a8ec163359837af2fe13133488e4c1d0ef3ae9e5f8ef7550078318304673a05f",
       "line_text": "## Экосистема инструментов: MCP и сложности выбора инструментов",
@@ -340,11 +335,6 @@
       "line_text": "### Инструменты запуска по событию",
       "kind": "heading"
     },
-    "chapter4.md:399": {
-      "line_sha256": "b97968c993f197b37376c4495253161252470358746e77dca9ea084dc5595a77",
-      "line_text": "### Инструменты взаимодействия с пользователем",
-      "kind": "heading"
-    },
     "chapter4.md:41": {
       "line_sha256": "c42f3967aa3b810f1f3085b987e24b89962dfe13b594c72649ba8e1ebf08fc49",
       "line_text": "## Общие принципы проектирования инструментов",
@@ -355,39 +345,14 @@
       "line_text": "### Виртуальная идентичность и изолированная среда выполнения",
       "kind": "heading"
     },
-    "chapter4.md:429": {
-      "line_sha256": "af0119d7238cbd769efa5fb489a7bd0a21ab6ba739f1df2bb851cb20a39e5483",
-      "line_text": "### Механизм обработки событий",
-      "kind": "heading"
-    },
     "chapter4.md:43": {
       "line_sha256": "da8578aa1c660a09f0c6b706a1f8a588471ed9ceab194998dff70c3fe71390cd",
       "line_text": "### Выбор формы представления возможностей: специализированный инструмент или Skill + универсальный исполнитель",
       "kind": "heading"
     },
-    "chapter4.md:504": {
-      "line_sha256": "c0d7d7e8c4eaf27a0b82c7342f80e2912b5e531a3eeb3b5057ba075133f147ba",
-      "line_text": "### Инженерная реализация: как обеспечить асинхронное прерывание синхронной модели",
-      "kind": "heading"
-    },
-    "chapter4.md:58": {
-      "line_sha256": "2963d7ddbd63b3450789f6fbebd2b9cf587b53e2e32ed36c127855631d5f7039",
-      "line_text": "### Компромисс в гранулярности инструментов: объединение и разделение",
-      "kind": "heading"
-    },
-    "chapter4.md:66": {
-      "line_sha256": "62f924e50b3b90e3e28418b56040b0069befce29ba48a49e6280637db4bba8e2",
-      "line_text": "### Проектирование универсальных инструментов",
-      "kind": "heading"
-    },
     "chapter4.md:74": {
       "line_sha256": "6cdddbd8ac6a67097e2195f69ded7b85762bad9156860febd67c64f807b40371",
       "line_text": "### Искусство описания инструментов",
-      "kind": "heading"
-    },
-    "chapter4.md:90": {
-      "line_sha256": "daad631e905822be7670de48bf4e0a39614cac06ec0dcd86d9b9b047fb957538",
-      "line_text": "### Точность передачи параметров",
       "kind": "heading"
     },
     "chapter5.md:146": {
