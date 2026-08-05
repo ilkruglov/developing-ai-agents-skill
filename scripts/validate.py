@@ -2,10 +2,21 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import re
+import sys
 from pathlib import Path
 from urllib.parse import unquote, urlparse
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+
+from source_anchors import (
+    LOCAL_SOURCE_ANCHOR,
+    LOCK_RELATIVE_PATH,
+    anchor_key,
+    iter_skill_documents,
+)
 
 PLUGIN_NAME = "developing-ai-agents"
 MARKETPLACE_NAME = "developing-ai-agents-skill"
@@ -74,10 +85,6 @@ REQUIRED_ATTRIBUTIONS = {
     ),
 }
 NON_LOCAL_SOURCE_PATH = re.compile(r"(?<![-\w/])book/")
-LOCAL_SOURCE_ANCHOR = re.compile(
-    r"(?<![-\w/])(?P<path>references/source-book/[A-Za-z0-9._/-]+\.md):"
-    r"(?P<start>\d+)(?:-(?P<end>\d+))?"
-)
 MARKDOWN_LINK = re.compile(r"(?<!!)\[[^\]]*\]\((?P<target>[^)]+)\)")
 SEMVER = re.compile(
     r"^(0|[1-9]\d*)\."
@@ -787,6 +794,56 @@ def validate_plugin_versions(root: Path, errors: list[str]) -> None:
         errors.append(f"plugin versions differ: {details}")
 
 
+def load_lock(root: Path, errors: list[str]) -> dict:
+    lock_path = root / LOCK_RELATIVE_PATH
+    if not lock_path.is_file():
+        errors.append(f"missing required file: {LOCK_RELATIVE_PATH.as_posix()}")
+        return {}
+    try:
+        return json.loads(lock_path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError as error:
+        errors.append(f"invalid JSON in {LOCK_RELATIVE_PATH.as_posix()}: {error}")
+        return {}
+
+
+def validate_source_lock(root: Path, lock: dict, errors: list[str]) -> None:
+    anchors = lock.get("anchors")
+    if not isinstance(anchors, dict):
+        if lock:
+            errors.append("invalid lock: anchors must be an object")
+        return
+
+    line_cache: dict[Path, list[str]] = {}
+    for document in iter_skill_documents(root):
+        relative_path = document.relative_to(root)
+        text = document.read_text(encoding="utf-8")
+        for match in LOCAL_SOURCE_ANCHOR.finditer(text):
+            source_path = root / SKILL_DIRECTORY / match.group("path")
+            if not source_path.is_file():
+                continue
+            start = int(match.group("start"))
+            key = anchor_key(match.group("path"), start)
+            entry = anchors.get(key)
+            if entry is None:
+                errors.append(
+                    f"anchor missing from lock: {key} (referenced in {relative_path})"
+                )
+                continue
+            if source_path not in line_cache:
+                line_cache[source_path] = source_path.read_text(
+                    encoding="utf-8"
+                ).splitlines()
+            lines = line_cache[source_path]
+            if start > len(lines):
+                continue
+            digest = hashlib.sha256(lines[start - 1].encode("utf-8")).hexdigest()
+            if digest != entry.get("line_sha256"):
+                errors.append(
+                    f"anchor drift: {key} no longer matches the locked line; "
+                    "re-run scripts/build_source_lock.py and review the diff"
+                )
+
+
 def validate_repository(root: Path) -> list[str]:
     errors: list[str] = []
     line_counts: dict[Path, int] = {}
@@ -847,6 +904,9 @@ def validate_repository(root: Path) -> list[str]:
     validate_claude_marketplace(root, errors)
     validate_claude_plugin_manifest(root, errors)
     validate_plugin_versions(root, errors)
+
+    lock = load_lock(root, errors)
+    validate_source_lock(root, lock, errors)
 
     for document_path in iter_source_anchor_documents(root):
         text = document_path.read_text(encoding="utf-8")

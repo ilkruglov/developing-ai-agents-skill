@@ -440,5 +440,49 @@ class ValidateRepositoryTests(unittest.TestCase):
         self.assertIn("invalid SKILL.md frontmatter", result.stdout)
 
 
+class SourceLockTests(unittest.TestCase):
+    @staticmethod
+    def lock_path(root: Path) -> Path:
+        return root / SKILL_DIRECTORY / "references" / "source-map.lock.json"
+
+    def write_lock(self, root: Path, lock: dict) -> None:
+        self.lock_path(root).write_text(
+            json.dumps(lock, ensure_ascii=False, indent=2) + "\n",
+            encoding="utf-8",
+        )
+
+    def test_rejects_anchor_missing_from_lock(self) -> None:
+        with repository_copy() as copied_root:
+            lock = json.loads(self.lock_path(copied_root).read_text(encoding="utf-8"))
+            lock["anchors"].pop("chapter1.md:13")
+            self.write_lock(copied_root, lock)
+
+            result = run_validator(copied_root)
+
+        self.assertNotEqual(0, result.returncode)
+        self.assertIn("anchor missing from lock", result.stdout)
+        self.assertIn("chapter1.md:13", result.stdout)
+
+    def test_rejects_anchor_drift(self) -> None:
+        with repository_copy() as copied_root:
+            lock = json.loads(self.lock_path(copied_root).read_text(encoding="utf-8"))
+            lock["anchors"]["chapter1.md:13"]["line_sha256"] = "0" * 64
+            self.write_lock(copied_root, lock)
+
+            result = run_validator(copied_root)
+
+        self.assertNotEqual(0, result.returncode)
+        self.assertIn("anchor drift", result.stdout)
+
+    def test_rejects_missing_lock_file(self) -> None:
+        with repository_copy() as copied_root:
+            self.lock_path(copied_root).unlink()
+
+            result = run_validator(copied_root)
+
+        self.assertNotEqual(0, result.returncode)
+        self.assertIn("source-map.lock.json", result.stdout)
+
+
 if __name__ == "__main__":
     unittest.main()
