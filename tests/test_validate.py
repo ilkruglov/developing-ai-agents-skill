@@ -483,6 +483,65 @@ class SourceLockTests(unittest.TestCase):
         self.assertNotEqual(0, result.returncode)
         self.assertIn("source-map.lock.json", result.stdout)
 
+    def test_rejects_inline_anchor_without_allowlist(self) -> None:
+        with repository_copy() as copied_root:
+            skill_path = copied_root / SKILL_DIRECTORY / "SKILL.md"
+            skill_path.write_text(
+                skill_path.read_text(encoding="utf-8")
+                + "\n\nПроверка: `references/source-book/chapter1.md:15`.\n",
+                encoding="utf-8",
+            )
+            subprocess.run(
+                [sys.executable, str(copied_root / "scripts" / "build_source_lock.py")],
+                cwd=copied_root,
+                check=True,
+                capture_output=True,
+            )
+
+            result = run_validator(copied_root)
+
+        self.assertNotEqual(0, result.returncode)
+        self.assertIn("anchor is not a heading", result.stdout)
+        self.assertIn("chapter1.md:15", result.stdout)
+
+    def test_accepts_inline_anchor_listed_in_allowlist(self) -> None:
+        with repository_copy() as copied_root:
+            skill_path = copied_root / SKILL_DIRECTORY / "SKILL.md"
+            skill_path.write_text(
+                skill_path.read_text(encoding="utf-8")
+                + "\n\nПроверка: `references/source-book/chapter1.md:15`.\n",
+                encoding="utf-8",
+            )
+            subprocess.run(
+                [sys.executable, str(copied_root / "scripts" / "build_source_lock.py")],
+                cwd=copied_root,
+                check=True,
+                capture_output=True,
+            )
+            lock = json.loads(self.lock_path(copied_root).read_text(encoding="utf-8"))
+            lock["allowed_inline"] = [
+                {"anchor": "chapter1.md:15", "reason": "формула вводится в абзаце"}
+            ]
+            self.write_lock(copied_root, lock)
+
+            result = run_validator(copied_root)
+
+        self.assertNotIn("anchor is not a heading", result.stdout)
+
+    def test_rejects_anchor_range_beyond_file(self) -> None:
+        with repository_copy() as copied_root:
+            patterns_path = copied_root / SKILL_DIRECTORY / "references" / "patterns.md"
+            patterns_path.write_text(
+                patterns_path.read_text(encoding="utf-8")
+                + "\n\nИсточник: `references/source-book/chapter1.md:13-99999`.\n",
+                encoding="utf-8",
+            )
+
+            result = run_validator(copied_root)
+
+        self.assertNotEqual(0, result.returncode)
+        self.assertIn("source anchor out of range", result.stdout)
+
 
 if __name__ == "__main__":
     unittest.main()

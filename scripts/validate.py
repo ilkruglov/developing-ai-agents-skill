@@ -813,6 +813,13 @@ def validate_source_lock(root: Path, lock: dict, errors: list[str]) -> None:
             errors.append("invalid lock: anchors must be an object")
         return
 
+    allowed_inline = lock.get("allowed_inline")
+    allowed_keys = (
+        {item.get("anchor") for item in allowed_inline if isinstance(item, dict)}
+        if isinstance(allowed_inline, list)
+        else set()
+    )
+
     line_cache: dict[Path, list[str]] = {}
     for document in iter_skill_documents(root):
         relative_path = document.relative_to(root)
@@ -829,6 +836,12 @@ def validate_source_lock(root: Path, lock: dict, errors: list[str]) -> None:
                     f"anchor missing from lock: {key} (referenced in {relative_path})"
                 )
                 continue
+            if entry.get("kind") != "heading" and key not in allowed_keys:
+                errors.append(
+                    f"anchor is not a heading: {key} (referenced in {relative_path}); "
+                    "point at a section heading or add it to allowed_inline "
+                    "with a reason"
+                )
             if source_path not in line_cache:
                 line_cache[source_path] = source_path.read_text(
                     encoding="utf-8"
