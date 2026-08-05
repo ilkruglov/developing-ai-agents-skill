@@ -355,14 +355,14 @@
       "line_text": "### Искусство описания инструментов",
       "kind": "heading"
     },
-    "chapter5.md:146": {
-      "line_sha256": "fd880c146e0bcaaf4b6f4ffa7e99f7f69a11aa754629b5c2da293ed3c6b68b8b",
-      "line_text": "### Общий процесс работы Coding-агента",
-      "kind": "heading"
-    },
     "chapter5.md:15": {
       "line_sha256": "53bf467461744332149d761b6d6d4b1d8826c647e4973aac010ccd0c94b44ab7",
       "line_text": "## Coding-агент",
+      "kind": "heading"
+    },
+    "chapter5.md:17": {
+      "line_sha256": "12fda5812902a40c1bdcd484eba7d25891d284233a676bda1cd1f3df55ed6d48",
+      "line_text": "### Написание кода — базовая способность агента",
       "kind": "heading"
     },
     "chapter5.md:188": {
@@ -375,49 +375,9 @@
       "line_text": "### Сбои и восстановление после ошибок",
       "kind": "heading"
     },
-    "chapter5.md:311": {
-      "line_sha256": "457b34087e60af00791f3f0e6ba7b209f3e39c982a053818db22eb0f987e43f7",
-      "line_text": "### Инструменты поиска в Coding-агенте",
-      "kind": "heading"
-    },
-    "chapter5.md:335": {
-      "line_sha256": "092f1677dd44ffc3bf640f3cb323518a8eb56ad5b523f46434570815f22e0d50",
-      "line_text": "### Инструменты редактирования файлов в Coding-агенте",
-      "kind": "heading"
-    },
     "chapter5.md:354": {
       "line_sha256": "97088bf9d17717abfd9d2c260168c145e29e7cfc34ee8c60c9781e1cd60ccc0c",
       "line_text": "## Код: метаспособность универсального агента",
-      "kind": "heading"
-    },
-    "chapter5.md:373": {
-      "line_sha256": "550f01b112700fbc2d7e96701973ad70ecf0f15cce4e0a0c2d176ec90da60693",
-      "line_text": "### Код как инструмент мышления",
-      "kind": "heading"
-    },
-    "chapter5.md:415": {
-      "line_sha256": "f6c28d22c18e7ad997559bf77bed9a7dcef27eb49cec50ba95d91fd467fca1c9",
-      "line_text": "### Код как исполнимое ограничение на основе бизнес-правил",
-      "kind": "heading"
-    },
-    "chapter5.md:509": {
-      "line_sha256": "a900dd9a0a60e56d4eb785e83ffe2d2462c9554f3903c77dc7691d11b4f5d537",
-      "line_text": "### Генерация мультимедиа с помощью кода",
-      "kind": "heading"
-    },
-    "chapter5.md:573": {
-      "line_sha256": "3daee4a7488145db7a1ba9a7bac6565e496dcb57ca8e2e73ade0dcf13d51fb0f",
-      "line_text": "### Код как системный адаптер",
-      "kind": "heading"
-    },
-    "chapter5.md:614": {
-      "line_sha256": "36b6cc8f7088ae29b8d7bfd745c8a0f508cdbf032b1dc5c9fe5719addb57f059",
-      "line_text": "### Код как генеративный UI",
-      "kind": "heading"
-    },
-    "chapter5.md:693": {
-      "line_sha256": "cb85f2efd59c5a24108b36765b69f7e40474551799c4995d1a4ecc7f15eae9fe",
-      "line_text": "### Код создаёт код: самозагрузка агента",
       "kind": "heading"
     },
     "chapter5.md:82": {
