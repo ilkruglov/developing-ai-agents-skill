@@ -1,7 +1,7 @@
 {
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
   "name": "developing-ai-agents-skill",
-  "description": "Плагин для разработки и проверки AI-агентов по книге Bojie Li.",
+  "description": "Плагин для системной разработки AI-агентов: от выбора архитектуры и Harness до диагностики, evals, realtime и multi-agent.",
   "owner": {
     "name": "ilkruglov"
   },
@@ -9,8 +9,8 @@
     {
       "name": "developing-ai-agents",
       "source": "./plugins/developing-ai-agents",
-      "description": "Skill для разработки и проверки AI-агентов по книге Bojie Li.",
-      "version": "0.3.0",
+      "description": "Инженерный skill для проектирования, реализации, отладки и оценки AI-агентов: архитектура, Harness, контекст, инструменты, память и evals.",
+      "version": "0.4.0",
       "category": "productivity"
     }
   ]
