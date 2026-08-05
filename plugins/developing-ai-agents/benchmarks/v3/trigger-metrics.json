@@ -1,0 +1,265 @@
+{
+  "summary": {
+    "total": 36,
+    "positive": 18,
+    "negative": 18,
+    "recall": 1.0,
+    "false_trigger_rate": 0.056,
+    "runs_failed": 0,
+    "note": "p01 и p10 перезапущены с увеличенным таймаутом"
+  },
+  "results": [
+    {
+      "id": "p01",
+      "query": "Наш автономный помощник зацикливается на одинаковых командах и после сжатия забывает ограничения. Нужно найти архитектурную причину и исправить runtime.",
+      "should_trigger": true,
+      "triggered": true,
+      "pass": true
+    },
+    {
+      "id": "p02",
+      "query": "Не понимаю, нужен ли здесь workflow, один агент или команда агентов. Спроектируй минимальный вариант и критерий выбора.",
+      "should_trigger": true,
+      "triggered": true,
+      "pass": true
+    },
+    {
+      "id": "p03",
+      "query": "Нужно построить честный benchmark для tool-using assistant: реальные outcomes, повторы, budgets и release gate.",
+      "should_trigger": true,
+      "triggered": true,
+      "pass": true
+    },
+    {
+      "id": "p04",
+      "query": "Support-бот путает память пользователей, RAG приносит устаревшие правила, а найденные страницы пытаются менять инструкции.",
+      "should_trigger": true,
+      "triggered": true,
+      "pass": true
+    },
+    {
+      "id": "p05",
+      "query": "Проектируем голосового помощника с barge-in: быстрый ответ должен жить отдельно от долгого reasoning и tool calls.",
+      "should_trigger": true,
+      "triggered": true,
+      "pass": true
+    },
+    {
+      "id": "p06",
+      "query": "Пять ролей голосуют за ответ, но ошибки усиливаются. Нужна схема координации и независимой проверки multi-agent.",
+      "should_trigger": true,
+      "triggered": true,
+      "pass": true
+    },
+    {
+      "id": "p07",
+      "query": "Хотим, чтобы помощник превращал успешные стратегии в Skills и создавал новые tools, но не мог повысить себе права.",
+      "should_trigger": true,
+      "triggered": true,
+      "pass": true
+    },
+    {
+      "id": "p08",
+      "query": "У агента проблемы с форматом tool calls и длинными траекториями. Реши, что чинить в Harness, а что обучать через SFT или RL.",
+      "should_trigger": true,
+      "triggered": true,
+      "pass": true
+    },
+    {
+      "id": "p09",
+      "query": "Собери production workflow Coding Agent: dirty worktree, sandbox, checkpoints, restart и доказательство прохождения тестов.",
+      "should_trigger": true,
+      "triggered": true,
+      "pass": true
+    },
+    {
+      "id": "p10",
+      "query": "Проведи review MCP/tool registry для агента: schemas, permissions, idempotency, approvals и проверка side effects.",
+      "should_trigger": true,
+      "triggered": true,
+      "pass": true
+    },
+    {
+      "id": "p11",
+      "query": "Асинхронный помощник получает дубли webhook и поздние результаты после cancel. Нужна state machine и recovery.",
+      "should_trigger": true,
+      "triggered": true,
+      "pass": true
+    },
+    {
+      "id": "p12",
+      "query": "Оцени архитектуру исследовательского агента по книге: context, tools, память, verifier и границы актуальности provider-фактов.",
+      "should_trigger": true,
+      "triggered": true,
+      "pass": true
+    },
+    {
+      "id": "p13",
+      "query": "у нас ассистент по возвратам, в 6% случаев клиент получает два одинаковых письма. таймауты почтового шлюза выросли на прошлой неделе. как найти причину, трассы есть",
+      "should_trigger": true,
+      "triggered": true,
+      "pass": true
+    },
+    {
+      "id": "p14",
+      "query": "Хочу, чтобы наш бот запоминал предпочтения клиентов между обращениями и не выяснял одно и то же заново. Что и где хранить, чтобы потом можно было удалить по запросу?",
+      "should_trigger": true,
+      "triggered": true,
+      "pass": true
+    },
+    {
+      "id": "p15",
+      "query": "нужно понять, стал ли новый промпт лучше. прогнали на 40 задачах, стало 78% против 74%. можно катить?",
+      "should_trigger": true,
+      "triggered": true,
+      "pass": true
+    },
+    {
+      "id": "p16",
+      "query": "делаем голосового помощника для колл-центра, хотим чтобы можно было перебивать. с чего начать архитектуру и какой лимит задержки закладывать",
+      "should_trigger": true,
+      "triggered": true,
+      "pass": true
+    },
+    {
+      "id": "p17",
+      "query": "Есть агент, который сам ставит себе задачи и создаёт инструменты через pip install. Безопасно ли это и что проверить перед запуском в прод?",
+      "should_trigger": true,
+      "triggered": true,
+      "pass": true
+    },
+    {
+      "id": "p18",
+      "query": "коллега предлагает разбить нашего агента на пять ролей: планировщик, исполнитель, критик, редактор и координатор. звучит красиво, но я не уверен что это не оверинжиниринг",
+      "should_trigger": true,
+      "triggered": true,
+      "pass": true
+    },
+    {
+      "id": "n01",
+      "query": "Оптимизируй промпт для суммаризации новостных статей: сейчас модель слишком многословна и добавляет свои оценки. Вот текущий промпт и три примера вывода.",
+      "should_trigger": false,
+      "triggered": false,
+      "pass": true
+    },
+    {
+      "id": "n02",
+      "query": "Настрой retry с экспоненциальной задержкой для нашего HTTP-клиента в микросервисе billing-api, сейчас при 503 падает сразу.",
+      "should_trigger": false,
+      "triggered": false,
+      "pass": true
+    },
+    {
+      "id": "n03",
+      "query": "Помоги выбрать векторную БД для поиска по внутренней документации: 200к документов, нужен фильтр по отделам. Сравниваем Qdrant и pgvector.",
+      "should_trigger": false,
+      "triggered": true,
+      "pass": false
+    },
+    {
+      "id": "n04",
+      "query": "У нас flaky-тест в CI, падает примерно раз в десять прогонов на разных шагах. Как локализовать?",
+      "should_trigger": false,
+      "triggered": false,
+      "pass": true
+    },
+    {
+      "id": "n05",
+      "query": "Спроектируй очередь задач на Celery с воркерами и приоритетами: воркеры должны переживать рестарт и не выполнять задачу дважды.",
+      "should_trigger": false,
+      "triggered": false,
+      "pass": true
+    },
+    {
+      "id": "n06",
+      "query": "Замерь p95 задержки нашего REST API и найди узкое место, есть трейсы из Jaeger за сутки.",
+      "should_trigger": false,
+      "triggered": false,
+      "pass": true
+    },
+    {
+      "id": "n07",
+      "query": "Настрой A/B-тест для лендинга: две версии заголовка, нужно понять, какая конверсия выше и сколько ждать.",
+      "should_trigger": false,
+      "triggered": false,
+      "pass": true
+    },
+    {
+      "id": "n08",
+      "query": "Как кэшировать ответы модели, чтобы снизить счёт за API? Много повторяющихся запросов к одному и тому же тексту.",
+      "should_trigger": false,
+      "triggered": false,
+      "pass": true
+    },
+    {
+      "id": "n09",
+      "query": "Сделай FAQ-бота на правилах: двадцать вопросов, ответы фиксированные, никаких внешних вызовов.",
+      "should_trigger": false,
+      "triggered": false,
+      "pass": true
+    },
+    {
+      "id": "n10",
+      "query": "Напиши ETL на Airflow: выгрузка из Postgres, трансформация, загрузка в ClickHouse, с ретраями на каждом шаге.",
+      "should_trigger": false,
+      "triggered": false,
+      "pass": true
+    },
+    {
+      "id": "n11",
+      "query": "Переведи этот абзац книги с китайского на русский, сохранив термины из glossary.",
+      "should_trigger": false,
+      "triggered": false,
+      "pass": true
+    },
+    {
+      "id": "n12",
+      "query": "Установи skill из указанного GitHub-репозитория в Codex.",
+      "should_trigger": false,
+      "triggered": false,
+      "pass": true
+    },
+    {
+      "id": "n13",
+      "query": "Нужен воркер, который читает из Kafka и пишет в Postgres с at-least-once семантикой, дубли недопустимы.",
+      "should_trigger": false,
+      "triggered": false,
+      "pass": true
+    },
+    {
+      "id": "n14",
+      "query": "Настрой алерты в Prometheus: p99 задержки выше 300 мс и error rate выше 1% за пять минут.",
+      "should_trigger": false,
+      "triggered": false,
+      "pass": true
+    },
+    {
+      "id": "n15",
+      "query": "Отрефактори модуль payments.py на 800 строк: слишком много ответственностей в одном классе.",
+      "should_trigger": false,
+      "triggered": false,
+      "pass": true
+    },
+    {
+      "id": "n16",
+      "query": "Объясни, чем embeddings отличаются от токенов и зачем нужна нормализация векторов.",
+      "should_trigger": false,
+      "triggered": false,
+      "pass": true
+    },
+    {
+      "id": "n17",
+      "query": "Сделай CLI-обёртку над нашим внутренним API с автодополнением команд в zsh.",
+      "should_trigger": false,
+      "triggered": false,
+      "pass": true
+    },
+    {
+      "id": "n18",
+      "query": "Напиши документацию по OpenAPI-спеке для наших пятнадцати эндпоинтов.",
+      "should_trigger": false,
+      "triggered": false,
+      "pass": true
+    }
+  ]
+}
