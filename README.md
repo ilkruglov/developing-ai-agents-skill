@@ -1,84 +1,76 @@
-# Developing AI Agents Skill
+# Developing AI Agents
 
-Автономный русскоязычный Skill для проектирования, реализации, диагностики и
-оценки production AI-агентов. Он охватывает context engineering, Harness,
-tool contracts, memory/RAG, evaluation, post-training, self-evolution,
-realtime interaction и multi-agent coordination.
+Плагин Codex с навыком `developing-ai-agents` для разработки и проверки
+AI-агентов. Материалы основаны на книге Bojie Li
+«深入理解 AI Agent：设计原理与工程实践».
 
-Репозиторий полностью self-contained: необходимые текстовые источники книги,
-инженерные конспекты, evals и offline-валидатор находятся внутри. Доступ к
-исходному репозиторию книги во время работы Skill не требуется. Сеть нужна
-только тогда, когда конкретная задача требует проверить изменяемые внешние
-факты: API, SDK, модели, цены, лимиты или поддержку провайдера.
+Текст русского перевода хранится внутри плагина. Для работы с ним не требуется
+отдельно скачивать репозиторий книги.
 
 ## Установка
 
-В проект:
-
 ```bash
-git clone https://github.com/ilkruglov/developing-ai-agents-skill.git \
-  .agents/skills/developing-ai-agents
+codex plugin marketplace add ilkruglov/developing-ai-agents-skill
+codex plugin add developing-ai-agents@developing-ai-agents-skill
 ```
 
-В личный каталог Codex:
+После установки начните новую сессию Codex.
+
+Для обновления:
 
 ```bash
-git clone https://github.com/ilkruglov/developing-ai-agents-skill.git \
-  ~/.codex/skills/developing-ai-agents
+codex plugin marketplace upgrade developing-ai-agents-skill
+codex plugin add developing-ai-agents@developing-ai-agents-skill
 ```
 
-После установки попросите агента использовать `$developing-ai-agents` либо
-задайте задачу по архитектуре, отладке или evaluation AI-агента — описание в
-`SKILL.md` предназначено и для автоматического triggering.
+## Использование
+
+```text
+Используй $developing-ai-agents, чтобы спроектировать агента для моей задачи.
+```
+
+Skill применяется также при review, отладке и оценке существующих агентных
+систем.
+
+## Состав
+
+- `plugins/developing-ai-agents/skills/developing-ai-agents/` — Skill и
+  материалы книги.
+- `plugins/developing-ai-agents/evals/` — набор проверочных задач.
+- `plugins/developing-ai-agents/benchmarks/v2/` — сохранённые результаты
+  benchmark.
+- `scripts/validate.py` — проверка структуры репозитория.
 
 ## Проверка
-
-Валидатор использует только Python standard library:
 
 ```bash
 python3 scripts/validate.py
 python3 -m unittest discover -s tests -v
 ```
 
-Он проверяет структуру Skill, frontmatter, локальные книжные anchors,
-Markdown-ссылки, JSON/JSONL и обязательную атрибуцию.
+## Результаты evals
 
-## Benchmark v2
+Набор содержит 12 сценариев, по три запуска с навыком и без него.
 
-Локальный held-out benchmark: 12 сценариев, 3 повтора, 72 ответа, отдельный
-grading и 36 слепых A/B-сравнений.
-
-| Метрика | Со Skill | Baseline |
+| Метрика | С навыком | Без навыка |
 |---|---:|---:|
-| Assertion pass rate | 90,0% (162/180) | 75,0% (135/180) |
-| Blind A/B wins | 28/36 | 8/36 |
-| Trigger precision / recall | 100% / 100% | — |
+| Выполненные требования | 90,0% (162/180) | 75,0% (135/180) |
+| Победы в слепом сравнении | 28/36 | 8/36 |
+| Точность определения применимости | 100% | — |
 
-Полные формальные результаты и ограничения методики находятся в
-[`benchmarks/v2/`](benchmarks/v2/). Точная runner-модель, token и time
-telemetry не были записаны; задачи внутри одного runner-контекста не полностью
-независимы.
+Модель запуска, расход токенов и время не записывались. Задачи внутри одного
+контекста запуска не были полностью независимы. Исходные данные находятся в
+[`plugins/developing-ai-agents/benchmarks/v2/`](plugins/developing-ai-agents/benchmarks/v2/).
 
-## Структура
+## Автор книги и исходные материалы
 
-- `SKILL.md` — основной рабочий контракт.
-- `references/` — инженерные конспекты, patterns, glossary и локальные источники.
-- `references/source-book/` — 12 русских Markdown-глав, используемых anchors.
-- `evals/` — eval-наборы и воспроизводимые fixtures.
-- `benchmarks/v2/` — результаты полного benchmark.
-- `scripts/validate.py` — автономная проверка репозитория.
-
-## Автор и источники
-
-Skill основан на книге Bojie Li «深入理解 AI Agent：设计原理与工程实践»:
-
-- автор: [Bojie Li](https://github.com/bojieli);
-- оригинальная книга: [bojieli/ai-agent-book](https://github.com/bojieli/ai-agent-book);
-- русский перевод: [ilkruglov/ai-agent-book](https://github.com/ilkruglov/ai-agent-book),
+- Автор: [Bojie Li](https://github.com/bojieli).
+- Оригинал: [bojieli/ai-agent-book](https://github.com/bojieli/ai-agent-book).
+- Русский перевод: [ilkruglov/ai-agent-book](https://github.com/ilkruglov/ai-agent-book),
   «Русский перевод: community edition».
 
-Точные версии источников записаны в [`SOURCE.json`](SOURCE.json), а сведения о
-производном произведении — в [`NOTICE`](NOTICE).
+Версии исходных материалов указаны в [`SOURCE.json`](SOURCE.json). Уведомление
+об авторстве находится в [`NOTICE`](NOTICE).
 
 ## Лицензия
 

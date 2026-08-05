@@ -12,6 +12,8 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 TEMP_ROOT = ROOT / ".tmp" / "tests"
+PLUGIN_DIRECTORY = Path("plugins") / "developing-ai-agents"
+SKILL_DIRECTORY = PLUGIN_DIRECTORY / "skills" / "developing-ai-agents"
 
 
 def run_validator(root: Path) -> subprocess.CompletedProcess[str]:
@@ -43,9 +45,120 @@ class ValidateRepositoryTests(unittest.TestCase):
 
         self.assertEqual(0, result.returncode, result.stdout + result.stderr)
 
+    def test_rejects_missing_plugin_manifest(self) -> None:
+        with repository_copy() as copied_root:
+            manifest_path = (
+                copied_root / PLUGIN_DIRECTORY / ".codex-plugin" / "plugin.json"
+            )
+            manifest_path.unlink(missing_ok=True)
+
+            result = run_validator(copied_root)
+
+        self.assertNotEqual(0, result.returncode)
+        self.assertIn("missing required file", result.stdout)
+        self.assertIn(".codex-plugin/plugin.json", result.stdout)
+
+    def test_rejects_missing_marketplace_manifest(self) -> None:
+        with repository_copy() as copied_root:
+            marketplace_path = copied_root / ".agents" / "plugins" / "marketplace.json"
+            marketplace_path.unlink()
+
+            result = run_validator(copied_root)
+
+        self.assertNotEqual(0, result.returncode)
+        self.assertIn("missing required file", result.stdout)
+        self.assertIn(".agents/plugins/marketplace.json", result.stdout)
+
+    def test_rejects_marketplace_source_that_does_not_resolve(self) -> None:
+        with repository_copy() as copied_root:
+            marketplace_path = copied_root / ".agents" / "plugins" / "marketplace.json"
+            payload = json.loads(marketplace_path.read_text(encoding="utf-8"))
+            payload["plugins"][0]["source"]["path"] = "./plugins/missing"
+            marketplace_path.write_text(
+                json.dumps(payload, ensure_ascii=False, indent=2) + "\n",
+                encoding="utf-8",
+            )
+
+            result = run_validator(copied_root)
+
+        self.assertNotEqual(0, result.returncode)
+        self.assertIn("invalid marketplace plugin source", result.stdout)
+
+    def test_rejects_mismatched_marketplace_name(self) -> None:
+        with repository_copy() as copied_root:
+            marketplace_path = copied_root / ".agents" / "plugins" / "marketplace.json"
+            payload = json.loads(marketplace_path.read_text(encoding="utf-8"))
+            payload["name"] = "wrong-marketplace"
+            marketplace_path.write_text(
+                json.dumps(payload, ensure_ascii=False, indent=2) + "\n",
+                encoding="utf-8",
+            )
+
+            result = run_validator(copied_root)
+
+        self.assertNotEqual(0, result.returncode)
+        self.assertIn("invalid marketplace name", result.stdout)
+
+    def test_rejects_missing_bundled_skill(self) -> None:
+        with repository_copy() as copied_root:
+            skill_path = copied_root / SKILL_DIRECTORY / "SKILL.md"
+            skill_path.unlink(missing_ok=True)
+
+            result = run_validator(copied_root)
+
+        self.assertNotEqual(0, result.returncode)
+        self.assertIn("missing required file", result.stdout)
+        self.assertIn("skills/developing-ai-agents/SKILL.md", result.stdout)
+
+    def test_rejects_missing_bundled_eval_suite(self) -> None:
+        with repository_copy() as copied_root:
+            eval_path = copied_root / PLUGIN_DIRECTORY / "evals" / "benchmark-v2.json"
+            eval_path.unlink(missing_ok=True)
+
+            result = run_validator(copied_root)
+
+        self.assertNotEqual(0, result.returncode)
+        self.assertIn("missing required file", result.stdout)
+        self.assertIn("evals/benchmark-v2.json", result.stdout)
+
+    def test_rejects_plugin_without_legal_source_files(self) -> None:
+        for relative_path in ("LICENSE", "NOTICE", "SOURCE.json"):
+            with (
+                self.subTest(relative_path=relative_path),
+                repository_copy() as copied_root,
+            ):
+                target_path = copied_root / PLUGIN_DIRECTORY / relative_path
+                target_path.unlink(missing_ok=True)
+
+                result = run_validator(copied_root)
+
+                self.assertNotEqual(0, result.returncode)
+                self.assertIn("missing required file", result.stdout)
+                self.assertIn(
+                    str(PLUGIN_DIRECTORY / relative_path),
+                    result.stdout,
+                )
+
+    def test_rejects_mismatched_plugin_manifest(self) -> None:
+        with repository_copy() as copied_root:
+            manifest_path = (
+                copied_root / PLUGIN_DIRECTORY / ".codex-plugin" / "plugin.json"
+            )
+            payload = json.loads(manifest_path.read_text(encoding="utf-8"))
+            payload["name"] = "wrong-plugin"
+            manifest_path.write_text(
+                json.dumps(payload, ensure_ascii=False, indent=2) + "\n",
+                encoding="utf-8",
+            )
+
+            result = run_validator(copied_root)
+
+        self.assertNotEqual(0, result.returncode)
+        self.assertIn("invalid plugin manifest", result.stdout)
+
     def test_rejects_non_local_book_anchor(self) -> None:
         with repository_copy() as copied_root:
-            skill_path = copied_root / "SKILL.md"
+            skill_path = copied_root / SKILL_DIRECTORY / "SKILL.md"
             skill_path.write_text(
                 skill_path.read_text(encoding="utf-8")
                 + "\nLegacy source: `book/chapter1.md:1`.\n",
@@ -59,7 +172,7 @@ class ValidateRepositoryTests(unittest.TestCase):
 
     def test_rejects_non_local_book_anchor_in_eval_json(self) -> None:
         with repository_copy() as copied_root:
-            eval_path = copied_root / "evals" / "benchmark-v2.json"
+            eval_path = copied_root / PLUGIN_DIRECTORY / "evals" / "benchmark-v2.json"
             payload = json.loads(eval_path.read_text(encoding="utf-8"))
             payload["legacy_anchor"] = "book/*.md:line"
             eval_path.write_text(
@@ -74,7 +187,7 @@ class ValidateRepositoryTests(unittest.TestCase):
 
     def test_rejects_out_of_range_local_anchor(self) -> None:
         with repository_copy() as copied_root:
-            skill_path = copied_root / "SKILL.md"
+            skill_path = copied_root / SKILL_DIRECTORY / "SKILL.md"
             skill_path.write_text(
                 skill_path.read_text(encoding="utf-8")
                 + "\nBroken source: `references/source-book/chapter1.md:999999`.\n",
@@ -118,7 +231,7 @@ class ValidateRepositoryTests(unittest.TestCase):
 
     def test_rejects_invalid_json(self) -> None:
         with repository_copy() as copied_root:
-            (copied_root / "evals" / "benchmark-v2.json").write_text(
+            (copied_root / PLUGIN_DIRECTORY / "evals" / "benchmark-v2.json").write_text(
                 "{\n",
                 encoding="utf-8",
             )
@@ -130,7 +243,13 @@ class ValidateRepositoryTests(unittest.TestCase):
 
     def test_rejects_invalid_jsonl(self) -> None:
         with repository_copy() as copied_root:
-            trace_path = copied_root / "evals" / "fixtures" / "context-loop-trace.jsonl"
+            trace_path = (
+                copied_root
+                / PLUGIN_DIRECTORY
+                / "evals"
+                / "fixtures"
+                / "context-loop-trace.jsonl"
+            )
             trace_path.write_text("{\n", encoding="utf-8")
 
             result = run_validator(copied_root)
@@ -140,7 +259,7 @@ class ValidateRepositoryTests(unittest.TestCase):
 
     def test_rejects_invalid_skill_frontmatter(self) -> None:
         with repository_copy() as copied_root:
-            skill_path = copied_root / "SKILL.md"
+            skill_path = copied_root / SKILL_DIRECTORY / "SKILL.md"
             skill_path.write_text(
                 skill_path.read_text(encoding="utf-8").replace(
                     "name: developing-ai-agents",

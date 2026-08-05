@@ -1,0 +1,20 @@
+{
+  "name": "developing-ai-agents-skill",
+  "interface": {
+    "displayName": "Разработка AI-агентов"
+  },
+  "plugins": [
+    {
+      "name": "developing-ai-agents",
+      "source": {
+        "source": "local",
+        "path": "./plugins/developing-ai-agents"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    }
+  ]
+}

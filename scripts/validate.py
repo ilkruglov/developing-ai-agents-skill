@@ -7,25 +7,38 @@ import re
 from pathlib import Path
 from urllib.parse import unquote
 
+PLUGIN_NAME = "developing-ai-agents"
+MARKETPLACE_NAME = "developing-ai-agents-skill"
+PLUGIN_DIRECTORY = Path("plugins") / PLUGIN_NAME
+PLUGIN_SOURCE = f"./{PLUGIN_DIRECTORY.as_posix()}"
+SKILL_DIRECTORY = PLUGIN_DIRECTORY / "skills" / PLUGIN_NAME
+
 REQUIRED_PATHS = (
-    "SKILL.md",
+    ".agents/plugins/marketplace.json",
+    str(PLUGIN_DIRECTORY / ".codex-plugin" / "plugin.json"),
+    str(PLUGIN_DIRECTORY / "LICENSE"),
+    str(PLUGIN_DIRECTORY / "NOTICE"),
+    str(PLUGIN_DIRECTORY / "SOURCE.json"),
+    str(PLUGIN_DIRECTORY / "evals" / "benchmark-v2.json"),
+    str(PLUGIN_DIRECTORY / "benchmarks" / "v2" / "benchmark.json"),
+    str(SKILL_DIRECTORY / "SKILL.md"),
     "README.md",
     "LICENSE",
     "NOTICE",
     "SOURCE.json",
-    "agents/openai.yaml",
-    "references/source-book/introduction.md",
-    "references/source-book/chapter1.md",
-    "references/source-book/chapter2.md",
-    "references/source-book/chapter3.md",
-    "references/source-book/chapter4.md",
-    "references/source-book/chapter5.md",
-    "references/source-book/chapter6.md",
-    "references/source-book/chapter7.md",
-    "references/source-book/chapter8.md",
-    "references/source-book/chapter9.md",
-    "references/source-book/chapter10.md",
-    "references/source-book/afterword.md",
+    str(SKILL_DIRECTORY / "agents" / "openai.yaml"),
+    str(SKILL_DIRECTORY / "references" / "source-book" / "introduction.md"),
+    str(SKILL_DIRECTORY / "references" / "source-book" / "chapter1.md"),
+    str(SKILL_DIRECTORY / "references" / "source-book" / "chapter2.md"),
+    str(SKILL_DIRECTORY / "references" / "source-book" / "chapter3.md"),
+    str(SKILL_DIRECTORY / "references" / "source-book" / "chapter4.md"),
+    str(SKILL_DIRECTORY / "references" / "source-book" / "chapter5.md"),
+    str(SKILL_DIRECTORY / "references" / "source-book" / "chapter6.md"),
+    str(SKILL_DIRECTORY / "references" / "source-book" / "chapter7.md"),
+    str(SKILL_DIRECTORY / "references" / "source-book" / "chapter8.md"),
+    str(SKILL_DIRECTORY / "references" / "source-book" / "chapter9.md"),
+    str(SKILL_DIRECTORY / "references" / "source-book" / "chapter10.md"),
+    str(SKILL_DIRECTORY / "references" / "source-book" / "afterword.md"),
 )
 REQUIRED_ATTRIBUTIONS = {
     "README.md": (
@@ -40,6 +53,18 @@ REQUIRED_ATTRIBUTIONS = {
         "https://github.com/ilkruglov/ai-agent-book",
     ),
     "SOURCE.json": (
+        "Bojie Li",
+        "https://github.com/bojieli",
+        "https://github.com/bojieli/ai-agent-book",
+        "https://github.com/ilkruglov/ai-agent-book",
+    ),
+    str(PLUGIN_DIRECTORY / "NOTICE"): (
+        "Bojie Li",
+        "https://github.com/bojieli",
+        "https://github.com/bojieli/ai-agent-book",
+        "https://github.com/ilkruglov/ai-agent-book",
+    ),
+    str(PLUGIN_DIRECTORY / "SOURCE.json"): (
         "Bojie Li",
         "https://github.com/bojieli",
         "https://github.com/bojieli/ai-agent-book",
@@ -80,7 +105,7 @@ def parse_frontmatter(text: str) -> dict[str, str]:
 
 
 def iter_markdown_documents(root: Path) -> list[Path]:
-    source_root = root / "references" / "source-book"
+    source_root = root / SKILL_DIRECTORY / "references" / "source-book"
     return [
         path
         for path in root.rglob("*.md")
@@ -90,11 +115,64 @@ def iter_markdown_documents(root: Path) -> list[Path]:
 
 def iter_source_anchor_documents(root: Path) -> list[Path]:
     documents = iter_markdown_documents(root)
-    evals_root = root / "evals"
+    evals_root = root / PLUGIN_DIRECTORY / "evals"
     if evals_root.is_dir():
         documents.extend(evals_root.rglob("*.json"))
         documents.extend(evals_root.rglob("*.jsonl"))
     return sorted(set(documents))
+
+
+def validate_marketplace(root: Path, errors: list[str]) -> None:
+    marketplace_path = root / ".agents" / "plugins" / "marketplace.json"
+    if not marketplace_path.is_file():
+        return
+    try:
+        marketplace = json.loads(marketplace_path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return
+    if not isinstance(marketplace, dict):
+        return
+    if marketplace.get("name") != MARKETPLACE_NAME:
+        errors.append(f"invalid marketplace name: expected {MARKETPLACE_NAME}")
+
+    plugins = marketplace.get("plugins")
+    if not isinstance(plugins, list):
+        errors.append("invalid marketplace plugin source: plugins must be an array")
+        return
+
+    entry = next(
+        (
+            value
+            for value in plugins
+            if isinstance(value, dict) and value.get("name") == PLUGIN_NAME
+        ),
+        None,
+    )
+    source = entry.get("source") if isinstance(entry, dict) else None
+    source_path = source.get("path") if isinstance(source, dict) else None
+    resolved_source = root / str(source_path).removeprefix("./")
+    if source_path != PLUGIN_SOURCE or not resolved_source.is_dir():
+        errors.append(
+            "invalid marketplace plugin source: expected "
+            f"{PLUGIN_NAME} at {PLUGIN_SOURCE}"
+        )
+
+
+def validate_plugin_manifest(root: Path, errors: list[str]) -> None:
+    manifest_path = root / PLUGIN_DIRECTORY / ".codex-plugin" / "plugin.json"
+    if not manifest_path.is_file():
+        return
+    try:
+        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return
+    if not isinstance(manifest, dict):
+        return
+    if manifest.get("name") != PLUGIN_NAME or manifest.get("skills") != "./skills/":
+        errors.append(
+            "invalid plugin manifest: expected name developing-ai-agents "
+            "and skills path ./skills/"
+        )
 
 
 def validate_repository(root: Path) -> list[str]:
@@ -115,7 +193,7 @@ def validate_repository(root: Path) -> list[str]:
                     f"missing attribution in {relative_path}: {required_value}"
                 )
 
-    skill_path = root / "SKILL.md"
+    skill_path = root / SKILL_DIRECTORY / "SKILL.md"
     if skill_path.is_file():
         frontmatter = parse_frontmatter(skill_path.read_text(encoding="utf-8"))
         if frontmatter.get("name") != "developing-ai-agents" or not frontmatter.get(
@@ -152,6 +230,9 @@ def validate_repository(root: Path) -> list[str]:
                     f"invalid JSONL in {relative_path}:{line_number}: {error}"
                 )
 
+    validate_marketplace(root, errors)
+    validate_plugin_manifest(root, errors)
+
     for document_path in iter_source_anchor_documents(root):
         text = document_path.read_text(encoding="utf-8")
         for match in NON_LOCAL_SOURCE_PATH.finditer(text):
@@ -160,7 +241,7 @@ def validate_repository(root: Path) -> list[str]:
                 f"non-local source anchor in {relative_path}: {match.group(0)}"
             )
         for match in LOCAL_SOURCE_ANCHOR.finditer(text):
-            source_path = root / match.group("path")
+            source_path = root / SKILL_DIRECTORY / match.group("path")
             start = int(match.group("start"))
             end = int(match.group("end") or start)
             if not source_path.is_file():
@@ -194,7 +275,7 @@ def validate_repository(root: Path) -> list[str]:
 
 def main() -> int:
     parser = argparse.ArgumentParser(
-        description="Validate the autonomous skill repository"
+        description="Validate the developing-ai-agents plugin repository"
     )
     parser.add_argument("root", nargs="?", default=".", type=Path)
     args = parser.parse_args()
