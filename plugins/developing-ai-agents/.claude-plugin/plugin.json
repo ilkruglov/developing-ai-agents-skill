@@ -2,7 +2,7 @@
   "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
   "name": "developing-ai-agents",
   "displayName": "Разработка AI-агентов",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "Инженерный skill для проектирования, реализации, отладки и оценки AI-агентов: архитектура, Harness, контекст, инструменты, память и evals.",
   "author": {
     "name": "ilkruglov",
@@ -11,5 +11,9 @@
   "homepage": "https://github.com/ilkruglov/developing-ai-agents-skill",
   "repository": "https://github.com/ilkruglov/developing-ai-agents-skill",
   "license": "Apache-2.0",
-  "keywords": ["ai-agents", "agent-skills", "evaluation"]
+  "keywords": [
+    "ai-agents",
+    "agent-skills",
+    "evaluation"
+  ]
 }
