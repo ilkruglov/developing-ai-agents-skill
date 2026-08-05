@@ -94,6 +94,8 @@ CHAPTER_QUOTE = re.compile(
     re.MULTILINE,
 )
 CHAPTERS_DIRECTORY = SKILL_DIRECTORY / "references" / "chapters"
+SKILL_LINE_LIMIT = 300
+REFERENCE_PATH = re.compile(r"references/[A-Za-z0-9._/-]+\.md")
 SEMVER = re.compile(
     r"^(0|[1-9]\d*)\."
     r"(0|[1-9]\d*)\."
@@ -893,6 +895,36 @@ def validate_chapter_quotes(root: Path, errors: list[str]) -> None:
                 )
 
 
+def validate_skill_routing(root: Path, errors: list[str]) -> None:
+    skill_path = root / SKILL_DIRECTORY / "SKILL.md"
+    if not skill_path.is_file():
+        return
+
+    text = skill_path.read_text(encoding="utf-8")
+    line_count = len(text.splitlines())
+    if line_count > SKILL_LINE_LIMIT:
+        errors.append(
+            f"SKILL.md exceeds {SKILL_LINE_LIMIT} lines: {line_count}; "
+            "move detail into references/"
+        )
+
+    listed = {
+        match.group(0)
+        for match in REFERENCE_PATH.finditer(text)
+        if "source-book/" not in match.group(0)
+    }
+    references_root = root / SKILL_DIRECTORY / "references"
+    present = {
+        path.relative_to(root / SKILL_DIRECTORY).as_posix()
+        for path in references_root.rglob("*.md")
+        if "source-book" not in path.parts
+    }
+    for missing in sorted(present - listed):
+        errors.append(f"reference file not listed in SKILL.md: {missing}")
+    for dangling in sorted(listed - present):
+        errors.append(f"SKILL.md lists missing reference file: {dangling}")
+
+
 def validate_repository(root: Path) -> list[str]:
     errors: list[str] = []
     line_counts: dict[Path, int] = {}
@@ -957,6 +989,7 @@ def validate_repository(root: Path) -> list[str]:
     lock = load_lock(root, errors)
     validate_source_lock(root, lock, errors)
     validate_chapter_quotes(root, errors)
+    validate_skill_routing(root, errors)
 
     for document_path in iter_source_anchor_documents(root):
         text = document_path.read_text(encoding="utf-8")

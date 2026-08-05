@@ -177,6 +177,22 @@ description: Use when designing, implementing, reviewing, debugging, or evaluati
 - Сквозные шаблоны: [references/patterns.md](references/patterns.md)
 - Термины: [references/glossary.md](references/glossary.md)
 - Точная карта источников: [references/source-map.md](references/source-map.md)
-- Подробные главы: [references/chapters/index.md](references/chapters/index.md)
+
+Конспекты глав — читай тот, который относится к задаче:
+
+| Тема | Файл |
+|---|---|
+| Назначение и структура книги | [references/chapters/ch00-introduction.md](references/chapters/ch00-introduction.md) |
+| Формула агента, ReAct, Harness | [references/chapters/ch01-agent-foundations.md](references/chapters/ch01-agent-foundations.md) |
+| Контекст, кэш, сжатие, Status Bar | [references/chapters/ch02-context-engineering.md](references/chapters/ch02-context-engineering.md) |
+| Память, RAG, retrieval | [references/chapters/ch03-memory-and-knowledge.md](references/chapters/ch03-memory-and-knowledge.md) |
+| Инструменты, MCP, async | [references/chapters/ch04-tools.md](references/chapters/ch04-tools.md) |
+| Coding agents, recovery | [references/chapters/ch05-coding-agents.md](references/chapters/ch05-coding-agents.md) |
+| Evals, метрики, judge | [references/chapters/ch06-evaluation.md](references/chapters/ch06-evaluation.md) |
+| Post-training, SFT, RL | [references/chapters/ch07-post-training.md](references/chapters/ch07-post-training.md) |
+| Самоулучшение, Skills, tool creation | [references/chapters/ch08-self-evolution.md](references/chapters/ch08-self-evolution.md) |
+| Realtime, голос, мультимодальность | [references/chapters/ch09-realtime-multimodal.md](references/chapters/ch09-realtime-multimodal.md) |
+| Multi-agent, топологии, каскады | [references/chapters/ch10-multi-agent.md](references/chapters/ch10-multi-agent.md) |
+| Возврат к основной формуле | [references/chapters/ch11-afterword.md](references/chapters/ch11-afterword.md) |
 
 Загружай только релевантные reference-файлы. Не помещай всю книгу в контекст одновременно.

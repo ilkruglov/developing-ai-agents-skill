@@ -611,5 +611,51 @@ class ChapterQuoteTests(unittest.TestCase):
         self.assertIn("quote not found in anchor section", result.stdout)
 
 
+class SkillRoutingTests(unittest.TestCase):
+    @staticmethod
+    def skill_path(root: Path) -> Path:
+        return root / SKILL_DIRECTORY / "SKILL.md"
+
+    def test_rejects_reference_file_missing_from_skill(self) -> None:
+        with repository_copy() as copied_root:
+            orphan_path = (
+                copied_root / SKILL_DIRECTORY / "references" / "orphan-note.md"
+            )
+            orphan_path.write_text("# Осиротевший файл\n", encoding="utf-8")
+
+            result = run_validator(copied_root)
+
+        self.assertNotEqual(0, result.returncode)
+        self.assertIn("reference file not listed in SKILL.md", result.stdout)
+        self.assertIn("orphan-note.md", result.stdout)
+
+    def test_rejects_skill_listing_missing_reference(self) -> None:
+        with repository_copy() as copied_root:
+            path = self.skill_path(copied_root)
+            path.write_text(
+                path.read_text(encoding="utf-8")
+                + "\n- `references/playbooks/nonexistent.md`\n",
+                encoding="utf-8",
+            )
+
+            result = run_validator(copied_root)
+
+        self.assertNotEqual(0, result.returncode)
+        self.assertIn("SKILL.md lists missing reference file", result.stdout)
+
+    def test_rejects_oversized_skill_document(self) -> None:
+        with repository_copy() as copied_root:
+            path = self.skill_path(copied_root)
+            path.write_text(
+                path.read_text(encoding="utf-8") + "строка\n" * 400,
+                encoding="utf-8",
+            )
+
+            result = run_validator(copied_root)
+
+        self.assertNotEqual(0, result.returncode)
+        self.assertIn("SKILL.md exceeds", result.stdout)
+
+
 if __name__ == "__main__":
     unittest.main()
