@@ -510,11 +510,6 @@
       "line_text": "### Обучение на неудачах",
       "kind": "heading"
     },
-    "chapter8.md:11": {
-      "line_sha256": "43cf9816fe50018429f3b89837befb7912f47b8ebd0c66b7dc557752c678be52",
-      "line_text": "## Почему AI-агент не обучается автоматически",
-      "kind": "heading"
-    },
     "chapter8.md:113": {
       "line_sha256": "80caddd68dd9b49c2ad40f74a0346c1d269a8149197a48fd1a2a3a894be97b7a",
       "line_text": "### Skills: экстернализация предметных знаний в структурированные возможности",
@@ -540,11 +535,6 @@
       "line_text": "## Активное обнаружение инструментов",
       "kind": "heading"
     },
-    "chapter8.md:191": {
-      "line_sha256": "571a15b6b17bc88ca7d08b97e3abacc42b671cdccc8a60f76645c8e1382ad23f",
-      "line_text": "### Существующие методы обнаружения инструментов",
-      "kind": "heading"
-    },
     "chapter8.md:224": {
       "line_sha256": "cfd0d7a726fbf71be929b8a4dc9382bee261b7180fc9c1a48bc5c5a209dcdd11",
       "line_text": "### Skills: обнаружение инструментов как «обращение по мере необходимости»",
@@ -560,16 +550,6 @@
       "line_text": "## От пользователя инструментов к их создателю",
       "kind": "heading"
     },
-    "chapter8.md:246": {
-      "line_sha256": "2e1d9b67f38fee395c030a358d4b01d3babcb27e371f97fb4336b0b82f3b89a3",
-      "line_text": "### От предопределения к самоэволюции",
-      "kind": "heading"
-    },
-    "chapter8.md:258": {
-      "line_sha256": "a3468e1d87b7030d444c1dcdad01c601f3d71b618a717a201dcb845a33cc4bc1",
-      "line_text": "### AI-агент самостоятельно находит в интернете и запускает инструменты",
-      "kind": "heading"
-    },
     "chapter8.md:273": {
       "line_sha256": "a34ad47672a82dcb7e2b4c2c6031eda883910eda5f1cd979b31edb4db5d13541",
       "line_text": "### AI-агент создаёт новые инструменты, программируя их",
@@ -583,11 +563,6 @@
     "chapter8.md:329": {
       "line_sha256": "8a522b0e67c24e8bb906e9cd09d4816c2d3c6a0729a64ecf025a89e0aadfb24c",
       "line_text": "### Границы безопасности самоэволюции",
-      "kind": "heading"
-    },
-    "chapter8.md:49": {
-      "line_sha256": "1f7049cb5da91183f2947f33d4a5c26d1a026148c052324629b10ed44b1a2178",
-      "line_text": "## Почему AI-агенту необходимо учиться на опыте: от «ума» к «мастерству»",
       "kind": "heading"
     },
     "chapter8.md:53": {
