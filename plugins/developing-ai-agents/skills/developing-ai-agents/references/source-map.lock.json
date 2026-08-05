@@ -570,11 +570,6 @@
       "line_text": "## Обучение на опыте",
       "kind": "heading"
     },
-    "chapter9.md:106": {
-      "line_sha256": "7dca062adee5b1562c1796b174979e875b5c481c65a666bff24061c5c8a5c7d8",
-      "line_text": "### Потоковое восприятие речи: замена VAD + ASR",
-      "kind": "heading"
-    },
     "chapter9.md:149": {
       "line_sha256": "641425cc4a1d4e4b5345b9887e3e7856dfd6c89cd128052ac522b5d31fee3638",
       "line_text": "## Парадигма 2 · Сквозная омнимодальная модель (Omni)",
@@ -588,11 +583,6 @@
     "chapter9.md:192": {
       "line_sha256": "dcaa9becfa9f7f0a4fc6d4fc885766e47ff1e79faf73d8bd7a35e73d56807982",
       "line_text": "## Выбор архитектуры мышления: от разделения к объединению",
-      "kind": "heading"
-    },
-    "chapter9.md:20": {
-      "line_sha256": "2e1eb7f4e8286295b543bbc678e2f0ab1cdaabddc2bf7d2b4d169be42943feea",
-      "line_text": "## Голос: самый естественный интерфейс взаимодействия человека с компьютером",
       "kind": "heading"
     },
     "chapter9.md:200": {
@@ -615,24 +605,9 @@
       "line_text": "## Три парадигмы голосовой архитектуры",
       "kind": "heading"
     },
-    "chapter9.md:288": {
-      "line_sha256": "081a083622f825bf330a6b0eb2eac9f4b94ded8b399083d9664435fc52e24d7f",
-      "line_text": "## Более человечный синтез речи",
-      "kind": "heading"
-    },
     "chapter9.md:308": {
       "line_sha256": "d1644503104887cb173a2c721eaceb53ece3aa2de97586946b5e8794969908b2",
       "line_text": "## Computer Use: агент автоматизации GUI",
-      "kind": "heading"
-    },
-    "chapter9.md:327": {
-      "line_sha256": "53d3e6226c5fb4bca7292ed2018777a46c3eb3e4667b35c3f57c07aad1b6a04d",
-      "line_text": "### Проектирование пространства действий",
-      "kind": "heading"
-    },
-    "chapter9.md:348": {
-      "line_sha256": "704c618310c5153b66d486ef9375abe07e72f7f45268ff2494967bc40e4b43f0",
-      "line_text": "### Визуальная локализация (Grounding)",
       "kind": "heading"
     },
     "chapter9.md:418": {
@@ -643,16 +618,6 @@
     "chapter9.md:42": {
       "line_sha256": "efb97d3d0a2f2cf18a4300c8665cbb84098c6dd541c7560ef0088d79941b2f13",
       "line_text": "## Парадигма 1 · Каскадный конвейер (Cascading)",
-      "kind": "heading"
-    },
-    "chapter9.md:430": {
-      "line_sha256": "983f9eee2770381d133df5ca214befc3044dd05707b9e0e3c3b644286905c912",
-      "line_text": "## Управление роботами: от контроля в реальном времени к обучению и обобщению",
-      "kind": "heading"
-    },
-    "chapter9.md:450": {
-      "line_sha256": "282666feaf762eb2ca8192cd3a8fef98e9dff6569003747c175cf94bfe47c54c",
-      "line_text": "### Двухуровневая архитектура: разделение планирования и управления",
       "kind": "heading"
     },
     "chapter9.md:94": {
