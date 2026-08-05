@@ -255,19 +255,9 @@
       "line_text": "### Сжатие и KV-кэш: кажущееся противоречие и реальная взаимодополняемость",
       "kind": "heading"
     },
-    "chapter3.md:124": {
-      "line_sha256": "4df99489699a5ec571e2aa6991487793a93c93038204e398bddaec48e2d4b66f",
-      "line_text": "### Расширенные представления: от исполняемого кода к параметрической памяти",
-      "kind": "heading"
-    },
     "chapter3.md:17": {
       "line_sha256": "9c87ba94effc90e97d354280ee37c316b5b49d8a845ce1ee919ec99e460c6269",
       "line_text": "## Система пользовательской памяти",
-      "kind": "heading"
-    },
-    "chapter3.md:247": {
-      "line_sha256": "66d5704b09c55adfdd807f51df61718196e7d1e604eb85ffbb0700f6a6481a30",
-      "line_text": "### Механизмы сжатия и упорядочивания памяти",
       "kind": "heading"
     },
     "chapter3.md:261": {
@@ -280,39 +270,14 @@
       "line_text": "## Основы RAG: построение конвейера получения знаний для AI-агента",
       "kind": "heading"
     },
-    "chapter3.md:322": {
-      "line_sha256": "e23a936ec9107751caf76a9f9beb96cd5daf46b9597325108c9f28582b5270e1",
-      "line_text": "### Разбиение документов на фрагменты (Chunking)",
-      "kind": "heading"
-    },
-    "chapter3.md:338": {
-      "line_sha256": "2cda8debb17f93e0b1d68c02b216d3b5c067fec4beb6c315e10eff9e82e9036b",
-      "line_text": "### Плотные эмбеддинги: от лексических связей к пониманию семантики",
-      "kind": "heading"
-    },
-    "chapter3.md:384": {
-      "line_sha256": "1da27ba4fa1b4b040940d3901361a8b7aee61d1761b7d9ee6da110eeb7349b9c",
-      "line_text": "### Разреженные эмбеддинги: поиск по точному совпадению ключевых слов",
-      "kind": "heading"
-    },
     "chapter3.md:425": {
       "line_sha256": "530e3e017069cff2c067ba17e4e91b7911ff4da1972e13ec9acaf85834fe2f57",
       "line_text": "### Гибридный поиск: искусство объединять лучшее",
       "kind": "heading"
     },
-    "chapter3.md:489": {
-      "line_sha256": "8a163d66f2249c0646f7612a1454c59b02bd4a2059ee59742b92d58adbb7abe5",
-      "line_text": "## За пределами плоского текста: организация и поиск знаний",
-      "kind": "heading"
-    },
     "chapter3.md:49": {
       "line_sha256": "7aff00b8855617fdb5e4e74258be5eced89db8f07fa82541c1c53ca87ea3f157",
       "line_text": "### Оценка возможностей памяти: трёхуровневая модель",
-      "kind": "heading"
-    },
-    "chapter3.md:543": {
-      "line_sha256": "1658d27332b9d4c52dacd7a22c9727ab75a3c402eeaaf1b40117f7a874ba9a69",
-      "line_text": "### Файловая парадигма: организация знаний с помощью структуры каталогов",
       "kind": "heading"
     },
     "chapter3.md:574": {
