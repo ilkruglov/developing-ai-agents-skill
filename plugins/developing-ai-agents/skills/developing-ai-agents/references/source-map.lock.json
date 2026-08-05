@@ -15,11 +15,6 @@
       "line_text": "# Послесловие: возвращаясь к формуле «AI-агент = LLM + контекст + инструменты» {.unnumbered}",
       "kind": "heading"
     },
-    "afterword.md:33": {
-      "line_sha256": "3bfd80e9893dac74074f7821843a9f5d1a03515e5ffcf6d11749c15e8b268b84",
-      "line_text": "## Совместная эволюция модели и AI-агента {.unnumbered}",
-      "kind": "heading"
-    },
     "chapter1.md:13": {
       "line_sha256": "7f085204ebcc2ecf7e1176369cbf3b3e7de873e53160f410d25bc5cd20b63fcf",
       "line_text": "## Современный AI-агент = LLM + контекст + инструменты",
