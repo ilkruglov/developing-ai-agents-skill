@@ -390,39 +390,14 @@
       "line_text": "### Безопасность Coding-агента",
       "kind": "heading"
     },
-    "chapter6.md:110": {
-      "line_sha256": "19502078ad81aa46cbc63a7a13a698049c4cb9383a9ea2fa4cde4197a3468399",
-      "line_text": "### Среда оценки с взаимодействием человека и агента",
-      "kind": "heading"
-    },
     "chapter6.md:157": {
       "line_sha256": "5629f610861aa3c2ea177ae3fef0dd3c08926a11d9507c12e6a32bb3a95a103e",
       "line_text": "## Проектирование набора данных с задачами для оценки",
       "kind": "heading"
     },
-    "chapter6.md:167": {
-      "line_sha256": "7d408080b5b32be78b4d4f5a3b0f9a1d8c2ca820e811462a54d5d870ec208fce",
-      "line_text": "### Основные сложности проектирования набора задач",
-      "kind": "heading"
-    },
-    "chapter6.md:179": {
-      "line_sha256": "c420e000e831bd83242f462f71decdfc9690699ab8a4885c19289cab0eeb0166",
-      "line_text": "### Проектирование точного описания задачи",
-      "kind": "heading"
-    },
-    "chapter6.md:197": {
-      "line_sha256": "fac2e41010b1950515186f01d851fbdf56d4f9973bbcbb1cde8d89fce3b38ede",
-      "line_text": "### Многоуровневое проектирование сложности задач",
-      "kind": "heading"
-    },
     "chapter6.md:205": {
       "line_sha256": "6bf2ab0b76e767bd88603f5e059299903c17f34d686fe3b2cf3e7a56834712af",
       "line_text": "### Обеспечение проверяемости и объективности",
-      "kind": "heading"
-    },
-    "chapter6.md:223": {
-      "line_sha256": "09e7c1289fb5b990e1dbdfbd99e8833bbca47a9d2ee4a88ae8f038f3b1d69d92",
-      "line_text": "### Систематическое проектирование распределения задач",
       "kind": "heading"
     },
     "chapter6.md:239": {
@@ -440,16 +415,6 @@
       "line_text": "### LLM-as-a-Judge: основа автоматизированной оценки",
       "kind": "heading"
     },
-    "chapter6.md:29": {
-      "line_sha256": "d94df3fbb7d10746a37a8482efd0e5aef8266ac095715887badaa5c0ccf0450c",
-      "line_text": "## Конкретный пример оценки",
-      "kind": "heading"
-    },
-    "chapter6.md:401": {
-      "line_sha256": "c2a818180c673c4a27f2a1e78a1897bf417eb1564994603b9274cdebe52c656e",
-      "line_text": "### Попарное сравнение и ранжирование моделей",
-      "kind": "heading"
-    },
     "chapter6.md:421": {
       "line_sha256": "ffe97f9a90d6d4e0d47b63faf797f709bfaed6203d88f9644e447b7ceccc2b6f",
       "line_text": "## Выбор модели на основе оценки",
@@ -458,11 +423,6 @@
     "chapter6.md:444": {
       "line_sha256": "de452d35994ad10e611be8fc49260719a0a08c751f01c7fcfd662daaa51b061d",
       "line_text": "### Анализ затрат системы AI-агентов",
-      "kind": "heading"
-    },
-    "chapter6.md:494": {
-      "line_sha256": "555bd777e1b96d1b309ce5872927e6639ddbcd5a62cae8f6e124484e9a9b82ee",
-      "line_text": "### Непрерывная итерация на основе оценки",
       "kind": "heading"
     },
     "chapter6.md:520": {
@@ -480,26 +440,6 @@
       "line_text": "## От отчёта бенчмарка к улучшению системы",
       "kind": "heading"
     },
-    "chapter6.md:573": {
-      "line_sha256": "235457aa5523357716f18a0ebed19f1e1912a07e6da1980f91b360d2175b8768",
-      "line_text": "### Как читать отчёт бенчмарка: искусство обнаружения проблем",
-      "kind": "heading"
-    },
-    "chapter6.md:585": {
-      "line_sha256": "d1913626c29b6772338e36ef7c3d8787ee4c67c685adf42d1b28f880e96b6975",
-      "line_text": "### От данных к гипотезам: построение плана улучшений",
-      "kind": "heading"
-    },
-    "chapter6.md:595": {
-      "line_sha256": "3491d3e37077ba8e8d577b9ad3e5cc77cf1f9674b233b3b1b783fb7fbde5d104",
-      "line_text": "### От результатов к решению: компромиссы на основе данных",
-      "kind": "heading"
-    },
-    "chapter6.md:609": {
-      "line_sha256": "daa18fb5f434decac3d9e06d417ddd0bfe879a539ba27371af781509fd2f0d43",
-      "line_text": "### Непрерывные итерации: от первого улучшения к эволюции системы",
-      "kind": "heading"
-    },
     "chapter6.md:631": {
       "line_sha256": "cbab00af477e1fb7b995ccd09ffabc154c5a481b691906a092120d0165512cb5",
       "line_text": "## От внешней оценки к внутренней: инфраструктура оценки AI-агентов промышленного уровня",
@@ -510,34 +450,14 @@
       "line_text": "### Инфраструктура абляции: понимание реального вклада каждой функции",
       "kind": "heading"
     },
-    "chapter6.md:641": {
-      "line_sha256": "1517c0908af8363038f583477116c4b30ea93be4252594004b6afce393a80e06",
-      "line_text": "### Методология A/B-тестирования: разделение механизма и цели",
-      "kind": "heading"
-    },
-    "chapter6.md:653": {
-      "line_sha256": "4362cceb551dd2af91bbf50f2749fbd7902c5e7a2332842d90ff1a5267f401a7",
-      "line_text": "### Двухуровневая система флагов функций",
-      "kind": "heading"
-    },
     "chapter6.md:679": {
       "line_sha256": "2e82f1989fab0e3e82ef8be8d18f2e98b2d516774e84cbb4984354971e644072",
       "line_text": "## Среды симуляции: мост от оценки к постобучению",
       "kind": "heading"
     },
-    "chapter6.md:699": {
-      "line_sha256": "2dfe7a429e3c0dbaf86f282080d6a42487a2240489cb0e108e940a5e0642d53c",
-      "line_text": "### Компромиссы, связанные с точностью симуляции, и доменная рандомизация",
-      "kind": "heading"
-    },
     "chapter6.md:71": {
       "line_sha256": "6f5259fa187e224effbfe89fce34d7366077d7b6787e9a545290ad8f5987d8dc",
       "line_text": "## Автоматизированная среда оценки",
-      "kind": "heading"
-    },
-    "chapter6.md:91": {
-      "line_sha256": "ba36332a9fca58917d911a12bb27c4daef9e03705a3b48df0074e7554f3b1b98",
-      "line_text": "### Среда оценки с вызовами инструментов",
       "kind": "heading"
     },
     "chapter7.md:264": {
