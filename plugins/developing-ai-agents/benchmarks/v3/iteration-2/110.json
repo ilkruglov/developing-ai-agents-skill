@@ -1,0 +1,1 @@
+{"id": "110", "met": [true, false, true, true, true], "notes": "Кр.2: в контракте fast/slow передаются turn_id/state_version/cancellation и freshness-проверка, но deadline и evidence явно не передаются."}

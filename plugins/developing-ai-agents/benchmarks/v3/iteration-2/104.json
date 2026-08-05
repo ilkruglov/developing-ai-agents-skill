@@ -1,0 +1,1 @@
+{"id": "104", "met": [true, true, true, true, true], "notes": "все критерии выполнены: trace-разбор, intent-state с дедупом event_id и idempotency_key, in_flight+pre-check+CAS, разделение отмены run и эффекта с компенсацией, race-тесты; 946 слов"}
