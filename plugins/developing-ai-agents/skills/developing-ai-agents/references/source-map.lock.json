@@ -20,11 +20,6 @@
       "line_text": "## Совместная эволюция модели и AI-агента {.unnumbered}",
       "kind": "heading"
     },
-    "chapter1.md:122": {
-      "line_sha256": "c190d04a2da290938371bd9c81b74a8b1e3c1ad2793b5e28f96e77cc6a15e990",
-      "line_text": "### Контекст: глаза агента",
-      "kind": "heading"
-    },
     "chapter1.md:13": {
       "line_sha256": "7f085204ebcc2ecf7e1176369cbf3b3e7de873e53160f410d25bc5cd20b63fcf",
       "line_text": "## Современный AI-агент = LLM + контекст + инструменты",
@@ -55,14 +50,19 @@
       "line_text": "### Основные принципы построения эффективного агента",
       "kind": "heading"
     },
-    "chapter1.md:307": {
-      "line_sha256": "e7a96e15d86036b16f0716487669a081b6ee981b49e9953b15c6a0714955d7ff",
-      "line_text": "### Как выбрать модель",
-      "kind": "heading"
-    },
     "chapter1.md:324": {
       "line_sha256": "2b731a7dec6e4ba596bf214c3b68525ef4281a64df068067a6eaceb47601644c",
       "line_text": "### Паттерны оркестрации: рабочие процессы и автономность",
+      "kind": "heading"
+    },
+    "chapter1.md:330": {
+      "line_sha256": "1e2b790452a7398c556bae3bb854d4956e11ff086ab2bc0efa40a418c1e261f7",
+      "line_text": "#### Паттерн рабочего процесса: детерминированная оркестрация",
+      "kind": "heading"
+    },
+    "chapter1.md:347": {
+      "line_sha256": "ea1277b1df941ff75aa4bbad897538850fd25f7ec854009c1bfbf94aa768e085",
+      "line_text": "#### Автономный агент: динамическое самостоятельное принятие решений",
       "kind": "heading"
     },
     "chapter1.md:387": {
@@ -70,14 +70,14 @@
       "line_text": "### Защитные барьеры и безопасность",
       "kind": "heading"
     },
-    "chapter1.md:43": {
-      "line_sha256": "4d83e7c84457f3f0dd7c7152d36c7f4ca034fa2fa719d101c06dbb3ed5cddddb",
-      "line_text": "### Инструменты: руки и ноги агента",
+    "chapter1.md:395": {
+      "line_sha256": "9d12b56847bbeec275539a0fb87a303f730124e2c4ce41ba3726e94b9eedd5ea",
+      "line_text": "#### Типы защитных барьеров",
       "kind": "heading"
     },
-    "chapter1.md:88": {
-      "line_sha256": "db3c49e32f04f3bda41b9f51f5f3614c737cfb5e35e7ef565106e0e5f2c51cc8",
-      "line_text": "### LLM: мозг агента",
+    "chapter1.md:407": {
+      "line_sha256": "9901e698012c4fd72b99468d9ec7d283bcd69c8168343ef91b402e28c3de6eab",
+      "line_text": "#### Участие человека",
       "kind": "heading"
     },
     "chapter10.md:11": {
