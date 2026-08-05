@@ -175,6 +175,7 @@ description: Use when designing, implementing, reviewing, debugging, or evaluati
 
 - Быстрый выбор архитектуры и проверок: [references/cheatsheet.md](references/cheatsheet.md)
 - Сквозные шаблоны: [references/patterns.md](references/patterns.md)
+- Каталог ошибок по симптомам: [references/antipatterns.md](references/antipatterns.md)
 - Термины: [references/glossary.md](references/glossary.md)
 - Точная карта источников: [references/source-map.md](references/source-map.md)
 
