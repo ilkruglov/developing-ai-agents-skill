@@ -10,7 +10,7 @@
       "name": "developing-ai-agents",
       "source": "./plugins/developing-ai-agents",
       "description": "Инженерный skill для проектирования, реализации, отладки и оценки AI-агентов: архитектура, Harness, контекст, инструменты, память и evals.",
-      "version": "0.5.1",
+      "version": "0.6.0",
       "category": "productivity"
     }
   ]
