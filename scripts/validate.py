@@ -885,6 +885,11 @@ def validate_chapter_quotes(root: Path, errors: list[str]) -> None:
         # выглядит как подтверждённая ссылка на книгу.
         started = len(CHAPTER_QUOTE_MARKER.findall(text))
         parsed = len(CHAPTER_QUOTE.findall(text))
+        if started == 0:
+            errors.append(
+                f"chapter summary without verified quotes: {relative_path}; "
+                "a summary that retells the book must cite it"
+            )
         if started != parsed:
             errors.append(
                 f"unparsed chapter quote in {relative_path}: "

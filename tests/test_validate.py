@@ -605,6 +605,22 @@ class ChapterQuoteTests(unittest.TestCase):
         self.assertNotEqual(0, result.returncode)
         self.assertIn("quote not found in anchor section", result.stdout)
 
+    def test_rejects_chapter_summary_without_quotes(self) -> None:
+        with repository_copy() as copied_root:
+            path = (
+                copied_root
+                / SKILL_DIRECTORY
+                / "references"
+                / "chapters"
+                / "ch11-afterword.md"
+            )
+            path.write_text("# Послесловие\n\nБез цитат.\n", encoding="utf-8")
+
+            result = run_validator(copied_root)
+
+        self.assertNotEqual(0, result.returncode)
+        self.assertIn("chapter summary without verified quotes", result.stdout)
+
     def test_rejects_quote_line_that_does_not_parse(self) -> None:
         with repository_copy() as copied_root:
             path = self.chapter_path(copied_root)
