@@ -460,11 +460,6 @@
       "line_text": "## Автоматизированная среда оценки",
       "kind": "heading"
     },
-    "chapter7.md:264": {
-      "line_sha256": "f1a17d6d20b13f2c460ea18381dfc3211059f6d4d0cb239e8d5b790c44ca48eb",
-      "line_text": "## SFT (дообучение с учителем)",
-      "kind": "heading"
-    },
     "chapter7.md:27": {
       "line_sha256": "5bd2874c2873270e88c579b053a2ad059b2e98ed72b1fbc20bb4dc2b6ae03f80",
       "line_text": "## Предобучение, SFT и обучение с подкреплением (RL): полная картина трёх этапов",
@@ -475,24 +470,14 @@
       "line_text": "## Когда выбирать SFT, а когда RL",
       "kind": "heading"
     },
-    "chapter7.md:39": {
-      "line_sha256": "9c4f1f765356294cde6be7e459d6debeaa576d6afb0676801a0931bbef03bdc8",
-      "line_text": "### Что происходит при предобучении: предсказание следующего слова",
-      "kind": "heading"
-    },
     "chapter7.md:447": {
       "line_sha256": "da88a81ca2fd209f4e877f0e8e89e8b85f5f3b1ada5ef05928322fc49d6ea99b",
       "line_text": "## Данные и среда: важнее алгоритмов",
       "kind": "heading"
     },
-    "chapter7.md:461": {
-      "line_sha256": "80a10aa9697c835988805bb3ad75202f457f11d6b4e1f76b9a3afd13837c1315",
-      "line_text": "### Данные: важнейшее звено, где качество превыше всего",
-      "kind": "heading"
-    },
-    "chapter7.md:477": {
-      "line_sha256": "00bc7f7ea12b577f9f4f23a93896ca7923ef18112c0616422c5597c1e1a1ee6e",
-      "line_text": "### Когда же наступает очередь алгоритма?",
+    "chapter7.md:451": {
+      "line_sha256": "c2a98d3b408402beac3b17fb61be030c4041a260259e84e2f56e2fdaff3583b1",
+      "line_text": "### Среда: тренировочная площадка модели",
       "kind": "heading"
     },
     "chapter7.md:481": {
@@ -500,29 +485,9 @@
       "line_text": "## От однораундового взаимодействия к многораундовому: распределение заслуг и проектирование вознаграждений",
       "kind": "heading"
     },
-    "chapter7.md:49": {
-      "line_sha256": "43a9c6d16e3ec7861aa2295298f2826aa9e5bfd8fb013df5e53fd309588c0a1b",
-      "line_text": "### Суть SFT: то же «предсказание следующего слова», но с другими данными",
-      "kind": "heading"
-    },
-    "chapter7.md:493": {
-      "line_sha256": "0942a93cd7cbdf771c1f17ac4349bb1dbd599511669ecf50bce269cd6919813d",
-      "line_text": "### Плотность и парадигмы сигналов вознаграждения",
-      "kind": "heading"
-    },
-    "chapter7.md:545": {
-      "line_sha256": "fc6b78cd2ba2c43c99416e6ed7980d12aff765f79e6dd2b1f6ff699c2537f3bd",
-      "line_text": "### Процессное вознаграждение и вознаграждение за результат: ключевой выбор для многораундовых задач",
-      "kind": "heading"
-    },
     "chapter7.md:581": {
       "line_sha256": "07efbd27a88399fdccd9c99082a868747c5ae6333ab0877960403250ad3a3c15",
       "line_text": "### Вознаграждать результат, ограничивать процесс: верифицируемый штраф за траекторию (RLVP) и частичное вознаграждение",
-      "kind": "heading"
-    },
-    "chapter7.md:62": {
-      "line_sha256": "07f294f386e2eba9899bea41ebcca368871fccc83112a40b5d9ed6fe322c7cd8",
-      "line_text": "### Почему SFT обязательно должно предшествовать RL, а не наоборот",
       "kind": "heading"
     },
     "chapter7.md:635": {
