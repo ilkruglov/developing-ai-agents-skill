@@ -11,7 +11,7 @@ import source_anchors
 
 
 class SectionTextTests(unittest.TestCase):
-    def test_section_stops_at_same_level_heading(self) -> None:
+    def test_section_stops_at_nested_heading(self) -> None:
         lines = [
             "## Первый раздел",
             "тело первого",
@@ -23,7 +23,8 @@ class SectionTextTests(unittest.TestCase):
 
         result = source_anchors.section_text(lines, 1)
 
-        self.assertIn("тело подраздела", result)
+        self.assertIn("тело первого", result)
+        self.assertNotIn("тело подраздела", result)
         self.assertNotIn("тело второго", result)
 
     def test_section_stops_at_higher_level_heading(self) -> None:
@@ -33,6 +34,13 @@ class SectionTextTests(unittest.TestCase):
 
         self.assertIn("тело", result)
         self.assertNotIn("чужое тело", result)
+
+    def test_section_for_non_heading_anchor_is_the_line_itself(self) -> None:
+        lines = ["## Раздел", "первый абзац", "второй абзац"]
+
+        result = source_anchors.section_text(lines, 2)
+
+        self.assertEqual("первый абзац", result)
 
     def test_normalize_unifies_quotes_dashes_and_spaces(self) -> None:
         raw = "«контекст»  —   не   transcript"

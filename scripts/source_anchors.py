@@ -37,23 +37,26 @@ def normalize(text: str) -> str:
 
 
 def section_text(lines: list[str], start: int) -> str:
-    """Текст секции якоря.
+    """Текст секции якоря: от заголовка на строке ``start`` до следующего
+    заголовка любого уровня.
 
-    От заголовка на строке ``start`` до следующего заголовка того же или более
-    высокого уровня. Если якорь указывает не на заголовок, секцией считается
-    сама строка: расширять окно в этом случае нечем, а брать соседние абзацы
-    означало бы принимать цитату не из того места.
+    Граница проходит по ближайшему заголовку, а не по заголовку того же уровня.
+    Раздел ``##`` вместе с вложенными ``###`` в этой книге достигает 42 000
+    символов, поэтому цитата из чужого подраздела прошла бы проверку. Обрыв на
+    ближайшем заголовке заставляет ссылаться на тот подраздел, откуда цитата
+    действительно взята.
+
+    Если якорь указывает не на заголовок, секцией считается сама строка:
+    расширять окно нечем, а брать соседние абзацы означало бы принимать цитату
+    не из того места.
     """
     if start < 1 or start > len(lines):
         return ""
-    heading_match = HEADING.match(lines[start - 1])
-    if heading_match is None:
+    if HEADING.match(lines[start - 1]) is None:
         return normalize(lines[start - 1])
-    level = len(heading_match.group("hashes"))
     collected = [lines[start - 1]]
     for line in lines[start:]:
-        match = HEADING.match(line)
-        if match is not None and len(match.group("hashes")) <= level:
+        if HEADING.match(line) is not None:
             break
         collected.append(line)
     return normalize(" ".join(collected))

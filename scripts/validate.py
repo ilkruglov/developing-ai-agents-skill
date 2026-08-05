@@ -16,6 +16,8 @@ from source_anchors import (
     LOCK_RELATIVE_PATH,
     anchor_key,
     iter_skill_documents,
+    normalize,
+    section_text,
 )
 
 PLUGIN_NAME = "developing-ai-agents"
@@ -86,6 +88,12 @@ REQUIRED_ATTRIBUTIONS = {
 }
 NON_LOCAL_SOURCE_PATH = re.compile(r"(?<![-\w/])book/")
 MARKDOWN_LINK = re.compile(r"(?<!!)\[[^\]]*\]\((?P<target>[^)]+)\)")
+CHAPTER_QUOTE = re.compile(
+    r"^>\s*«(?P<quote>[^»]{3,200})»\s*[—-]\s*`"
+    r"(?P<path>references/source-book/[A-Za-z0-9._/-]+\.md):(?P<start>\d+)`",
+    re.MULTILINE,
+)
+CHAPTERS_DIRECTORY = SKILL_DIRECTORY / "references" / "chapters"
 SEMVER = re.compile(
     r"^(0|[1-9]\d*)\."
     r"(0|[1-9]\d*)\."
@@ -857,6 +865,34 @@ def validate_source_lock(root: Path, lock: dict, errors: list[str]) -> None:
                 )
 
 
+def validate_chapter_quotes(root: Path, errors: list[str]) -> None:
+    chapters_root = root / CHAPTERS_DIRECTORY
+    if not chapters_root.is_dir():
+        return
+
+    line_cache: dict[Path, list[str]] = {}
+    for chapter_path in sorted(chapters_root.glob("*.md")):
+        relative_path = chapter_path.relative_to(root)
+        text = chapter_path.read_text(encoding="utf-8")
+        for match in CHAPTER_QUOTE.finditer(text):
+            source_path = root / SKILL_DIRECTORY / match.group("path")
+            if not source_path.is_file():
+                errors.append(f"source anchor file missing: {match.group('path')}")
+                continue
+            if source_path not in line_cache:
+                line_cache[source_path] = source_path.read_text(
+                    encoding="utf-8"
+                ).splitlines()
+            start = int(match.group("start"))
+            haystack = section_text(line_cache[source_path], start)
+            needle = normalize(match.group("quote"))
+            if needle not in haystack:
+                errors.append(
+                    "quote not found in anchor section: "
+                    f"{relative_path} -> {match.group('path')}:{start}"
+                )
+
+
 def validate_repository(root: Path) -> list[str]:
     errors: list[str] = []
     line_counts: dict[Path, int] = {}
@@ -920,6 +956,7 @@ def validate_repository(root: Path) -> list[str]:
 
     lock = load_lock(root, errors)
     validate_source_lock(root, lock, errors)
+    validate_chapter_quotes(root, errors)
 
     for document_path in iter_source_anchor_documents(root):
         text = document_path.read_text(encoding="utf-8")

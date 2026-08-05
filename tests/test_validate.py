@@ -543,5 +543,73 @@ class SourceLockTests(unittest.TestCase):
         self.assertIn("source anchor out of range", result.stdout)
 
 
+class ChapterQuoteTests(unittest.TestCase):
+    @staticmethod
+    def chapter_path(root: Path) -> Path:
+        return (
+            root
+            / SKILL_DIRECTORY
+            / "references"
+            / "chapters"
+            / "ch01-agent-foundations.md"
+        )
+
+    @staticmethod
+    def book_lines(root: Path) -> list[str]:
+        book_path = (
+            root / SKILL_DIRECTORY / "references" / "source-book" / "chapter1.md"
+        )
+        return book_path.read_text(encoding="utf-8").splitlines()
+
+    def test_rejects_quote_absent_from_anchor_section(self) -> None:
+        with repository_copy() as copied_root:
+            path = self.chapter_path(copied_root)
+            path.write_text(
+                path.read_text(encoding="utf-8")
+                + "\n> «этой фразы нет ни в одной секции книги» — "
+                "`references/source-book/chapter1.md:13`\n",
+                encoding="utf-8",
+            )
+
+            result = run_validator(copied_root)
+
+        self.assertNotEqual(0, result.returncode)
+        self.assertIn("quote not found in anchor section", result.stdout)
+
+    def test_accepts_quote_present_in_anchor_section(self) -> None:
+        with repository_copy() as copied_root:
+            path = self.chapter_path(copied_root)
+            quote = self.book_lines(copied_root)[14].strip()[:60]
+            path.write_text(
+                path.read_text(encoding="utf-8")
+                + f"\n> «{quote}» — `references/source-book/chapter1.md:13`\n",
+                encoding="utf-8",
+            )
+
+            result = run_validator(copied_root)
+
+        self.assertEqual(0, result.returncode, result.stdout + result.stderr)
+
+    def test_rejects_quote_taken_from_a_neighbouring_section(self) -> None:
+        with repository_copy() as copied_root:
+            path = self.chapter_path(copied_root)
+            lines = self.book_lines(copied_root)
+            foreign = next(
+                line.strip()
+                for line in lines[150:250]
+                if len(line.strip()) > 40 and not line.startswith("#")
+            )
+            path.write_text(
+                path.read_text(encoding="utf-8")
+                + f"\n> «{foreign[:60]}» — `references/source-book/chapter1.md:13`\n",
+                encoding="utf-8",
+            )
+
+            result = run_validator(copied_root)
+
+        self.assertNotEqual(0, result.returncode)
+        self.assertIn("quote not found in anchor section", result.stdout)
+
+
 if __name__ == "__main__":
     unittest.main()
