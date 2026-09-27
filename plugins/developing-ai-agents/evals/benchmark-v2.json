@@ -167,7 +167,7 @@
         "Review не подтверждает как текущие факты claims о Model Z, Protocol Q, цене/качестве или provider support без актуальных primary sources и даты; marketing/blog помечаются непригодными для такого вывода.",
         "Выявлены существенные системные дефекты: transcript-only state, отсутствие compression/memory lifecycle, unrestricted tools, global raw memory, self-verification, unlimited retries, shared-context debate и демонстрационный eval.",
         "Рекомендации покрывают минимальную архитектуру, Harness, context/state, tool constraints/verification/correction, memory isolation, representative evaluation и обоснованный single/multi-agent выбор.",
-        "Ключевые книжные утверждения имеют точные существующие и релевантные ссылки минимум на главы 1, 2, 4, 6 и 10; вымышленных file:line anchors нет.",
+        "Ключевые книжные утверждения имеют точные существующие и релевантные ссылки минимум на главы 1, 2, 4, 7 и 10; вымышленных file:line anchors нет.",
         "Evidence, inference, unknown и требующая live verification информация разделены; ответ начинается с verdict и остаётся не длиннее 1200 слов."
       ]
     }
