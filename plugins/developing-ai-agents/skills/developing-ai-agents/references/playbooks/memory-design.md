@@ -117,6 +117,6 @@
 ## Чем добрать
 
 - Форматы памяти, RAG, извлечение: `references/chapters/ch03-memory-and-knowledge.md`.
-- Цепочка продвижения и риски самоэволюции: `references/chapters/ch08-self-evolution.md`.
+- Цепочка продвижения и риски самоэволюции: `references/chapters/ch09-continual-evolution.md`.
 - Конструкции: паттерны 6, 7, 13, 16 в `references/patterns.md`.
 - Развилка «веса или Harness»: паттерн 15 там же.

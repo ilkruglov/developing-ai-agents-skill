@@ -8,13 +8,13 @@
     "author": "Bojie Li",
     "author_url": "https://github.com/bojieli",
     "repository": "https://github.com/bojieli/ai-agent-book",
-    "commit": "97de455e9aa44cf9f93441ce0c771c9aa9643d92",
-    "version": "v1.2"
+    "commit": "c3352738f4b6fe42fe34e3cf6a79bcb424a133b8",
+    "version": "v2.0"
   },
   "russian_translation": {
     "attribution": "Русский перевод: community edition",
     "repository": "https://github.com/ilkruglov/ai-agent-book",
-    "commit": "ed2ae516d45dfe26e934cb390b80f105ca780b1f"
+    "commit": "dd3bec63e5bbbd613a38b1a2f03f4aeba859ab1e"
   },
   "bundled_sources": {
     "directory": "skills/developing-ai-agents/references/source-book",
@@ -31,7 +31,8 @@
       "chapter8.md",
       "chapter9.md",
       "chapter10.md",
-      "afterword.md"
+      "afterword.md",
+      "reference-answers.md"
     ]
   },
   "license": "Apache-2.0"

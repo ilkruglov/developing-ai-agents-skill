@@ -5,10 +5,11 @@
 системы. Он разбирает задачу на LLM, контекст, инструменты и Harness, выбирает
 минимальную достаточную архитектуру и сразу определяет, как проверить результат.
 
-Методическая основа skill — книга Bojie Li «AI-агенты изнутри: принципы
-проектирования и инженерная практика». Русский текст книги и рабочие материалы
-включены в плагин: отдельно скачивать книгу, выбирать главы или собирать skill
-вручную не требуется.
+Методическая основа skill — вторая редакция (v2.0) книги Bojie Li «AI-агенты
+изнутри: принципы проектирования и инженерная практика». Русский текст книги,
+справочные ответы на вопросы для размышления и рабочие материалы включены в
+плагин: отдельно скачивать книгу, выбирать главы или собирать skill вручную не
+требуется.
 
 ## Задачи, которые покрывает skill
 
@@ -28,8 +29,9 @@
 - **Evals.** Строит baseline, representative и adversarial cases, holdout,
   метрики результата и trajectory, повторные прогоны, release gate, canary и
   rollback.
-- **Специализированные архитектуры.** Покрывает coding agents, externalized
-  learning, realtime voice/multimodal systems и multi-agent coordination.
+- **Специализированные архитектуры.** Покрывает coding agents, асинхронных и
+  событийных агентов, realtime voice, Computer Use, постобучение и непрерывную
+  эволюцию, multi-agent coordination.
 
 ## Как проходит работа
 
@@ -126,11 +128,12 @@ claude plugin update developing-ai-agents@developing-ai-agents-skill
   trace, review, evals, память, бюджет задержки, выбор multi-agent.
 - `references/templates/` — шесть заполняемых артефактов с примерами.
 - `references/chapters/` — двенадцать конспектов глав книги с проверенными
-  цитатами.
+  цитатами и указатель к справочным ответам на вопросы для размышления.
 - `references/patterns.md` — шестнадцать паттернов «failure mode → механизм →
   проверка»; `references/antipatterns.md` — каталог ошибок по симптомам.
-- `references/source-book/` — русский текст книги; `references/source-map.md` и
-  `references/source-map.lock.json` — карта тем и фиксация якорей.
+- `references/source-book/` — русский текст книги v2.0 и справочные ответы;
+  `references/source-map.md` и `references/source-map.lock.json` — карта тем и
+  фиксация якорей.
 - `plugins/developing-ai-agents/evals/` — быстрый набор, benchmark v2 и v3,
   триггер-набор из 36 запросов.
 - `scripts/validate.py`, `scripts/build_source_lock.py` — проверки и генератор

@@ -1,6 +1,6 @@
 # Карта источников
 
-Канонический источник skill — русская рукопись книги Bojie Li «AI-агенты изнутри: принципы проектирования и инженерная практика» в текущем репозитории. Перевод закреплён за upstream commit `97de455e9aa44cf9f93441ce0c771c9aa9643d92`; см. `README.md:9-13`. Книга и skill распространяются с учётом `LICENSE` (Apache-2.0).
+Канонический источник skill — русская рукопись книги Bojie Li «AI-агенты изнутри: принципы проектирования и инженерная практика» в текущем репозитории. Перевод соответствует второй редакции книги (v2.0), upstream commit `c3352738f4b6fe42fe34e3cf6a79bcb424a133b8`; пины перевода и оригинала — в `SOURCE.json`. Книга и skill распространяются с учётом `LICENSE` (Apache-2.0).
 
 Ссылки вида `references/source-book/chapterN.md:line` указывают на начало релевантного раздела. Все якоря зафиксированы в `references/source-map.lock.json` вместе с sha256 строки книги: расхождение обнаруживается валидатором, а не при чтении.
 
@@ -8,54 +8,67 @@
 
 | Тема | Первичный раздел | Конспект |
 |---|---|---|
-| Назначение и структура книги | `references/source-book/introduction.md:3`, `references/source-book/introduction.md:39`, `references/source-book/introduction.md:58` | `references/chapters/ch00-introduction.md` |
+| Назначение и структура книги | `references/source-book/introduction.md:3`, `references/source-book/introduction.md:39`, `references/source-book/introduction.md:56` | `references/chapters/ch00-introduction.md` |
 | Формула LLM + контекст + инструменты | `references/source-book/chapter1.md:13` | `references/chapters/ch01-agent-foundations.md` |
-| ReAct | `references/source-book/chapter1.md:146` | `references/chapters/ch01-agent-foundations.md` |
-| Harness-инженерия и пять функций | `references/source-book/chapter1.md:230`, `references/source-book/chapter1.md:272`, `references/source-book/chapter1.md:280` | `references/chapters/ch01-agent-foundations.md` |
-| Простота, прозрачность, ACI, workflow/agent | `references/source-book/chapter1.md:295`, `references/source-book/chapter1.md:324` | `references/chapters/ch01-agent-foundations.md` |
-| Guardrails и безопасность | `references/source-book/chapter1.md:387` | `references/chapters/ch01-agent-foundations.md` |
-| Структура API-контекста | `references/source-book/chapter2.md:34`, `references/source-book/chapter2.md:355` | `references/chapters/ch02-context-engineering.md` |
-| KV-cache как ограничение архитектуры | `references/source-book/chapter2.md:401`, `references/source-book/chapter2.md:524` | `references/chapters/ch02-context-engineering.md` |
-| Prompt и tool definitions | `references/source-book/chapter2.md:560`, `references/source-book/chapter2.md:635` | `references/chapters/ch02-context-engineering.md` |
-| Prompt injection | `references/source-book/chapter2.md:655` | `references/chapters/ch02-context-engineering.md` |
-| Dynamic prompts и Skills | `references/source-book/chapter2.md:689`, `references/source-book/chapter2.md:700`, `references/source-book/chapter2.md:722` | `references/chapters/ch02-context-engineering.md` |
-| Agent Status Bar | `references/source-book/chapter2.md:763`, `references/source-book/chapter2.md:842`, `references/source-book/chapter2.md:856` | `references/chapters/ch02-context-engineering.md` |
-| Сжатие и изоляция контекста | `references/source-book/chapter2.md:936`, `references/source-book/chapter2.md:1017`, `references/source-book/chapter2.md:1054` | `references/chapters/ch02-context-engineering.md` |
-| Трёхуровневая оценка памяти | `references/source-book/chapter3.md:49` | `references/chapters/ch03-memory-and-knowledge.md` |
-| Иерархия и четыре формата памяти | `references/source-book/chapter3.md:78`, `references/source-book/chapter3.md:94` | `references/chapters/ch03-memory-and-knowledge.md` |
-| Privacy памяти | `references/source-book/chapter3.md:261` | `references/chapters/ch03-memory-and-knowledge.md` |
-| RAG, hybrid search, Agentic RAG | `references/source-book/chapter3.md:273`, `references/source-book/chapter3.md:425`, `references/source-book/chapter3.md:574` | `references/chapters/ch03-memory-and-knowledge.md` |
-| Contextual retrieval | `references/source-book/chapter3.md:630` | `references/chapters/ch03-memory-and-knowledge.md` |
-| Классы и проектирование tools | `references/source-book/chapter4.md:14`, `references/source-book/chapter4.md:41` | `references/chapters/ch04-tools.md` |
-| MCP и выбор tools | `references/source-book/chapter4.md:110` | `references/chapters/ch04-tools.md` |
-| Perception, execution, collaboration tools | `references/source-book/chapter4.md:147`, `references/source-book/chapter4.md:179`, `references/source-book/chapter4.md:284` | `references/chapters/ch04-tools.md` |
-| Async/event-driven agent | `references/source-book/chapter4.md:347` | `references/chapters/ch04-tools.md` |
-| Coding Agent, Sessionless, безопасность | `references/source-book/chapter5.md:15`, `references/source-book/chapter5.md:82`, `references/source-book/chapter5.md:92` | `references/chapters/ch05-coding-agents.md` |
-| Harness и recovery Coding Agent | `references/source-book/chapter5.md:188`, `references/source-book/chapter5.md:233` | `references/chapters/ch05-coding-agents.md` |
-| Code as meta-capability | `references/source-book/chapter5.md:354` | `references/chapters/ch05-coding-agents.md` |
-| Evaluation environment и dataset | `references/source-book/chapter6.md:71`, `references/source-book/chapter6.md:157` | `references/chapters/ch06-evaluation.md` |
-| Метрики и LLM-as-a-Judge | `references/source-book/chapter6.md:239`, `references/source-book/chapter6.md:284` | `references/chapters/ch06-evaluation.md` |
-| Model/system selection и cost | `references/source-book/chapter6.md:421`, `references/source-book/chapter6.md:444` | `references/chapters/ch06-evaluation.md` |
-| Statistics и observability | `references/source-book/chapter6.md:520`, `references/source-book/chapter6.md:534` | `references/chapters/ch06-evaluation.md` |
-| Improvement loop, ablation, simulation | `references/source-book/chapter6.md:563`, `references/source-book/chapter6.md:635`, `references/source-book/chapter6.md:679` | `references/chapters/ch06-evaluation.md` |
-| Pretraining/SFT/RL | `references/source-book/chapter7.md:27`, `references/source-book/chapter7.md:72`, `references/source-book/chapter7.md:305` | `references/chapters/ch07-post-training.md` |
-| Data/environment before algorithm | `references/source-book/chapter7.md:447` | `references/chapters/ch07-post-training.md` |
-| Multi-turn reward и RLVP | `references/source-book/chapter7.md:481`, `references/source-book/chapter7.md:581` | `references/chapters/ch07-post-training.md` |
-| Tool-call RL и On-Policy Distillation | `references/source-book/chapter7.md:635`, `references/source-book/chapter7.md:694` | `references/chapters/ch07-post-training.md` |
-| Три парадигмы обучения | `references/source-book/chapter8.md:23` | `references/chapters/ch08-self-evolution.md` |
-| Experience, failures, Skills | `references/source-book/chapter8.md:53`, `references/source-book/chapter8.md:105`, `references/source-book/chapter8.md:113` | `references/chapters/ch08-self-evolution.md` |
-| Prompt optimization и cross-session continuation | `references/source-book/chapter8.md:145`, `references/source-book/chapter8.md:181` | `references/chapters/ch08-self-evolution.md` |
-| Tool discovery/creation | `references/source-book/chapter8.md:187`, `references/source-book/chapter8.md:236`, `references/source-book/chapter8.md:273` | `references/chapters/ch08-self-evolution.md` |
-| Continuous accumulation и safety | `references/source-book/chapter8.md:319`, `references/source-book/chapter8.md:329` | `references/chapters/ch08-self-evolution.md` |
-| Cascading, Omni, Full-Duplex | `references/source-book/chapter9.md:28`, `references/source-book/chapter9.md:42`, `references/source-book/chapter9.md:149`, `references/source-book/chapter9.md:174` | `references/chapters/ch09-realtime-multimodal.md` |
-| Fast/slow thinking | `references/source-book/chapter9.md:192`, `references/source-book/chapter9.md:276` | `references/chapters/ch09-realtime-multimodal.md` |
-| Computer Use и realtime | `references/source-book/chapter9.md:308`, `references/source-book/chapter9.md:418` | `references/chapters/ch09-realtime-multimodal.md` |
-| Multi-agent: context/topology axes | `references/source-book/chapter10.md:11`, `references/source-book/chapter10.md:15`, `references/source-book/chapter10.md:53` | `references/chapters/ch10-multi-agent.md` |
-| Когда multi-agent выигрывает | `references/source-book/chapter10.md:65` | `references/chapters/ch10-multi-agent.md` |
-| Shared/no-shared context | `references/source-book/chapter10.md:94`, `references/source-book/chapter10.md:196` | `references/chapters/ch10-multi-agent.md` |
-| Data/control planes и topologies | `references/source-book/chapter10.md:206`, `references/source-book/chapter10.md:237`, `references/source-book/chapter10.md:251`, `references/source-book/chapter10.md:287`, `references/source-book/chapter10.md:431` | `references/chapters/ch10-multi-agent.md` |
-| File conflicts и cascading errors | `references/source-book/chapter10.md:481`, `references/source-book/chapter10.md:493`, `references/source-book/chapter10.md:511` | `references/chapters/ch10-multi-agent.md` |
+| ReAct | `references/source-book/chapter1.md:164` | `references/chapters/ch01-agent-foundations.md` |
+| Harness-инженерия и пять функций | `references/source-book/chapter1.md:266`, `references/source-book/chapter1.md:324`, `references/source-book/chapter1.md:509` | `references/chapters/ch01-agent-foundations.md` |
+| Простота, прозрачность, ACI, workflow/agent | `references/source-book/chapter1.md:344`, `references/source-book/chapter1.md:375` | `references/chapters/ch01-agent-foundations.md` |
+| Guardrails и безопасность | `references/source-book/chapter1.md:469` | `references/chapters/ch01-agent-foundations.md` |
+| Структура API-контекста | `references/source-book/chapter2.md:43`, `references/source-book/chapter2.md:372` | `references/chapters/ch02-context-engineering.md` |
+| KV-cache как ограничение архитектуры | `references/source-book/chapter2.md:437`, `references/source-book/chapter2.md:562` | `references/chapters/ch02-context-engineering.md` |
+| Prompt и tool definitions | `references/source-book/chapter2.md:604`, `references/source-book/chapter2.md:702` | `references/chapters/ch02-context-engineering.md` |
+| Prompt injection | `references/source-book/chapter2.md:732` | `references/chapters/ch02-context-engineering.md` |
+| Dynamic prompts и Skills | `references/source-book/chapter2.md:767`, `references/source-book/chapter2.md:778`, `references/source-book/chapter2.md:816` | `references/chapters/ch02-context-engineering.md` |
+| Agent Status Bar | `references/source-book/chapter2.md:860`, `references/source-book/chapter2.md:911`, `references/source-book/chapter2.md:923` | `references/chapters/ch02-context-engineering.md` |
+| Сжатие и изоляция контекста | `references/source-book/chapter2.md:994`, `references/source-book/chapter2.md:1069`, `references/source-book/chapter2.md:1092` | `references/chapters/ch02-context-engineering.md` |
+| Трёхуровневая оценка памяти | `references/source-book/chapter3.md:47` | `references/chapters/ch03-memory-and-knowledge.md` |
+| Иерархия и четыре формата памяти | `references/source-book/chapter3.md:76`, `references/source-book/chapter3.md:92` | `references/chapters/ch03-memory-and-knowledge.md` |
+| Privacy памяти | `references/source-book/chapter3.md:235` | `references/chapters/ch03-memory-and-knowledge.md` |
+| RAG, hybrid search, Agentic RAG | `references/source-book/chapter3.md:247`, `references/source-book/chapter3.md:389`, `references/source-book/chapter3.md:546` | `references/chapters/ch03-memory-and-knowledge.md` |
+| Contextual retrieval | `references/source-book/chapter3.md:598` | `references/chapters/ch03-memory-and-knowledge.md` |
+| Классы и проектирование tools | `references/source-book/chapter4.md:9`, `references/source-book/chapter4.md:36` | `references/chapters/ch04-tools.md` |
+| MCP и выбор tools | `references/source-book/chapter4.md:102` | `references/chapters/ch04-tools.md` |
+| Perception, execution, collaboration tools | `references/source-book/chapter4.md:220`, `references/source-book/chapter4.md:272`, `references/source-book/chapter4.md:384` | `references/chapters/ch04-tools.md` |
+| Coding Agent, ядро универсального агента, безопасность | `references/source-book/chapter5.md:15`, `references/source-book/chapter5.md:60`, `references/source-book/chapter5.md:311` | `references/chapters/ch05-coding-agents.md` |
+| Harness и recovery Coding Agent | `references/source-book/chapter5.md:129`, `references/source-book/chapter5.md:174` | `references/chapters/ch05-coding-agents.md` |
+| Code as meta-capability | `references/source-book/chapter5.md:353` | `references/chapters/ch05-coding-agents.md` |
+| Асинхронность и событийная архитектура | `references/source-book/chapter6.md:31`, `references/source-book/chapter6.md:75`, `references/source-book/chapter6.md:87`, `references/source-book/chapter6.md:115` | `references/chapters/ch06-interaction.md` |
+| Виртуальная идентичность и изолированная среда | `references/source-book/chapter6.md:103` | `references/chapters/ch06-interaction.md` |
+| Нативная асинхронность модели | `references/source-book/chapter6.md:200`, `references/source-book/chapter6.md:277`, `references/source-book/chapter6.md:291` | `references/chapters/ch06-interaction.md` |
+| Cascading, Omni, Full-Duplex | `references/source-book/chapter6.md:315`, `references/source-book/chapter6.md:329`, `references/source-book/chapter6.md:391`, `references/source-book/chapter6.md:406` | `references/chapters/ch06-interaction.md` |
+| Fast/slow thinking | `references/source-book/chapter6.md:418`, `references/source-book/chapter6.md:440` | `references/chapters/ch06-interaction.md` |
+| Computer Use: grounding, наблюдение, модель мира | `references/source-book/chapter6.md:462`, `references/source-book/chapter6.md:500`, `references/source-book/chapter6.md:550`, `references/source-book/chapter6.md:558` | `references/chapters/ch06-interaction.md` |
+| Роботы: планировщик навыков, VLA, мировая модель | `references/source-book/chapter6.md:587`, `references/source-book/chapter6.md:626`, `references/source-book/chapter6.md:666`, `references/source-book/chapter6.md:691` | `references/chapters/ch06-interaction.md` |
+| Анатомия задачи, Pass@k и Pass^k | `references/source-book/chapter7.md:29`, `references/source-book/chapter7.md:132`, `references/source-book/chapter7.md:136`, `references/source-book/chapter7.md:150` | `references/chapters/ch07-evaluation.md` |
+| Evaluation environment и dataset | `references/source-book/chapter7.md:165`, `references/source-book/chapter7.md:206`, `references/source-book/chapter7.md:277` | `references/chapters/ch07-evaluation.md` |
+| Оценщики, задачи-ловушки, утечка | `references/source-book/chapter7.md:225`, `references/source-book/chapter7.md:235`, `references/source-book/chapter7.md:245` | `references/chapters/ch07-evaluation.md` |
+| LLM-as-a-Judge и смещение в пользу длины | `references/source-book/chapter7.md:291`, `references/source-book/chapter7.md:307` | `references/chapters/ch07-evaluation.md` |
+| Атрибуция неудач и регрессионные задачи | `references/source-book/chapter7.md:437`, `references/source-book/chapter7.md:467`, `references/source-book/chapter7.md:516` | `references/chapters/ch07-evaluation.md` |
+| Model selection, поведенческая стратегия, cost | `references/source-book/chapter7.md:561`, `references/source-book/chapter7.md:586`, `references/source-book/chapter7.md:602` | `references/chapters/ch07-evaluation.md` |
+| Statistics и observability | `references/source-book/chapter7.md:675`, `references/source-book/chapter7.md:701` | `references/chapters/ch07-evaluation.md` |
+| Improvement loop и simulation | `references/source-book/chapter7.md:721`, `references/source-book/chapter7.md:828` | `references/chapters/ch07-evaluation.md` |
+| Внутренняя инфраструктура оценки: абляция, A/B, флаги, промпты | `references/source-book/chapter7.md:780`, `references/source-book/chapter7.md:784`, `references/source-book/chapter7.md:790`, `references/source-book/chapter7.md:802`, `references/source-book/chapter7.md:812`, `references/source-book/chapter7.md:818` | `references/chapters/ch07-evaluation.md` |
+| Четыре этапа: предобучение, Mid-training, SFT, RL | `references/source-book/chapter8.md:28`, `references/source-book/chapter8.md:51`, `references/source-book/chapter8.md:57`, `references/source-book/chapter8.md:88` | `references/chapters/ch08-post-training.md` |
+| Mid-training и данные для него | `references/source-book/chapter8.md:278`, `references/source-book/chapter8.md:289` | `references/chapters/ch08-post-training.md` |
+| SFT, синтез данных, порядок диагностики | `references/source-book/chapter8.md:316`, `references/source-book/chapter8.md:371`, `references/source-book/chapter8.md:387` | `references/chapters/ch08-post-training.md` |
+| GRPO, on-policy, численные расхождения | `references/source-book/chapter8.md:483`, `references/source-book/chapter8.md:505`, `references/source-book/chapter8.md:518` | `references/chapters/ch08-post-training.md` |
+| Среда RL и модель как среда | `references/source-book/chapter8.md:531`, `references/source-book/chapter8.md:545`, `references/source-book/chapter8.md:555` | `references/chapters/ch08-post-training.md` |
+| Вознаграждение: источник, момент, объём; RLVP | `references/source-book/chapter8.md:565`, `references/source-book/chapter8.md:611`, `references/source-book/chapter8.md:615`, `references/source-book/chapter8.md:625`, `references/source-book/chapter8.md:645` | `references/chapters/ch08-post-training.md` |
+| Дистилляция, On-Policy Distillation, OPSD | `references/source-book/chapter8.md:671`, `references/source-book/chapter8.md:679`, `references/source-book/chapter8.md:712` | `references/chapters/ch08-post-training.md` |
+| От проблемных случаев к постобучению | `references/source-book/chapter8.md:734`, `references/source-book/chapter8.md:779` | `references/chapters/ch08-post-training.md` |
+| Обучающие сигналы и трёхуровневая проверка | `references/source-book/chapter9.md:21` | `references/chapters/ch09-continual-evolution.md` |
+| Четыре способа эволюции: знания, инструкции, программа, параметры | `references/source-book/chapter9.md:58`, `references/source-book/chapter9.md:250` | `references/chapters/ch09-continual-evolution.md` |
+| Опыт в знания и в инструкции | `references/source-book/chapter9.md:77`, `references/source-book/chapter9.md:99`, `references/source-book/chapter9.md:137` | `references/chapters/ch09-continual-evolution.md` |
+| Масштабы поиска, локальные патчи, два цикла | `references/source-book/chapter9.md:258`, `references/source-book/chapter9.md:288`, `references/source-book/chapter9.md:331` | `references/chapters/ch09-continual-evolution.md` |
+| Опыт в программу, самомодифицирующийся Harness | `references/source-book/chapter4.md:135`, `references/source-book/chapter9.md:169`, `references/source-book/chapter9.md:230` | `references/chapters/ch09-continual-evolution.md` |
+| Границы безопасности и обучение во сне | `references/source-book/chapter9.md:344`, `references/source-book/chapter9.md:354` | `references/chapters/ch09-continual-evolution.md` |
+| Multi-agent: context/topology axes | `references/source-book/chapter10.md:13`, `references/source-book/chapter10.md:17`, `references/source-book/chapter10.md:36` | `references/chapters/ch10-multi-agent.md` |
+| Когда multi-agent выигрывает | `references/source-book/chapter10.md:48` | `references/chapters/ch10-multi-agent.md` |
+| Shared/no-shared context | `references/source-book/chapter10.md:81`, `references/source-book/chapter10.md:104` | `references/chapters/ch10-multi-agent.md` |
+| Data/control planes и topologies | `references/source-book/chapter10.md:135`, `references/source-book/chapter10.md:168`, `references/source-book/chapter10.md:196`, `references/source-book/chapter10.md:286`, `references/source-book/chapter10.md:445` | `references/chapters/ch10-multi-agent.md` |
+| File conflicts и cascading errors | `references/source-book/chapter10.md:525`, `references/source-book/chapter10.md:539`, `references/source-book/chapter10.md:551` | `references/chapters/ch10-multi-agent.md` |
 | Возврат к основной формуле | `references/source-book/afterword.md:3` | `references/chapters/ch11-afterword.md` |
+| Справочные ответы на вопросы для размышления | `references/source-book/reference-answers.md:7`, `references/source-book/reference-answers.md:246`, `references/source-book/reference-answers.md:286`, `references/source-book/reference-answers.md:340` | `references/chapters/ch12-reference-answers.md` |
 
 ## Drift gate
 

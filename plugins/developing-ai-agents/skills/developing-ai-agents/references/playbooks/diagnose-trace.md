@@ -107,5 +107,5 @@
 - Локализация по четырём областям: `references/chapters/ch01-agent-foundations.md`.
 - Механизмы потери контекста: `references/chapters/ch02-context-engineering.md`.
 - Таксономия сбоев и восстановление: `references/chapters/ch05-coding-agents.md`.
-- Наблюдаемость и метрики процесса: `references/chapters/ch06-evaluation.md`.
+- Наблюдаемость и метрики процесса: `references/chapters/ch07-evaluation.md`.
 - Симптомы и их причины: `references/antipatterns.md`.

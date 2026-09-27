@@ -58,7 +58,7 @@
 
 **ReAct** — цикл Reason → Act → Observe, в котором решение приводит к инструментальному действию, а новое наблюдение влияет на следующий шаг.
 
-**RLVP (Reinforcement Learning with Verifiable Process constraints/penalty)** — подход главы 7: reward за результат сочетается с проверяемыми ограничениями/штрафами траектории. Практический вывод: outcome и допустимость процесса оцениваются раздельно.
+**RLVP (Reinforcement Learning with Verifiable Process constraints/penalty)** — подход главы 8: reward за результат сочетается с проверяемыми ограничениями/штрафами траектории. Практический вывод: outcome и допустимость процесса оцениваются раздельно.
 
 ## S–Z
 
@@ -88,7 +88,7 @@
 
 **Экстернализация** — перенос знания или процедуры из скрытого/временного состояния модели в проверяемый внешний носитель.
 
-Источники терминов: `references/source-book/chapter1.md:13-229`, `references/source-book/chapter1.md:230-294`, `references/source-book/chapter2.md:401-559`, `references/source-book/chapter2.md:689-935`, `references/source-book/chapter3.md:273-701`, `references/source-book/chapter6.md:284-420`, `references/source-book/chapter8.md:23-355`, `references/source-book/chapter9.md:28-287`, `references/source-book/chapter10.md:11-533`.
+Источники терминов: `references/source-book/chapter1.md:13`, `references/source-book/chapter1.md:266`, `references/source-book/chapter2.md:437`, `references/source-book/chapter2.md:767`, `references/source-book/chapter3.md:247`, `references/source-book/chapter7.md:307`, `references/source-book/chapter9.md:58`, `references/source-book/chapter6.md:315`, `references/source-book/chapter10.md:13`.
 
 **False accept** — доля случаев, когда проверяющая роль приняла заведомо неверное утверждение. Основная метрика качества независимой проверки: высокий показатель означает, что проверка формальна.
 

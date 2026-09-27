@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
   "book": {
-    "upstream_commit": "97de455e9aa44cf9f93441ce0c771c9aa9643d92",
-    "translation_commit": "ed2ae516d45dfe26e934cb390b80f105ca780b1f"
+    "upstream_commit": "c3352738f4b6fe42fe34e3cf6a79bcb424a133b8",
+    "translation_commit": "dd3bec63e5bbbd613a38b1a2f03f4aeba859ab1e"
   },
   "anchors": {
-    "afterword.md:19": {
+    "afterword.md:15": {
       "line_sha256": "f515f546666fc6dfe5c89c59433850e55c621f63e28044f70dfea8d02bbddd76",
       "line_text": "## Две тучи {.unnumbered}",
       "kind": "heading"
@@ -20,234 +20,254 @@
       "line_text": "## Современный AI-агент = LLM + контекст + инструменты",
       "kind": "heading"
     },
-    "chapter1.md:146": {
+    "chapter1.md:140": {
+      "line_sha256": "c190d04a2da290938371bd9c81b74a8b1e3c1ad2793b5e28f96e77cc6a15e990",
+      "line_text": "### Контекст: глаза агента",
+      "kind": "heading"
+    },
+    "chapter1.md:164": {
       "line_sha256": "ca55743a5986c572da99459c1abff42311abbc9c220b220405dce4424c6ab4fd",
       "line_text": "### Цикл ReAct",
       "kind": "heading"
     },
-    "chapter1.md:230": {
+    "chapter1.md:266": {
       "line_sha256": "7d14e12236a963fdeed26afbbd240d56bb36b4ac5a80624eb7f4c6bb050f519b",
       "line_text": "## Harness-инженерия: конкурентное преимущество за пределами модели",
       "kind": "heading"
     },
-    "chapter1.md:272": {
-      "line_sha256": "3c4d8dcee6973edee280e336f0a023eb963fc792712997bd89f149be3a62c36f",
-      "line_text": "### От промпт-инженерии к Harness-инженерии: эволюция инженерной парадигмы",
+    "chapter1.md:324": {
+      "line_sha256": "de27df65b98a1647f1fe7634a6e2e4d5da71a58ad0c0483d1a433c0948166c5f",
+      "line_text": "### От промпт-инженерии к Loop-инженерии: эволюция инженерной парадигмы",
       "kind": "heading"
     },
-    "chapter1.md:280": {
-      "line_sha256": "6fea788903bcced29d0875fd4bd7a81595dd8eef69f51535a903dd724dd28b87",
-      "line_text": "### Основные принципы пяти функций Harness",
-      "kind": "heading"
-    },
-    "chapter1.md:295": {
+    "chapter1.md:344": {
       "line_sha256": "62d752f33b08a6a38756f130f5a0b05db5f1e81c561fd420f3704cd0dc88cb04",
       "line_text": "### Основные принципы построения эффективного агента",
       "kind": "heading"
     },
-    "chapter1.md:324": {
+    "chapter1.md:375": {
       "line_sha256": "2b731a7dec6e4ba596bf214c3b68525ef4281a64df068067a6eaceb47601644c",
       "line_text": "### Паттерны оркестрации: рабочие процессы и автономность",
       "kind": "heading"
     },
-    "chapter1.md:330": {
+    "chapter1.md:387": {
       "line_sha256": "1e2b790452a7398c556bae3bb854d4956e11ff086ab2bc0efa40a418c1e261f7",
       "line_text": "#### Паттерн рабочего процесса: детерминированная оркестрация",
       "kind": "heading"
     },
-    "chapter1.md:347": {
+    "chapter1.md:39": {
+      "line_sha256": "43110452fc2bc97911403805b7f3fd0bb9b539d6dbedd9a143754a9a55f93340",
+      "line_text": "### Пространство наблюдений и пространство действий: интерфейс между моделью и миром",
+      "kind": "heading"
+    },
+    "chapter1.md:421": {
       "line_sha256": "ea1277b1df941ff75aa4bbad897538850fd25f7ec854009c1bfbf94aa768e085",
       "line_text": "#### Автономный агент: динамическое самостоятельное принятие решений",
       "kind": "heading"
     },
-    "chapter1.md:387": {
+    "chapter1.md:469": {
       "line_sha256": "8a77b15f7288d0080aa608b7643158021746239ddd6ae7b7e616ec94d0b94aec",
       "line_text": "### Защитные барьеры и безопасность",
       "kind": "heading"
     },
-    "chapter1.md:395": {
+    "chapter1.md:477": {
       "line_sha256": "9d12b56847bbeec275539a0fb87a303f730124e2c4ce41ba3726e94b9eedd5ea",
       "line_text": "#### Типы защитных барьеров",
       "kind": "heading"
     },
-    "chapter1.md:407": {
+    "chapter1.md:493": {
       "line_sha256": "9901e698012c4fd72b99468d9ec7d283bcd69c8168343ef91b402e28c3de6eab",
       "line_text": "#### Участие человека",
       "kind": "heading"
     },
-    "chapter10.md:11": {
+    "chapter1.md:509": {
+      "line_sha256": "8cf15653c22f42e7abb01ba1f856215b95dc9988894ba18f725a11dfffcb9b3b",
+      "line_text": "### Соответствие пяти функций Harness разделу «Построение»",
+      "kind": "heading"
+    },
+    "chapter10.md:104": {
+      "line_sha256": "0f3f5cfa23dda18400440d0c3a7d42a9402f2e433b61e03a5ad73e57fbee762d",
+      "line_text": "## Мультиагентное взаимодействие без общего контекста",
+      "kind": "heading"
+    },
+    "chapter10.md:13": {
       "line_sha256": "1cba9cbf6d98d10746dea0d2591c63369aa4c3d33c594014686ebf1b953d9d17",
       "line_text": "## Классификация взаимодействия нескольких AI-агентов",
       "kind": "heading"
     },
-    "chapter10.md:15": {
+    "chapter10.md:135": {
+      "line_sha256": "e28f1fd03c69afbe252a92dd080afa209782582968fda67b6c5035270f3da1be",
+      "line_text": "### Файловая система с точки зрения агента",
+      "kind": "heading"
+    },
+    "chapter10.md:168": {
+      "line_sha256": "7676181ee5073140aa480ed423cb490b14b0a59db070aeec18fec53b481b66ca",
+      "line_text": "### Коммуникация и управление между агентами",
+      "kind": "heading"
+    },
+    "chapter10.md:17": {
       "line_sha256": "557fa471a536897624e75712ef72088d25cb8680dd5187a63980f930f451d424",
       "line_text": "### Аспект 1: общий ли контекст",
       "kind": "heading"
     },
     "chapter10.md:196": {
-      "line_sha256": "0f3f5cfa23dda18400440d0c3a7d42a9402f2e433b61e03a5ad73e57fbee762d",
-      "line_text": "## Мультиагентное взаимодействие без общего контекста",
-      "kind": "heading"
-    },
-    "chapter10.md:206": {
-      "line_sha256": "e28f1fd03c69afbe252a92dd080afa209782582968fda67b6c5035270f3da1be",
-      "line_text": "### Файловая система с точки зрения агента",
-      "kind": "heading"
-    },
-    "chapter10.md:237": {
-      "line_sha256": "7676181ee5073140aa480ed423cb490b14b0a59db070aeec18fec53b481b66ca",
-      "line_text": "### Коммуникация и управление между агентами",
-      "kind": "heading"
-    },
-    "chapter10.md:251": {
       "line_sha256": "599690abb757a653a704516caa816cbee805ba0264a1b3a7e7578b01b0a5d016",
       "line_text": "### Одноранговое взаимодействие: взаимный контроль и итеративное улучшение",
       "kind": "heading"
     },
-    "chapter10.md:287": {
+    "chapter10.md:286": {
       "line_sha256": "9e97f903fb42730b7fcbf7e6a4297fcd248ffc1eff696bcebde6ec8e647b9bc5",
       "line_text": "### Модель менеджера: централизованная координация",
       "kind": "heading"
     },
-    "chapter10.md:431": {
-      "line_sha256": "7a4d8f9432f386f9cabf937c0cddeeca1629e8527432f2570fb0b896b5e95f4b",
-      "line_text": "### Децентрализованная модель: одноранговая передача управления",
-      "kind": "heading"
-    },
-    "chapter10.md:481": {
-      "line_sha256": "8e396561b1b466e98b47a6f525efc9184a79fac8d5a1aa2a943c458cb266af98",
-      "line_text": "## Режимы отказа при взаимодействии нескольких агентов",
-      "kind": "heading"
-    },
-    "chapter10.md:493": {
-      "line_sha256": "ef5812005c9599c88af42d3a6c53c3c600bb2366b136352f973af37d6293f0f0",
-      "line_text": "### Режим отказа 1: конкурентные конфликты в общей файловой системе",
-      "kind": "heading"
-    },
-    "chapter10.md:511": {
-      "line_sha256": "2bbe227615f0fcfc5bb97391fb7641181572da3e997cea02c6b4ef95bb7b9651",
-      "line_text": "### Режим отказа 2: каскадное усиление ошибок",
-      "kind": "heading"
-    },
-    "chapter10.md:53": {
+    "chapter10.md:36": {
       "line_sha256": "e787512f6ec3da914edb6a3cc7f13118bba5dcc29c03641b821ffa7739825fa8",
       "line_text": "### Аспект 2: топология взаимодействия",
       "kind": "heading"
     },
-    "chapter10.md:65": {
+    "chapter10.md:445": {
+      "line_sha256": "241c6786611628b3174e427bdcad88c851686a6ac2e8901f699c751e3b1bd3cb",
+      "line_text": "### Децентрализованная модель",
+      "kind": "heading"
+    },
+    "chapter10.md:48": {
       "line_sha256": "2f70ae4ebd8d8ac3aeb140b125a708e29cf84724c6325d962a081151a11e25a8",
       "line_text": "## Когда несколько AI-агентов действительно превосходят одного агента",
       "kind": "heading"
     },
-    "chapter10.md:94": {
-      "line_sha256": "11630e9c359cf9d08056bc8fd538820f01838284a0b2f70d92fd9440399d1653",
-      "line_text": "## Взаимодействие нескольких AI-агентов с общим контекстом",
+    "chapter10.md:525": {
+      "line_sha256": "92f1e0b29aae572214a7eafca24f8be2827f6ce9221cd74c828509e7d92e0f96",
+      "line_text": "## Режимы отказа при взаимодействии нескольких AI-агентов",
       "kind": "heading"
     },
-    "chapter2.md:1017": {
+    "chapter10.md:539": {
+      "line_sha256": "ef5812005c9599c88af42d3a6c53c3c600bb2366b136352f973af37d6293f0f0",
+      "line_text": "### Режим отказа 1: конкурентные конфликты в общей файловой системе",
+      "kind": "heading"
+    },
+    "chapter10.md:551": {
+      "line_sha256": "2bbe227615f0fcfc5bb97391fb7641181572da3e997cea02c6b4ef95bb7b9651",
+      "line_text": "### Режим отказа 2: каскадное усиление ошибок",
+      "kind": "heading"
+    },
+    "chapter10.md:557": {
+      "line_sha256": "a30460908a08eaad547b0813596caab2842d5c76e5beb58c78407a715c9e6285",
+      "line_text": "### Режим отказа 3: однородная конвергенция",
+      "kind": "heading"
+    },
+    "chapter10.md:573": {
+      "line_sha256": "86979dbb43d6c2d294ae4b2dd2e006fb02da61c853a28d50dc20fba3ddd27b81",
+      "line_text": "### Режим отказа 6: долг понимания и когнитивная капитуляция",
+      "kind": "heading"
+    },
+    "chapter10.md:81": {
+      "line_sha256": "a272c08f564a2bfd282d2784895c08147f7fddcaf599a7bcfbc0a17b759865b4",
+      "line_text": "## Мультиагентное взаимодействие с общим контекстом",
+      "kind": "heading"
+    },
+    "chapter2.md:1031": {
+      "line_sha256": "a4d696eff5eeee527697ed97c866f67d8256430fdacfb6b535d257660c5028f7",
+      "line_text": "### Сжатие и KV-кэш: кажущееся противоречие и реальная взаимодополняемость",
+      "kind": "heading"
+    },
+    "chapter2.md:1069": {
       "line_sha256": "f4516211b51195badb2877ae84472fa6c6e17fb272bc51616a34b8f6bc55874d",
       "line_text": "### Многоуровневый механизм сжатия промышленного уровня",
       "kind": "heading"
     },
-    "chapter2.md:1029": {
+    "chapter2.md:1079": {
       "line_sha256": "fffabc02e86eecb41dfc10348f119255d443eee788fe3e4548601d70c352cbf6",
       "line_text": "### Принципы проектирования стратегии сжатия",
       "kind": "heading"
     },
-    "chapter2.md:1054": {
+    "chapter2.md:1092": {
       "line_sha256": "980861d2b7f8e7056ce143f9d634ad195a27a006bdd7332b287b590d1373f39b",
       "line_text": "### Изоляция лучше сжатия: изоляция контекста дочернего агента",
       "kind": "heading"
     },
-    "chapter2.md:34": {
-      "line_sha256": "9fb1e2060f9eb7ffbbc7ee6d5a8036df0e3222dd150f2ecc0c8cadc316a485f3",
-      "line_text": "## Как AI-агент вызывает большую языковую модель: структура контекста API",
-      "kind": "heading"
-    },
-    "chapter2.md:355": {
+    "chapter2.md:372": {
       "line_sha256": "c024d7f75111888a9e3188b813cffc3edaecd99fe2e2146c73f82e521bad692e",
       "line_text": "### Состав контекста с точки зрения API",
       "kind": "heading"
     },
-    "chapter2.md:401": {
+    "chapter2.md:43": {
+      "line_sha256": "9fb1e2060f9eb7ffbbc7ee6d5a8036df0e3222dd150f2ecc0c8cadc316a485f3",
+      "line_text": "## Как AI-агент вызывает большую языковую модель: структура контекста API",
+      "kind": "heading"
+    },
+    "chapter2.md:437": {
       "line_sha256": "811ced979c9ebd42839a3cf7eaf1f9319f0d364015fd0f63a18afe7f0c9add5d",
       "line_text": "## Проектирование контекста с учётом KV-кэша",
       "kind": "heading"
     },
-    "chapter2.md:524": {
+    "chapter2.md:562": {
       "line_sha256": "ca04019f23396bbbff5010655a1898db1d0972b04c3831559a0465a99fb7365c",
       "line_text": "### Кэш как архитектурное ограничение",
       "kind": "heading"
     },
-    "chapter2.md:560": {
+    "chapter2.md:604": {
       "line_sha256": "0f7be142c4e66b366db26c7c62311ba31f3ee2f8b3fb7b9f1d84aa1b057c808b",
       "line_text": "## Промпт-инжиниринг: оптимизация системного промпта",
       "kind": "heading"
     },
-    "chapter2.md:635": {
+    "chapter2.md:702": {
       "line_sha256": "11138e0d574d610dbcbe1da175a75ec887205b8e95983763f1a46483d94fe8e7",
       "line_text": "### Проектирование определений инструментов",
       "kind": "heading"
     },
-    "chapter2.md:655": {
+    "chapter2.md:732": {
       "line_sha256": "5dd8710baff907ee1ccd7b7fb6118bc8edbd40435a7c09b81f37c6c15b78cc4c",
       "line_text": "### Инъекция в промпт: основная угроза безопасности контекста",
       "kind": "heading"
     },
-    "chapter2.md:689": {
+    "chapter2.md:767": {
       "line_sha256": "f792376ae9c589e07fb099354ed50f656cd007648a6b9083d2d662a140ab842a",
       "line_text": "## Динамические промпты и Agent Skills",
       "kind": "heading"
     },
-    "chapter2.md:700": {
+    "chapter2.md:778": {
       "line_sha256": "f465393079c8fa081146b2ec89b79704b99508aac97fb79813979ef172669b73",
       "line_text": "### Skills: компонуемые единицы предметных компетенций",
       "kind": "heading"
     },
-    "chapter2.md:722": {
-      "line_sha256": "3ea9aacc38408c8836666b47c6e46edee43a6a2cb3ba089fa484caac4751cad3",
-      "line_text": "### Реализация Skills и связанные компромиссы",
+    "chapter2.md:816": {
+      "line_sha256": "4a544e8994e8070a30b92a6ec0d572caa8735064687e2aa855df3165d6cbcc46",
+      "line_text": "### Место Skills в контексте",
       "kind": "heading"
     },
-    "chapter2.md:763": {
-      "line_sha256": "7ae20d0d6310cf7d1cd5afe8f2d1db37809a33f423c8d624544458dcea21f1ee",
-      "line_text": "## Панель состояния AI-агента: расширение управления траекторией агента с помощью метаданных",
+    "chapter2.md:860": {
+      "line_sha256": "0f74f740e1731aec3db5799f2522a281f6da69fd253578b2ba368e40ceb06f44",
+      "line_text": "## Панель состояния AI-агента: улучшение управления траекторией агента с помощью метаданных",
       "kind": "heading"
     },
-    "chapter2.md:842": {
+    "chapter2.md:911": {
       "line_sha256": "ae2d1fdeb971cf2eced05e984c758039db9c082a2963a67d5de6b137c259782f",
       "line_text": "### Состав панели состояния агента",
       "kind": "heading"
     },
-    "chapter2.md:856": {
+    "chapter2.md:923": {
       "line_sha256": "9623ede1681977eb745c925e0ad10998d3b0387d746acea55965c20bee3ebec4",
       "line_text": "### Конкретное положение панели состояния агента в контексте",
       "kind": "heading"
     },
-    "chapter2.md:86": {
-      "line_sha256": "5989d3c1f1902ec2930a082feb517bec5c2802e8dc2c5ec5cd464536b0cb015f",
-      "line_text": "### Многоходовое взаимодействие с вызовами инструментов: основной цикл агента",
-      "kind": "heading"
-    },
-    "chapter2.md:887": {
+    "chapter2.md:954": {
       "line_sha256": "0f8e31e4b6bb0ebd2aa48e0e3fed370e0e9a93369734f7284ae35496cc46e925",
       "line_text": "### Два способа обновления состояния и их влияние на кэш",
       "kind": "heading"
     },
-    "chapter2.md:936": {
-      "line_sha256": "253ccc5dc69ba85e202cd0c3b453a53827be95a3fa406f3b1bb590ac4616173e",
-      "line_text": "## Стратегия сжатия контекста",
+    "chapter2.md:97": {
+      "line_sha256": "5989d3c1f1902ec2930a082feb517bec5c2802e8dc2c5ec5cd464536b0cb015f",
+      "line_text": "### Многоходовое взаимодействие с вызовами инструментов: основной цикл агента",
       "kind": "heading"
     },
-    "chapter2.md:940": {
+    "chapter2.md:994": {
+      "line_sha256": "9693c0114dba1ac4aa0214d47a7db476ae1cce78cee33cccb4d967c86fcc1349",
+      "line_text": "## Стратегии сжатия контекста",
+      "kind": "heading"
+    },
+    "chapter2.md:998": {
       "line_sha256": "2dd98d1f01cdcd211729c5693509e931f152f9b14bd4249a35c5c99040517efd",
       "line_text": "### Зачем нужно сжатие: дело не только в длине",
-      "kind": "heading"
-    },
-    "chapter2.md:981": {
-      "line_sha256": "a4d696eff5eeee527697ed97c866f67d8256430fdacfb6b535d257660c5028f7",
-      "line_text": "### Сжатие и KV-кэш: кажущееся противоречие и реальная взаимодополняемость",
       "kind": "heading"
     },
     "chapter3.md:17": {
@@ -255,99 +275,94 @@
       "line_text": "## Система пользовательской памяти",
       "kind": "heading"
     },
-    "chapter3.md:261": {
+    "chapter3.md:235": {
       "line_sha256": "e3dd0e8377ba6454ad6485e1eb6f3b3ccd3f5ce217d722120cfcab1605eb9d99",
       "line_text": "### Защита конфиденциальности: обезличивание журналов",
       "kind": "heading"
     },
-    "chapter3.md:273": {
+    "chapter3.md:247": {
       "line_sha256": "a20fa53b4ee64e4da57de47e3ae3113f53a546714695fa83d775c3f1056dd808",
       "line_text": "## Основы RAG: построение конвейера получения знаний для AI-агента",
       "kind": "heading"
     },
-    "chapter3.md:425": {
+    "chapter3.md:389": {
       "line_sha256": "530e3e017069cff2c067ba17e4e91b7911ff4da1972e13ec9acaf85834fe2f57",
       "line_text": "### Гибридный поиск: искусство объединять лучшее",
       "kind": "heading"
     },
-    "chapter3.md:49": {
+    "chapter3.md:47": {
       "line_sha256": "7aff00b8855617fdb5e4e74258be5eced89db8f07fa82541c1c53ca87ea3f157",
       "line_text": "### Оценка возможностей памяти: трёхуровневая модель",
       "kind": "heading"
     },
-    "chapter3.md:574": {
+    "chapter3.md:546": {
       "line_sha256": "bc073a6026150d80ea41ed8abea648c857f6b957d0758e2c5674274dfe7ff040",
       "line_text": "### Агентный RAG: переход к парадигме поиска знаний посредством инструментов",
       "kind": "heading"
     },
-    "chapter3.md:630": {
+    "chapter3.md:598": {
       "line_sha256": "0f47e81d517416b1449b77a87a096a79088999fadb09865c091b1292d82bad67",
       "line_text": "### Техника RAG: контекстно-зависимый поиск",
       "kind": "heading"
     },
-    "chapter3.md:78": {
+    "chapter3.md:76": {
       "line_sha256": "62bfc8e073120f035c7a9b159d138975b358168bd0cdef68514d14990e2fbed0",
       "line_text": "### Иерархия памяти",
       "kind": "heading"
     },
-    "chapter3.md:94": {
+    "chapter3.md:92": {
       "line_sha256": "5f2188476ce79b48f6dbf1fbc8441529a30c3a3e7f9c1fdc8e004679a3b1c5da",
       "line_text": "### Четыре формата хранения пользовательской памяти",
       "kind": "heading"
     },
-    "chapter4.md:110": {
-      "line_sha256": "a8ec163359837af2fe13133488e4c1d0ef3ae9e5f8ef7550078318304673a05f",
-      "line_text": "## Экосистема инструментов: MCP и сложности выбора инструментов",
+    "chapter4.md:102": {
+      "line_sha256": "9c1ac499b10642cceeb72aab6bda31bd3c8cdd645fb024042a21374a6e77e326",
+      "line_text": "## Экосистема инструментов: MCP и Skill Hub",
       "kind": "heading"
     },
-    "chapter4.md:14": {
-      "line_sha256": "2f39083955fe7449e2338e04b198e2f17cbf91b979b4f963c01df0767ceb67b1",
-      "line_text": "## Классификация инструментов",
+    "chapter4.md:135": {
+      "line_sha256": "356ce2d9e975365eae9b087f1d39b19965f51301fddbd804190d3a80a233fef0",
+      "line_text": "## Что делать, если инструментов слишком много: иерархическая организация и активное обнаружение инструментов",
       "kind": "heading"
     },
-    "chapter4.md:147": {
+    "chapter4.md:220": {
       "line_sha256": "98e281e1759b18b87ecf11815ca08a2240c5dd8eca8c1d567ca8e55d1fcd2301",
       "line_text": "## Инструменты восприятия",
       "kind": "heading"
     },
-    "chapter4.md:179": {
+    "chapter4.md:272": {
       "line_sha256": "79ede4f81b981a5b28d5cf05c7f873dae82df162e45cb4b98092a63b19ac785f",
       "line_text": "## Инструменты выполнения",
       "kind": "heading"
     },
-    "chapter4.md:284": {
-      "line_sha256": "e28bbfbd4285b1b376ee4e7186f6ade2efb0738f6a058c3522f6d25e62584615",
-      "line_text": "## Инструменты совместной работы",
-      "kind": "heading"
-    },
-    "chapter4.md:347": {
-      "line_sha256": "d71e31d39db4890c4904c1bd68460056b473584eee0c11b5a520f84afc25e388",
-      "line_text": "## Событийно-ориентированный асинхронный AI-агент",
-      "kind": "heading"
-    },
-    "chapter4.md:387": {
-      "line_sha256": "72e96f1270be1560f51826decf499ed73e0d74d55f0ea2f58157195490948fad",
-      "line_text": "### Инструменты запуска по событию",
-      "kind": "heading"
-    },
-    "chapter4.md:41": {
+    "chapter4.md:36": {
       "line_sha256": "c42f3967aa3b810f1f3085b987e24b89962dfe13b594c72649ba8e1ebf08fc49",
       "line_text": "## Общие принципы проектирования инструментов",
       "kind": "heading"
     },
-    "chapter4.md:415": {
-      "line_sha256": "6023e1d326bad83368d929db7d5acb14fd4ad40036d6c10817e17174b40e4b3a",
-      "line_text": "### Виртуальная идентичность и изолированная среда выполнения",
+    "chapter4.md:384": {
+      "line_sha256": "e28bbfbd4285b1b376ee4e7186f6ade2efb0738f6a058c3522f6d25e62584615",
+      "line_text": "## Инструменты совместной работы",
       "kind": "heading"
     },
-    "chapter4.md:43": {
-      "line_sha256": "da8578aa1c660a09f0c6b706a1f8a588471ed9ceab194998dff70c3fe71390cd",
-      "line_text": "### Выбор формы представления возможностей: специализированный инструмент или Skill + универсальный исполнитель",
+    "chapter4.md:40": {
+      "line_sha256": "87a649be02bbd0a34dac747bec412d3fcadf272fa4b727586de5c5f15c1beadf",
+      "line_text": "### Формы представления возможностей: специализированные инструменты, универсальные исполнители и Skill",
       "kind": "heading"
     },
-    "chapter4.md:74": {
+    "chapter4.md:72": {
       "line_sha256": "6cdddbd8ac6a67097e2195f69ded7b85762bad9156860febd67c64f807b40371",
       "line_text": "### Искусство описания инструментов",
+      "kind": "heading"
+    },
+    "chapter4.md:9": {
+      "line_sha256": "2f39083955fe7449e2338e04b198e2f17cbf91b979b4f963c01df0767ceb67b1",
+      "line_text": "## Классификация инструментов",
+      "kind": "heading"
+    },
+    "chapter5.md:129": {
+      "line_sha256": "3becd2cbac972a6b1bffdbe34d27e6223a25b68a6a9902d7b4813875bd279feb",
+      "line_text": "### Практика Harness-инженерии в Coding-агентах",
       "kind": "heading"
     },
     "chapter5.md:15": {
@@ -360,264 +375,579 @@
       "line_text": "### Написание кода — базовая способность агента",
       "kind": "heading"
     },
-    "chapter5.md:188": {
-      "line_sha256": "3becd2cbac972a6b1bffdbe34d27e6223a25b68a6a9902d7b4813875bd279feb",
-      "line_text": "### Практика Harness-инженерии в Coding-агентах",
-      "kind": "heading"
-    },
-    "chapter5.md:233": {
+    "chapter5.md:174": {
       "line_sha256": "da51289200fcabb6ce6f778429337247950df5e7c3c0a7065978e426f739091b",
       "line_text": "### Сбои и восстановление после ошибок",
       "kind": "heading"
     },
-    "chapter5.md:354": {
-      "line_sha256": "97088bf9d17717abfd9d2c260168c145e29e7cfc34ee8c60c9781e1cd60ccc0c",
-      "line_text": "## Код: метаспособность универсального агента",
-      "kind": "heading"
-    },
-    "chapter5.md:82": {
-      "line_sha256": "0b0cb5fd0fef6ffeb922fc0c6715499a69fad4360b989bac649e81d0be572410",
-      "line_text": "### Архитектура Sessionless",
-      "kind": "heading"
-    },
-    "chapter5.md:92": {
+    "chapter5.md:311": {
       "line_sha256": "047939e4c407f45e0e587e257a36b7b9a748a148b9a3096c5ae0c73a85569eb3",
       "line_text": "### Безопасность Coding-агента",
       "kind": "heading"
     },
-    "chapter6.md:157": {
-      "line_sha256": "5629f610861aa3c2ea177ae3fef0dd3c08926a11d9507c12e6a32bb3a95a103e",
-      "line_text": "## Проектирование набора данных с задачами для оценки",
+    "chapter5.md:353": {
+      "line_sha256": "f8bdf3d6be87f1b6122c42920153784932b50f17757e961a9ae4f4f6815c87ea",
+      "line_text": "## Код: метаспособность универсального AI-агента",
       "kind": "heading"
     },
-    "chapter6.md:205": {
-      "line_sha256": "6bf2ab0b76e767bd88603f5e059299903c17f34d686fe3b2cf3e7a56834712af",
-      "line_text": "### Обеспечение проверяемости и объективности",
+    "chapter5.md:60": {
+      "line_sha256": "ac20614565829e4a46245554abc1d878edfd3993c439c93add542b3b2ed48888",
+      "line_text": "### Пример: от Manus до OpenClaw — программное ядро универсального агента",
       "kind": "heading"
     },
-    "chapter6.md:239": {
-      "line_sha256": "11a7d82b05081b99055d49ddc8281ec5277b0963cf2b0a8d8fea3524ad3add30",
-      "line_text": "## Система метрик оценки",
+    "chapter6.md:103": {
+      "line_sha256": "6023e1d326bad83368d929db7d5acb14fd4ad40036d6c10817e17174b40e4b3a",
+      "line_text": "### Виртуальная идентичность и изолированная среда выполнения",
       "kind": "heading"
     },
-    "chapter6.md:278": {
+    "chapter6.md:115": {
+      "line_sha256": "af0119d7238cbd769efa5fb489a7bd0a21ab6ba739f1df2bb851cb20a39e5483",
+      "line_text": "### Механизм обработки событий",
+      "kind": "heading"
+    },
+    "chapter6.md:200": {
+      "line_sha256": "a0c80b41a2aa8b8cd2d4a33c473a8975c1a6884372f82e2a36429fef90191b82",
+      "line_text": "### Схема совместимости при отсутствии нативной асинхронности",
+      "kind": "heading"
+    },
+    "chapter6.md:277": {
+      "line_sha256": "d80d29d1205eb75b98c66bc7358c8126b5752b64b26223bdf8dcbec066d10cd0",
+      "line_text": "### Нативная асинхронность модели: GPT-6 Astra",
+      "kind": "heading"
+    },
+    "chapter6.md:291": {
+      "line_sha256": "b4f1825151bfb0ce72198a12f8551c07606900f64eb0c789d9b7f326d1f48994",
+      "line_text": "### От «способности принимать асинхронные сообщения» к «надёжной обработке асинхронных задач»",
+      "kind": "heading"
+    },
+    "chapter6.md:3": {
+      "line_sha256": "53f19c3befd2d2ef12e5a263d8ef5737e1c6be6bc263e29a193f99d09ec1e05b",
+      "line_text": "# Взаимодействие: расширение пространства наблюдений и пространства действий",
+      "kind": "heading"
+    },
+    "chapter6.md:31": {
+      "line_sha256": "4fa8bcac93cb17393045dff0843bbd59811568efd50b43c583bf69362831b33a",
+      "line_text": "## Асинхронность и событийно-ориентированная архитектура: когда мир обращается к агенту сам",
+      "kind": "heading"
+    },
+    "chapter6.md:315": {
+      "line_sha256": "db6947f1e81daa2c42837e9ac72aceec3ab9c53b2a73d721ee0f3ef5c1a1aa7b",
+      "line_text": "### Последовательность взаимодействия: от каскада к полному дуплексу",
+      "kind": "heading"
+    },
+    "chapter6.md:329": {
+      "line_sha256": "5b57cc32d46685e020e491036143af6cab4c9c65668c600fc6366f50c2abd41c",
+      "line_text": "### Парадигма 1 · Каскадный конвейер (Cascading)",
+      "kind": "heading"
+    },
+    "chapter6.md:360": {
+      "line_sha256": "da19f6da6f6f9b8561ad6c384fb8396dcd145820e267be19a615f6350d6ea12f",
+      "line_text": "#### От последовательной к потоковой обработке восприятия",
+      "kind": "heading"
+    },
+    "chapter6.md:37": {
+      "line_sha256": "9c99b0063f36c2d94c47a7113cf844df7a157cfa5e4282d7beef9d0abee6b873",
+      "line_text": "### Зачем нужна асинхронность",
+      "kind": "heading"
+    },
+    "chapter6.md:391": {
+      "line_sha256": "c1b6373f1c62ecbb5117d1c42b2488532b062e6110f03c2b16724ca29bf3b3f8",
+      "line_text": "### Парадигма 2 · Сквозная всемодальная модель (Omni)",
+      "kind": "heading"
+    },
+    "chapter6.md:406": {
+      "line_sha256": "d55e35bcfce540a222f6785d7a2784cb58dcbce9364fd46eaeccf0adc64a96e9",
+      "line_text": "### Парадигма 3 · Полнодуплексная модель взаимодействия",
+      "kind": "heading"
+    },
+    "chapter6.md:418": {
+      "line_sha256": "9c15801e5142a5125d850caef269cfb87bdcda28c7de08b72ca932175c9239c6",
+      "line_text": "### Когнитивная последовательность: взаимодействие в реальном времени и глубокое мышление",
+      "kind": "heading"
+    },
+    "chapter6.md:440": {
+      "line_sha256": "fc99809886cad6ebba37519f51376fb29b838a3459528b404d11c72ecc830efd",
+      "line_text": "#### Компромисс между разделением быстрого и медленного мышления и сквозным мышлением",
+      "kind": "heading"
+    },
+    "chapter6.md:462": {
+      "line_sha256": "5097b33cde232d0cc2e4f00ed95a923ab9abe4323dddd7cd3be42cf396924bbe",
+      "line_text": "## Computer Use: AI-агент автоматизации GUI",
+      "kind": "heading"
+    },
+    "chapter6.md:500": {
+      "line_sha256": "704c618310c5153b66d486ef9375abe07e72f7f45268ff2494967bc40e4b43f0",
+      "line_text": "### Визуальная локализация (Grounding)",
+      "kind": "heading"
+    },
+    "chapter6.md:550": {
+      "line_sha256": "575b19e95e2f0fc17901952dc1c7561a22c5bbb538f6780335ce69860b93050b",
+      "line_text": "### Агент Computer Use, способный видеть анимацию и слышать звук",
+      "kind": "heading"
+    },
+    "chapter6.md:558": {
+      "line_sha256": "d61bb79f7ebcfae1edbafd5f2ee74495fd3a9ba5ad54c5a77dfa1a8febbd8e88",
+      "line_text": "### Модель мира для Computer Use",
+      "kind": "heading"
+    },
+    "chapter6.md:587": {
+      "line_sha256": "8ac7657d5028b8c6686fde5bd73da7b80301dac00863a7d0f21285181a819718",
+      "line_text": "## Управление роботами: уборка стола с помощью XLeRobot",
+      "kind": "heading"
+    },
+    "chapter6.md:604": {
+      "line_sha256": "84d6545b9c9d7f81dda09ed32e97ea3bf2bfdd7100a0b55d13e0d1fe44455709",
+      "line_text": "### Разделение функций оборудования и алгоритмов",
+      "kind": "heading"
+    },
+    "chapter6.md:626": {
+      "line_sha256": "700f4db88240107a281f37f6d1bb15322ede7cd06ec245292740fddd960bdc8e",
+      "line_text": "### Базовая структура управления роботом",
+      "kind": "heading"
+    },
+    "chapter6.md:666": {
+      "line_sha256": "ac912d7c3e26ece2d1c140cc03213823635694eb4cfac5fa4b8c3e823f4941f2",
+      "line_text": "### VLA-управление",
+      "kind": "heading"
+    },
+    "chapter6.md:680": {
+      "line_sha256": "c4d0d6f77782b6dc0295567a54d845e2c3d916230c8a7959234eaf0bdf50f10e",
+      "line_text": "### Ограничения VLA",
+      "kind": "heading"
+    },
+    "chapter6.md:691": {
+      "line_sha256": "69e737a689ccab09c02d3a052324757285fcaf31c881100584e6de7548a852a3",
+      "line_text": "### Мировая модель",
+      "kind": "heading"
+    },
+    "chapter6.md:7": {
+      "line_sha256": "3bf7bda4b20feaffcdf1b24e6f932eb2578c3937e87183eab2b29b417c5e73e3",
+      "line_text": "## Расширение модальностей и моментов срабатывания",
+      "kind": "heading"
+    },
+    "chapter6.md:75": {
+      "line_sha256": "72e96f1270be1560f51826decf499ed73e0d74d55f0ea2f58157195490948fad",
+      "line_text": "### Инструменты запуска по событию",
+      "kind": "heading"
+    },
+    "chapter6.md:87": {
+      "line_sha256": "b97968c993f197b37376c4495253161252470358746e77dca9ea084dc5595a77",
+      "line_text": "### Инструменты взаимодействия с пользователем",
+      "kind": "heading"
+    },
+    "chapter7.md:132": {
+      "line_sha256": "e3c98e08761f1a5ff2095ee5a70e55f9938068f3f01e548c116b44cef3ea94c0",
+      "line_text": "## Метрики оценки: определение успеха",
+      "kind": "heading"
+    },
+    "chapter7.md:136": {
+      "line_sha256": "00e33733e43500d80fa5232e6dace88f6b26c58c4b8ec11f653cf24e7ef09c8e",
+      "line_text": "### Техническое чудо: верхняя граница возможностей по Pass@k",
+      "kind": "heading"
+    },
+    "chapter7.md:150": {
+      "line_sha256": "a72a7185817bc4f220350655bee16496dfe3a348f1d9ecaeac2cb9544067ecc4",
+      "line_text": "### Надёжность в бизнесе: внимание к Pass^k",
+      "kind": "heading"
+    },
+    "chapter7.md:165": {
+      "line_sha256": "c6d1f70bcf976bb017e9234891855baaa43b8010dc5e81d6f1e6231691a16367",
+      "line_text": "## Среда оценки",
+      "kind": "heading"
+    },
+    "chapter7.md:169": {
+      "line_sha256": "6c316f1ab31c666f512a4972d07a62767b9581cade450e2814e79c82cda5403d",
+      "line_text": "### Пять компонентов",
+      "kind": "heading"
+    },
+    "chapter7.md:185": {
+      "line_sha256": "67539a403b7ca856de03ff01a2ce8b9d50df6f574e0b31e9d7b49adc609d4890",
+      "line_text": "### Среды оценки с взаимодействием человека и агента и с вызовами инструментов",
+      "kind": "heading"
+    },
+    "chapter7.md:206": {
+      "line_sha256": "4d1a9785c71a70e9a811d32d4722f475d24a538ac066a3c03ad62f634e84afe1",
+      "line_text": "## Проектирование оценочного набора данных",
+      "kind": "heading"
+    },
+    "chapter7.md:225": {
+      "line_sha256": "239a9f1e8feb099aa0e496bb08f48e9badf4b9cf59dfeba335d2af1d6eb9e4f5",
+      "line_text": "### Оценщики",
+      "kind": "heading"
+    },
+    "chapter7.md:235": {
+      "line_sha256": "4d122e5abc3639048432c43beac6e4e3fcdfbbc5340e2ba2a81a3e85d5afd963",
+      "line_text": "### Разделение задач по сложности",
+      "kind": "heading"
+    },
+    "chapter7.md:245": {
+      "line_sha256": "17808c3e0d78c8738e8b5498e98426b91287a668dedac43770e915355c8fd06a",
+      "line_text": "### Предотвращение утечки данных",
+      "kind": "heading"
+    },
+    "chapter7.md:277": {
+      "line_sha256": "7d4233ae219e75055b1909d19a3a8a2f7ee5d0c61cd6d1c206bd7170abf4d9fc",
+      "line_text": "### Три источника оценочного набора",
+      "kind": "heading"
+    },
+    "chapter7.md:29": {
+      "line_sha256": "3c8aba24292e07cf1045059d6cb3a8917aedc16561895d4ffd8f2e31158db968",
+      "line_text": "## Анатомия задачи оценки: телекоммуникационная область τ²-bench",
+      "kind": "heading"
+    },
+    "chapter7.md:291": {
       "line_sha256": "198963c0369dbb4f9e638bd72abf6f0dd1fbc0a1d20d498a3281931ba7b87ce8",
       "line_text": "## Методы автоматизированной оценки",
       "kind": "heading"
     },
-    "chapter6.md:284": {
+    "chapter7.md:3": {
+      "line_sha256": "49e34eb5779e3aad1c10126a6c5b09e601e90eb4576290850c7391b8fb1b12be",
+      "line_text": "# Оценка AI-агента",
+      "kind": "heading"
+    },
+    "chapter7.md:307": {
       "line_sha256": "8c0e8eeb3beebe01d6408fcfe277122e649a76e5f3fc0dab3dde4c7348b4f2a4",
       "line_text": "### LLM-as-a-Judge: основа автоматизированной оценки",
       "kind": "heading"
     },
-    "chapter6.md:421": {
+    "chapter7.md:437": {
+      "line_sha256": "ed00648f40698bd3a4ab045f922f4bdfd6696adf927dbfa19d9ebfccc3efca5a",
+      "line_text": "### Атрибуция неудач: поиск первой ошибки во всей траектории",
+      "kind": "heading"
+    },
+    "chapter7.md:467": {
+      "line_sha256": "5b512b004dc2c3e84712215c191f23b4d2b26c589b7325201845eabd0ab9e0b6",
+      "line_text": "#### Проблема «сделал правильно, но сообщил неправильно»",
+      "kind": "heading"
+    },
+    "chapter7.md:505": {
+      "line_sha256": "6fc93948bf03a2e49fe3230fe670d273371326b8c43f3aec4bf67f1df947e98a",
+      "line_text": "#### Ошибка точного копирования: многоуровневая локализация `old_string` mismatch",
+      "kind": "heading"
+    },
+    "chapter7.md:516": {
+      "line_sha256": "a87511db5db88c63d7087c035bb717a12cb06441e9bff25c4665bc0d5b781cab",
+      "line_text": "### Сквозные регрессионные задачи и регрессионные задачи на префиксах траекторий",
+      "kind": "heading"
+    },
+    "chapter7.md:561": {
       "line_sha256": "ffe97f9a90d6d4e0d47b63faf797f709bfaed6203d88f9644e447b7ceccc2b6f",
       "line_text": "## Выбор модели на основе оценки",
       "kind": "heading"
     },
-    "chapter6.md:444": {
-      "line_sha256": "de452d35994ad10e611be8fc49260719a0a08c751f01c7fcfd662daaa51b061d",
-      "line_text": "### Анализ затрат системы AI-агентов",
+    "chapter7.md:565": {
+      "line_sha256": "2e771c359ee010e23cd12c3c3c7e1eb01d6ea4f97baef661f60c27e978a72785",
+      "line_text": "### Ключевые параметры выбора",
       "kind": "heading"
     },
-    "chapter6.md:520": {
+    "chapter7.md:586": {
+      "line_sha256": "f7419674dfa6c4c2b81b6f299098cab0f80f5037ecf1e9d4b64ffa2e3807d2ba",
+      "line_text": "### Поведенческая стратегия модели",
+      "kind": "heading"
+    },
+    "chapter7.md:602": {
+      "line_sha256": "f845a6547261df1040623d9fbb453c433718c0295ebe53777d1e52384c90b0e4",
+      "line_text": "### Анализ затрат агентной системы",
+      "kind": "heading"
+    },
+    "chapter7.md:675": {
       "line_sha256": "320d02a1e2cb015e5063d55224406f0c1d8fbb35514286130fd4b2724e673d74",
       "line_text": "## Статистическая значимость результатов оценки",
       "kind": "heading"
     },
-    "chapter6.md:534": {
+    "chapter7.md:701": {
       "line_sha256": "c681aa8dbe50607c75b2a957144fee1d31681a09c54460f2962e4e47ff88124e",
       "line_text": "## Наблюдаемость AI-агента",
       "kind": "heading"
     },
-    "chapter6.md:563": {
+    "chapter7.md:721": {
       "line_sha256": "e271675432cf2ac2ece24da7bbfaf0aa94b98df4d16083e485d298a2a48faec0",
       "line_text": "## От отчёта бенчмарка к улучшению системы",
       "kind": "heading"
     },
-    "chapter6.md:631": {
+    "chapter7.md:745": {
+      "line_sha256": "3491d3e37077ba8e8d577b9ad3e5cc77cf1f9674b233b3b1b783fb7fbde5d104",
+      "line_text": "### От результатов к решению: компромиссы на основе данных",
+      "kind": "heading"
+    },
+    "chapter7.md:759": {
+      "line_sha256": "daa18fb5f434decac3d9e06d417ddd0bfe879a539ba27371af781509fd2f0d43",
+      "line_text": "### Непрерывные итерации: от первого улучшения к эволюции системы",
+      "kind": "heading"
+    },
+    "chapter7.md:780": {
       "line_sha256": "cbab00af477e1fb7b995ccd09ffabc154c5a481b691906a092120d0165512cb5",
       "line_text": "## От внешней оценки к внутренней: инфраструктура оценки AI-агентов промышленного уровня",
       "kind": "heading"
     },
-    "chapter6.md:635": {
+    "chapter7.md:784": {
       "line_sha256": "75f19043c21c39323ff78791582310ba1685a564a71f516947177e838c7cad34",
       "line_text": "### Инфраструктура абляции: понимание реального вклада каждой функции",
       "kind": "heading"
     },
-    "chapter6.md:679": {
+    "chapter7.md:790": {
+      "line_sha256": "1517c0908af8363038f583477116c4b30ea93be4252594004b6afce393a80e06",
+      "line_text": "### Методология A/B-тестирования: разделение механизма и цели",
+      "kind": "heading"
+    },
+    "chapter7.md:802": {
+      "line_sha256": "4362cceb551dd2af91bbf50f2749fbd7902c5e7a2332842d90ff1a5267f401a7",
+      "line_text": "### Двухуровневая система флагов функций",
+      "kind": "heading"
+    },
+    "chapter7.md:812": {
+      "line_sha256": "af9d61fcd2b3ec4c4a070b9aba0efd166546ff55ffab3418272c09d1869d8341",
+      "line_text": "### Оценка чувствительности промптов",
+      "kind": "heading"
+    },
+    "chapter7.md:818": {
+      "line_sha256": "0b1e7e7090cef99d0f63cd46ca2293c36b45fb2f9359ae2791f3b3bf17a9bd06",
+      "line_text": "### Аналитика с учётом конфиденциальности как основа оценки",
+      "kind": "heading"
+    },
+    "chapter7.md:824": {
+      "line_sha256": "0b4c7eb3a041fcf693959bb3a44a792eb242f8b4650db37c83425ad145f2723e",
+      "line_text": "### От внешней оценки к внутренней: изменение подхода к оценке",
+      "kind": "heading"
+    },
+    "chapter7.md:828": {
       "line_sha256": "2e82f1989fab0e3e82ef8be8d18f2e98b2d516774e84cbb4984354971e644072",
       "line_text": "## Среды симуляции: мост от оценки к постобучению",
       "kind": "heading"
     },
-    "chapter6.md:71": {
-      "line_sha256": "6f5259fa187e224effbfe89fce34d7366077d7b6787e9a545290ad8f5987d8dc",
-      "line_text": "## Автоматизированная среда оценки",
+    "chapter7.md:849": {
+      "line_sha256": "2dfe7a429e3c0dbaf86f282080d6a42487a2240489cb0e108e940a5e0642d53c",
+      "line_text": "### Компромиссы, связанные с точностью симуляции, и доменная рандомизация",
       "kind": "heading"
     },
-    "chapter7.md:27": {
-      "line_sha256": "5bd2874c2873270e88c579b053a2ad059b2e98ed72b1fbc20bb4dc2b6ae03f80",
-      "line_text": "## Предобучение, SFT и обучение с подкреплением (RL): полная картина трёх этапов",
+    "chapter7.md:98": {
+      "line_sha256": "96e656270feba0b44a0a9c0da269eb4ed689c26bd3ba426dce878d85112c3d74",
+      "line_text": "### Траектория реального запуска",
       "kind": "heading"
     },
-    "chapter7.md:305": {
-      "line_sha256": "4a61660e4185ba0f4ca8b2a6817ace47830b99e1ec9d81e40c6682cda807fefb",
-      "line_text": "## Когда выбирать SFT, а когда RL",
+    "chapter8.md:278": {
+      "line_sha256": "66a57f400a6429607d650e0b8268fb99ceb80b78c46ffedb49ee4e2e1c87adb4",
+      "line_text": "## Mid-training: восполнение знаний и базовых способностей",
       "kind": "heading"
     },
-    "chapter7.md:447": {
-      "line_sha256": "da88a81ca2fd209f4e877f0e8e89e8b85f5f3b1ada5ef05928322fc49d6ea99b",
-      "line_text": "## Данные и среда: важнее алгоритмов",
+    "chapter8.md:28": {
+      "line_sha256": "b916fdaf0042ecffc4e5c02da3b6593dc95d50a38592bc54245f4bc0354fbb92",
+      "line_text": "## От предобучения до обучения с подкреплением (RL): полная картина четырёх этапов",
       "kind": "heading"
     },
-    "chapter7.md:451": {
+    "chapter8.md:289": {
+      "line_sha256": "6a8bf41c349534e0b333702acde9b425e444d5c332d4d3e9397111ca299915d0",
+      "line_text": "### Как формировать данные для Mid-training",
+      "kind": "heading"
+    },
+    "chapter8.md:3": {
+      "line_sha256": "49edc6bb0b9ba96080d4a3917893762764a81a791dd372056190afa67f10ecfc",
+      "line_text": "# Постобучение модели",
+      "kind": "heading"
+    },
+    "chapter8.md:316": {
+      "line_sha256": "f1a17d6d20b13f2c460ea18381dfc3211059f6d4d0cb239e8d5b790c44ca48eb",
+      "line_text": "## SFT (дообучение с учителем)",
+      "kind": "heading"
+    },
+    "chapter8.md:371": {
+      "line_sha256": "fdb41be4964cc92b9d4b65ed1a8a1384c4f5b94bc7601bd3b962557a2414daaa",
+      "line_text": "## Синтез данных для SFT: от демонстраций к обучающим траекториям",
+      "kind": "heading"
+    },
+    "chapter8.md:387": {
+      "line_sha256": "84acb66e280254f00bfb73238d0888b0d7b12a3d58f38df25aeca3c35b090415",
+      "line_text": "## Когда выбирать Mid-training, SFT и RL",
+      "kind": "heading"
+    },
+    "chapter8.md:41": {
+      "line_sha256": "9c4f1f765356294cde6be7e459d6debeaa576d6afb0676801a0931bbef03bdc8",
+      "line_text": "### Что происходит при предобучении: предсказание следующего слова",
+      "kind": "heading"
+    },
+    "chapter8.md:483": {
+      "line_sha256": "252652391d94ed76c81281ef121dcb5abc65bc321972aaa62f9cf15805b728cb",
+      "line_text": "## Алгоритм RL: от 16 rollout до одного обновления параметров",
+      "kind": "heading"
+    },
+    "chapter8.md:505": {
+      "line_sha256": "7a9d549989e73cfac383c951864fef0312e67bfd81f9e08272576cef96ae59ba",
+      "line_text": "### Почему в RL для LLM обычно предпочитают On-Policy",
+      "kind": "heading"
+    },
+    "chapter8.md:51": {
+      "line_sha256": "12a783055df0d912bb699638a0858bf6ee5c2477b87d59d5e394b1812e3536f8",
+      "line_text": "### Суть Mid-training: продолжение обучения на целевом распределении",
+      "kind": "heading"
+    },
+    "chapter8.md:518": {
+      "line_sha256": "0282bf51ab05de0d8448acdef383829430dfcd9b224a429186f8c20904edd2cf",
+      "line_text": "#### Почему численные ошибки могут разрушить даже кажущееся On-Policy-обучение",
+      "kind": "heading"
+    },
+    "chapter8.md:531": {
+      "line_sha256": "3d2d94b8ed61caa1e3bba563b9c8a0511cf484db3c492e176f590454e7e14f34",
+      "line_text": "## Среда RL: от оценивания к симуляции",
+      "kind": "heading"
+    },
+    "chapter8.md:535": {
       "line_sha256": "c2a98d3b408402beac3b17fb61be030c4041a260259e84e2f56e2fdaff3583b1",
       "line_text": "### Среда: тренировочная площадка модели",
       "kind": "heading"
     },
-    "chapter7.md:481": {
-      "line_sha256": "9341d0ee2afbe97361ae30be28094999f30ce6b19139bf24aee8e604bde6b375",
-      "line_text": "## От однораундового взаимодействия к многораундовому: распределение заслуг и проектирование вознаграждений",
+    "chapter8.md:545": {
+      "line_sha256": "30056c944f083e2c6881ffdbc1015e2a232466efbd593a59067cac7822ae65aa",
+      "line_text": "### Что делать, если среду невозможно создать: поручить модели её роль",
       "kind": "heading"
     },
-    "chapter7.md:581": {
-      "line_sha256": "07efbd27a88399fdccd9c99082a868747c5ae6333ab0877960403250ad3a3c15",
-      "line_text": "### Вознаграждать результат, ограничивать процесс: верифицируемый штраф за траекторию (RLVP) и частичное вознаграждение",
+    "chapter8.md:555": {
+      "line_sha256": "0e1532c55b13a752ec1573a3f3ee0e22345734d79099c3c7b61ba921d868ef75",
+      "line_text": "### Изоляция среды, распределения задач и оценивания",
       "kind": "heading"
     },
-    "chapter7.md:635": {
-      "line_sha256": "31d2fe6553ca7a289366b2f8b9a10cad6feec891289286c30382833b9ccb3d18",
-      "line_text": "## RL-обучение вызову инструментов",
+    "chapter8.md:565": {
+      "line_sha256": "0fa0fac4fba1ebdc85510d41233f871297917373c98bfc6dc714786423a0b995",
+      "line_text": "## От однократного к многоэтапному взаимодействию: сценарии задач и распределение заслуг",
       "kind": "heading"
     },
-    "chapter7.md:694": {
-      "line_sha256": "434121e7e465953e1f7c358055ccf08757aa0caacd1081f100a003277eed2288",
-      "line_text": "### On-Policy Distillation: сочетание преимуществ SFT и RL",
+    "chapter8.md:57": {
+      "line_sha256": "43a9c6d16e3ec7861aa2295298f2826aa9e5bfd8fb013df5e53fd309588c0a1b",
+      "line_text": "### Суть SFT: то же «предсказание следующего слова», но с другими данными",
       "kind": "heading"
     },
-    "chapter7.md:72": {
-      "line_sha256": "09a1a653d929d85f742b1449dbcc750b21866e5711cf787e9e8b847323e42b61",
-      "line_text": "### Принципиальное различие между SFT и RL — важнейшая таблица этой главы",
+    "chapter8.md:611": {
+      "line_sha256": "0dadecebce21ad9ed7f051391e3165376a39ff04111a05fa76725e4fef378208",
+      "line_text": "## Проектирование вознаграждения: как превратить цель задачи в обучающий сигнал",
       "kind": "heading"
     },
-    "chapter8.md:105": {
-      "line_sha256": "0017a36fcd42c72f92df6cc9a5a07c0878bb812d4d07eba3c9d9c39ef7000258",
-      "line_text": "### Обучение на неудачах",
+    "chapter8.md:615": {
+      "line_sha256": "d5bbebfab01aca48d80d47c43141c8fa16b00c47c81dffd7ad524632f90d241f",
+      "line_text": "### Откуда поступает вознаграждение: правила, человеческие предпочтения и оценка моделью",
       "kind": "heading"
     },
-    "chapter8.md:113": {
-      "line_sha256": "80caddd68dd9b49c2ad40f74a0346c1d269a8149197a48fd1a2a3a894be97b7a",
-      "line_text": "### Skills: экстернализация предметных знаний в структурированные возможности",
+    "chapter8.md:625": {
+      "line_sha256": "405e8be34746ff20f35030943c6e9f6a7a1c3833fa919b4ec153ed04b09cd119",
+      "line_text": "### Когда выдаётся вознаграждение: за результат или за процесс",
       "kind": "heading"
     },
-    "chapter8.md:127": {
-      "line_sha256": "7aa78b57683a54b8da53b2a2e7b3fd2609c7c7d036c0a775081bc99e04dc25d5",
-      "line_text": "### Обучение во сне: автономная эволюция пользовательской памяти",
+    "chapter8.md:635": {
+      "line_sha256": "29b1cbbbd073590927e7a863ef26c68e7928d5d70190fd955a069365f9bcd978",
+      "line_text": "### Сколько информации должно выражать вознаграждение: скаляр, вектор и генеративная диагностика",
       "kind": "heading"
     },
-    "chapter8.md:145": {
-      "line_sha256": "ed1e010865aaf08dbd612b99ea8ad328ec983f04cd356574c6ac0e89f93d6fbe",
-      "line_text": "### Автоматическая оптимизация системного промпта",
+    "chapter8.md:645": {
+      "line_sha256": "e644c53ededda4713be13887f705b6a8408b0743f255cdd10af72cb6005c13e5",
+      "line_text": "### Правильного результата недостаточно: ограничения пути и RLVP",
       "kind": "heading"
     },
-    "chapter8.md:181": {
-      "line_sha256": "874d5ec83f5741297d08de96308a4079afff1bf3bba25a38d08bd01955515ba6",
-      "line_text": "### Продолжение длительных задач между сессиями (дополнение об инженерной поддержке)",
+    "chapter8.md:671": {
+      "line_sha256": "0cb6f5c8196c550655f1a9293304b0e893f20078ac5ec3cab669225fca4afa1d",
+      "line_text": "## Дистилляция: повышение эффективности выборки",
       "kind": "heading"
     },
-    "chapter8.md:187": {
-      "line_sha256": "38036e306dca6114dff2cfb14520a0bfb8e344973199901548dcaf1675a30d57",
-      "line_text": "## Активное обнаружение инструментов",
+    "chapter8.md:679": {
+      "line_sha256": "5eabe7c8439378bb0de5fe03d69b3ebc1f1dc888bcf0901d7855a4059bc26953",
+      "line_text": "### Дистилляция на данных текущей политики: плотный надзор из одной траектории rollout",
       "kind": "heading"
     },
-    "chapter8.md:224": {
-      "line_sha256": "cfd0d7a726fbf71be929b8a4dc9382bee261b7180fc9c1a48bc5c5a209dcdd11",
-      "line_text": "### Skills: обнаружение инструментов как «обращение по мере необходимости»",
+    "chapter8.md:70": {
+      "line_sha256": "dffd4e8a861df9678c19d00bdbb660ed4a5c22ca61f7fb149277a293cd917875",
+      "line_text": "### Когда сначала требуется укрепить основу, а затем применять SFT/RL",
       "kind": "heading"
     },
-    "chapter8.md:23": {
-      "line_sha256": "e32e0019357d2e1952512f9bd79fb6c8b16a06d17b616438aa09eb59bdbb0bda",
-      "line_text": "## Три парадигмы обучения и место самоэволюции",
+    "chapter8.md:712": {
+      "line_sha256": "7d98c62f3061fdb1201e69ecc0de4f104a8b7ef36a6f22d39caf08033a88217b",
+      "line_text": "### Что делать без более сильного учителя: самодистилляция на данных текущей политики",
       "kind": "heading"
     },
-    "chapter8.md:236": {
-      "line_sha256": "63fbc6ac99519702f401ab82377b11424ddf6f6b31d56312042c5b7747c6bb4e",
-      "line_text": "## От пользователя инструментов к их создателю",
+    "chapter8.md:734": {
+      "line_sha256": "f2ad3913b621b11f00c3a354e839524e8ec5607a8b48714c1d68f95085b2f250",
+      "line_text": "## От проблемных случаев к постобучению",
       "kind": "heading"
     },
-    "chapter8.md:273": {
-      "line_sha256": "a34ad47672a82dcb7e2b4c2c6031eda883910eda5f1cd979b31edb4db5d13541",
-      "line_text": "### AI-агент создаёт новые инструменты, программируя их",
+    "chapter8.md:779": {
+      "line_sha256": "eae28204f5ce30f8ee00b026c002fc9cb43db6babe35a5082ebd924cbbd1cc10",
+      "line_text": "### Случай 3: частые сбои при редактировании файлов",
       "kind": "heading"
     },
-    "chapter8.md:319": {
-      "line_sha256": "ca936fa47e2912b26c68e605482f495c6ceb80a41640e278b9e2178697fffc1c",
-      "line_text": "### Непрерывное накопление возможностей на трёх уровнях",
+    "chapter8.md:88": {
+      "line_sha256": "861c50d659fe6bbc8c962cbfa322412e708756e8c631beb3674bb3dc5697e2d6",
+      "line_text": "### Принципиальное различие между SFT и RL",
       "kind": "heading"
     },
-    "chapter8.md:329": {
-      "line_sha256": "8a522b0e67c24e8bb906e9cd09d4816c2d3c6a0729a64ecf025a89e0aadfb24c",
-      "line_text": "### Границы безопасности самоэволюции",
+    "chapter9.md:107": {
+      "line_sha256": "a8a955285b14a61a7bc969de567aea98c3677552a72e0ba80eb195bd246df4ba",
+      "line_text": "#### Пример 1: формализация границы перевода на оператора",
       "kind": "heading"
     },
-    "chapter8.md:53": {
-      "line_sha256": "99458fd92503907cef4c06de1a8c1053892dabeec16b901e0425d587d97ab117",
-      "line_text": "## Обучение на опыте",
+    "chapter9.md:137": {
+      "line_sha256": "09ca11926fa6eaa01e26477962caa388d3b6d9e9f2d4cef6b0848d806dbcdcf9",
+      "line_text": "#### Пример 2: Skill уточнения требований — от «сразу приступить» к «сначала подтвердить, затем выполнить»",
       "kind": "heading"
     },
-    "chapter9.md:149": {
-      "line_sha256": "641425cc4a1d4e4b5345b9887e3e7856dfd6c89cd128052ac522b5d31fee3638",
-      "line_text": "## Парадигма 2 · Сквозная омнимодальная модель (Omni)",
+    "chapter9.md:169": {
+      "line_sha256": "40a3e67b3bc0842971fa3253f13e13e60ab609958f65da50cc0a1ba201dd7193",
+      "line_text": "### Преобразование опыта в программу",
       "kind": "heading"
     },
-    "chapter9.md:174": {
-      "line_sha256": "1cf7a3448316a1081cf94dddf0c24149efe172d1adfc5af06d6b3aa64d7837dd",
-      "line_text": "## Парадигма 3 · Полнодуплексная интерактивная модель (Full-Duplex / Interactive)",
+    "chapter9.md:21": {
+      "line_sha256": "7ceb7db430c717913782ba65afe16b2e524d1540ad03ad5f1d06a554cd2aad99",
+      "line_text": "## Получение обучающих сигналов из траекторий выполнения",
       "kind": "heading"
     },
-    "chapter9.md:192": {
-      "line_sha256": "dcaa9becfa9f7f0a4fc6d4fc885766e47ff1e79faf73d8bd7a35e73d56807982",
-      "line_text": "## Выбор архитектуры мышления: от разделения к объединению",
+    "chapter9.md:230": {
+      "line_sha256": "cef40c338557a40ded2a50e9f0e84916b87af7e51ffc7b84b795a6143f15f858",
+      "line_text": "#### Пример: самоэволюция DeepSeek Harness посредством принципа «всё является плагином»",
       "kind": "heading"
     },
-    "chapter9.md:200": {
-      "line_sha256": "ad0e0b2fc7c07c73375e76e7d80d74d0ab40eddc7af4e59e9cedd79897320e54",
-      "line_text": "### Подход 1: быстрое мышление поддерживает диалог, медленное даёт ответ",
+    "chapter9.md:250": {
+      "line_sha256": "ca91d1bf1e936f48341f357185b72cdcf9b361767ea17b6f53381af690b720b3",
+      "line_text": "### Преобразование опыта в параметры",
       "kind": "heading"
     },
-    "chapter9.md:220": {
-      "line_sha256": "4b9fee41e7aed3d131b630029a359c089c36b209482e11fb1e2d56d105e7852c",
-      "line_text": "### Подход 2: быстрое мышление взаимодействует, медленное подсказывает",
+    "chapter9.md:258": {
+      "line_sha256": "63c2e56babec3ea9df446115a8721d989fc69b883d4aabdb80c56bb262a096be",
+      "line_text": "### От обновления артефактов к обновлению «метода обновления»",
       "kind": "heading"
     },
-    "chapter9.md:276": {
-      "line_sha256": "3b7daa4d112d69d48b4b252df59524f433327df4b5bca0c7362b8fc46fa175b1",
-      "line_text": "### Интерфейс между быстрым и медленным мышлением: что ещё можно передавать, кроме текста",
+    "chapter9.md:288": {
+      "line_sha256": "420c174772f1b01d383232cee5052fa20f347b4fb81f1219bde7806674545fb3",
+      "line_text": "## Построение замкнутого цикла непрерывной эволюции для длительной работы",
       "kind": "heading"
     },
-    "chapter9.md:28": {
-      "line_sha256": "8ae2c001282a72096ea4f87d52c177243841309290d8181af8ed5b69f0452df3",
-      "line_text": "## Три парадигмы голосовой архитектуры",
+    "chapter9.md:3": {
+      "line_sha256": "8e79dcb68cd832931b6d24d098964972e26cf61ac80869a2b64017a25a89dc84",
+      "line_text": "# Непрерывная эволюция AI-агента",
       "kind": "heading"
     },
-    "chapter9.md:308": {
-      "line_sha256": "d1644503104887cb173a2c721eaceb53ece3aa2de97586946b5e8794969908b2",
-      "line_text": "## Computer Use: агент автоматизации GUI",
+    "chapter9.md:331": {
+      "line_sha256": "8a9d56727600b2ff7828ec2ee67453b6399df311c47d39ac556e7069b935dd18",
+      "line_text": "### Границы проверяемого замкнутого цикла: когда «завершение» не означает «прогресс»",
       "kind": "heading"
     },
-    "chapter9.md:418": {
-      "line_sha256": "4ae9779b2a97c8f49826e86d5586371a4ac83920e340819d13de6bde846a03ae",
-      "line_text": "### Работа в реальном времени: ключевая нерешённая проблема",
+    "chapter9.md:344": {
+      "line_sha256": "2bcbc9d54076ab138a1cd54a034092c8e0effb4b856d64cba4f53d3da1be55fd",
+      "line_text": "### Границы безопасности непрерывной эволюции",
       "kind": "heading"
     },
-    "chapter9.md:42": {
-      "line_sha256": "efb97d3d0a2f2cf18a4300c8665cbb84098c6dd541c7560ef0088d79941b2f13",
-      "line_text": "## Парадигма 1 · Каскадный конвейер (Cascading)",
+    "chapter9.md:354": {
+      "line_sha256": "fdf93176da5b65680632b7f2bc969f20b0c8dd453992d3361b72adbc7e4916ff",
+      "line_text": "### Обучение во сне: консолидация, забывание и поддержание актуальности возможностей",
       "kind": "heading"
     },
-    "chapter9.md:94": {
-      "line_sha256": "d2b6a545925d578cb3116d8c1e7403dcd79eed527b18cfe661ed9ead4118f858",
-      "line_text": "### Сквозная потоковая обработка каскадного конвейера",
+    "chapter9.md:58": {
+      "line_sha256": "2b7ef57bc9b06c39ffe56dbad08489968d8553049196bdd7076d9674601b9374",
+      "line_text": "## Четыре способа непрерывной эволюции AI-агента",
+      "kind": "heading"
+    },
+    "chapter9.md:77": {
+      "line_sha256": "1d01177ab99faecc32dc5982414d3bfa30ee252e76d1bc760db639f98b4f7508",
+      "line_text": "### Преобразование опыта в знания",
+      "kind": "heading"
+    },
+    "chapter9.md:99": {
+      "line_sha256": "6112d1f9150b4a50729203f99a456af0839feb5830d6f3dfdc245f6510920425",
+      "line_text": "### Преобразование опыта в инструкции",
       "kind": "heading"
     },
     "introduction.md:3": {
@@ -630,9 +960,59 @@
       "line_text": "## Структура книги {.unnumbered}",
       "kind": "heading"
     },
-    "introduction.md:58": {
+    "introduction.md:56": {
       "line_sha256": "572bfeb035c712db2cf7f6dc5a5a5439083c156a45f4c050cccfb4eec7a8ff2b",
       "line_text": "## Как читать эту книгу {.unnumbered}",
+      "kind": "heading"
+    },
+    "reference-answers.md:133": {
+      "line_sha256": "33331b9353288e7144e98a6a6471496618861410312611db6037798cd6d779db",
+      "line_text": "## Глава 4. Инструменты",
+      "kind": "heading"
+    },
+    "reference-answers.md:151": {
+      "line_sha256": "97e7f09a8495426f0b0c85c54132cf8cee5e734baef640ccea50d6a09075344d",
+      "line_text": "## Глава 5. Coding Agent и универсальный AI-агент",
+      "kind": "heading"
+    },
+    "reference-answers.md:192": {
+      "line_sha256": "36826a9a75fdb675f4dde5e0a93014b516d4c679a808facddd331180434f4db3",
+      "line_text": "## Глава 6. Взаимодействие: расширение пространства наблюдений и действий",
+      "kind": "heading"
+    },
+    "reference-answers.md:246": {
+      "line_sha256": "f2f2736e40856cd834fcfcc5c8c0af6e6437aa8660f51fb7acc4044976aa1ef1",
+      "line_text": "## Глава 7. Оценка AI-агентов",
+      "kind": "heading"
+    },
+    "reference-answers.md:286": {
+      "line_sha256": "a520a243d680e2ef147e8e7e4f677d95e8df05409c54f819d728617c6f631f9d",
+      "line_text": "## Глава 8. Постобучение моделей",
+      "kind": "heading"
+    },
+    "reference-answers.md:340": {
+      "line_sha256": "5bd164ac684297fa362570946951ebf222cc448170f388040ae52dadb492a2a3",
+      "line_text": "## Глава 9. Непрерывная эволюция AI-агента",
+      "kind": "heading"
+    },
+    "reference-answers.md:370": {
+      "line_sha256": "9d03fcb320e5ff7ea092e835d958edf5df2bd029f750da30b59022d0d4186e49",
+      "line_text": "## Глава десятая. Совместная работа нескольких AI-агентов",
+      "kind": "heading"
+    },
+    "reference-answers.md:55": {
+      "line_sha256": "faac6d1c68a2782224483d54c4fa9e97a28673524b9d291fcd9b1b493e6152cb",
+      "line_text": "## Глава 2. Инженерия контекста",
+      "kind": "heading"
+    },
+    "reference-answers.md:7": {
+      "line_sha256": "65a4ab87065bee0925670aac550280b1a6c4620017db7fc70e1e4729e6e56991",
+      "line_text": "## Глава 1. Введение в AI-агентов",
+      "kind": "heading"
+    },
+    "reference-answers.md:93": {
+      "line_sha256": "bdf076c1da2f546a4bd0c48275481968d8a646f8bf929616635267a9cb93b274",
+      "line_text": "## Глава 3. Пользовательская память и база знаний",
       "kind": "heading"
     }
   },

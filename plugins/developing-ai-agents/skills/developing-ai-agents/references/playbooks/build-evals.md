@@ -118,7 +118,7 @@
 
 ## Чем добрать
 
-- Среда, наборы, метрики, судья, статистика: `references/chapters/ch06-evaluation.md`.
+- Среда, наборы, метрики, судья, статистика: `references/chapters/ch07-evaluation.md`.
 - Цикл целиком: паттерн 8 в `references/patterns.md`.
 - Независимая проверка: паттерн 9 там же.
 - Измерение каскадных ошибок в multi-agent: `references/chapters/ch10-multi-agent.md`.

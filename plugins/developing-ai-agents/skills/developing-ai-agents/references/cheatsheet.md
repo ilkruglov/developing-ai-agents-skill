@@ -25,7 +25,7 @@
 
 Красные флаги преждевременной автономности: нет terminal conditions, tool side effects не ограничены, задача непроверяема, нет event log, нет baseline.
 
-Источник: `references/source-book/chapter1.md:295-386`, `references/source-book/chapter10.md:65-93`.
+Источник: `references/source-book/chapter1.md:344`, `references/source-book/chapter10.md:48`.
 
 ## 2. Карта диагностики
 
@@ -97,7 +97,7 @@ approval: required_for_high_risk
 
 Не отдавай агенту секреты «на всякий случай». Не смешивай read и destructive write в одном широком tool. Возвращай причину, `retryable` и remediation вместо неструктурированного stack trace.
 
-Источник: `references/source-book/chapter4.md:14-109`, `references/source-book/chapter1.md:387-422`.
+Источник: `references/source-book/chapter4.md:9`, `references/source-book/chapter1.md:469`.
 
 ## 5. Context lifecycle
 
@@ -121,7 +121,7 @@ dynamic projection
 
 Никогда не теряй при rollover: цель, decisions, constraints, artifact IDs, file changes, test evidence, open risks, next action, rollback.
 
-Источник: `references/source-book/chapter2.md:355-559`, `references/source-book/chapter2.md:763-1061`.
+Источник: `references/source-book/chapter2.md:372`, `references/source-book/chapter2.md:860`.
 
 ## 6. Память и обучение
 
@@ -146,7 +146,7 @@ raw episode
   -> promote or rollback
 ```
 
-Источник: `references/source-book/chapter3.md:17-272`, `references/source-book/chapter8.md:23-180`, `references/source-book/chapter8.md:319-355`.
+Источник: `references/source-book/chapter3.md:17`, `references/source-book/chapter9.md:58`, `references/source-book/chapter9.md:258`.
 
 ## 7. Eval card
 
@@ -175,7 +175,7 @@ rollback: tested version switch
 
 Для LLM-as-a-Judge: слепой порядок вариантов, точная rubric, калибровка на размеченной человеком выборке, проверка position/verbosity bias.
 
-Источник: `references/source-book/chapter6.md:71-238`, `references/source-book/chapter6.md:239-533`, `references/source-book/chapter6.md:631-678`.
+Источник: `references/source-book/chapter7.md:165`, `references/source-book/chapter7.md:132`, `references/source-book/chapter7.md:780`.
 
 ## 8. Realtime voice
 
@@ -187,7 +187,7 @@ rollback: tested version switch
 
 Fast path отвечает, подтверждает и поддерживает turn-taking. Slow path получает versioned snapshot и возвращает structured result. Перед публикацией сверяй `turn_id/state_version`; при barge-in отменяй TTS, generation и side-effecting work по отдельным правилам.
 
-Источник: `references/source-book/chapter9.md:28-287`.
+Источник: `references/source-book/chapter6.md:315`.
 
 ## 9. Multi-agent
 
@@ -203,4 +203,4 @@ Fast path отвечает, подтверждает и поддерживает
 
 Data plane: versioned artifacts/files. Control plane: задачи, сообщения, статусы, отмена. При общей FS нужны ownership, worktree или optimistic lock. Проверяй конфликт записи и каскадное усиление ошибки.
 
-Источник: `references/source-book/chapter10.md:11-64`, `references/source-book/chapter10.md:196-533`.
+Источник: `references/source-book/chapter10.md:13`, `references/source-book/chapter10.md:104`.

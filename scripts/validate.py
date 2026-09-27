@@ -54,6 +54,7 @@ REQUIRED_PATHS = (
     str(SKILL_DIRECTORY / "references" / "source-book" / "chapter9.md"),
     str(SKILL_DIRECTORY / "references" / "source-book" / "chapter10.md"),
     str(SKILL_DIRECTORY / "references" / "source-book" / "afterword.md"),
+    str(SKILL_DIRECTORY / "references" / "source-book" / "reference-answers.md"),
 )
 REQUIRED_ATTRIBUTIONS = {
     "README.md": (

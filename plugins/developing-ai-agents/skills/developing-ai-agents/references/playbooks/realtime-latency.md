@@ -122,7 +122,7 @@
 
 ## Чем добрать
 
-- Три парадигмы и подходы к разделению мышления: `references/chapters/ch09-realtime-multimodal.md`.
+- Три парадигмы и подходы к разделению мышления: `references/chapters/ch06-interaction.md`.
 - Конструкция контура: паттерн 11 в `references/patterns.md`.
 - Панель состояния как канал между контурами: `references/chapters/ch02-context-engineering.md`.
-- Измерение задержки и стоимости: `references/chapters/ch06-evaluation.md`.
+- Измерение задержки и стоимости: `references/chapters/ch07-evaluation.md`.

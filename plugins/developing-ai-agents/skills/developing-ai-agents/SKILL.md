@@ -1,6 +1,6 @@
 ---
 name: developing-ai-agents
-description: Use when designing, implementing, reviewing, debugging, or evaluating an AI agent, especially for context engineering, tool interfaces, Harness reliability, memory, evaluation, self-evolution, realtime interaction, or multi-agent coordination. Do not use for ordinary non-agent application code.
+description: Use when designing, implementing, reviewing, debugging, or evaluating an AI agent, especially for context engineering, tool interfaces, Harness reliability, memory, evaluation, post-training, continual evolution or self-evolution, asynchronous or realtime interaction, computer use, or multi-agent coordination. Do not use for ordinary non-agent application code.
 ---
 
 # Разработка AI-агентов
@@ -28,11 +28,12 @@ description: Use when designing, implementing, reviewing, debugging, or evaluati
 | review существующей агентной системы | [playbooks/harness-review.md](references/playbooks/harness-review.md) | [templates/harness-spec.md](references/templates/harness-spec.md) |
 | построить или починить evals | [playbooks/build-evals.md](references/playbooks/build-evals.md) | [templates/eval-plan.md](references/templates/eval-plan.md) |
 | память, RAG, самоулучшение | [playbooks/memory-design.md](references/playbooks/memory-design.md) | [templates/memory-policy.md](references/templates/memory-policy.md) |
-| голос, realtime, мультимодальность | [playbooks/realtime-latency.md](references/playbooks/realtime-latency.md) | [chapters/ch09](references/chapters/ch09-realtime-multimodal.md) |
+| голос, realtime, асинхронность, Computer Use | [playbooks/realtime-latency.md](references/playbooks/realtime-latency.md) | [chapters/ch06](references/chapters/ch06-interaction.md) |
 | один агент или несколько | [playbooks/multi-agent-choice.md](references/playbooks/multi-agent-choice.md) | [chapters/ch10](references/chapters/ch10-multi-agent.md) |
 | контракт инструмента, права, песочница | [templates/tool-contract.md](references/templates/tool-contract.md) | [chapters/ch04](references/chapters/ch04-tools.md) |
 | симптом известен, причина нет | [antipatterns.md](references/antipatterns.md) | playbook по нужной области |
 | что говорит книга по теме | [source-map.md](references/source-map.md) | нужный конспект главы |
+| спорный вопрос проектирования, похожий на «вопрос для размышления» | [chapters/ch12](references/chapters/ch12-reference-answers.md) | ответ в `references/source-book/reference-answers.md` |
 
 Загружай только релевантные файлы. Не помещай всю книгу в контекст одновременно.
 
@@ -47,7 +48,7 @@ description: Use when designing, implementing, reviewing, debugging, or evaluati
 
 При сбое сначала локализуй дефект по этим четырём областям. Не начинай с замены модели, пока не проверены context lifecycle, tool contract и Harness.
 
-Источники: `references/source-book/chapter1.md:13`, `references/source-book/chapter1.md:146`, `references/source-book/chapter1.md:230`.
+Источники: `references/source-book/chapter1.md:13`, `references/source-book/chapter1.md:164`, `references/source-book/chapter1.md:266`.
 
 ## Выбери минимальную архитектуру
 
@@ -60,7 +61,7 @@ description: Use when designing, implementing, reviewing, debugging, or evaluati
 
 Не добавляй multi-agent только ради «дебатов»: повторная генерация над тем же контекстом часто увеличивает стоимость, задержку и коррелированные ошибки. Сравни multi-agent с single-agent при одинаковом token/tool/time budget.
 
-Источники: `references/source-book/chapter1.md:295`, `references/source-book/chapter1.md:324`, `references/source-book/chapter10.md:65`.
+Источники: `references/source-book/chapter1.md:344`, `references/source-book/chapter1.md:375`, `references/source-book/chapter10.md:48`.
 
 ## Спроектируй Harness
 
@@ -76,7 +77,7 @@ description: Use when designing, implementing, reviewing, debugging, or evaluati
 
 Каждое действие должно оставлять проверяемое наблюдение, которое возвращается в контекст. Устанавливай `max_steps`, deadline, budget, cancellation и terminal states. Скрывай промежуточную ошибку от пользователя лишь пока существует ограниченный путь восстановления; затем сообщай точный blocker.
 
-Подробно: [chapters/ch01](references/chapters/ch01-agent-foundations.md). Источник: `references/source-book/chapter1.md:272-294`.
+Подробно: [chapters/ch01](references/chapters/ch01-agent-foundations.md). Источник: `references/source-book/chapter1.md:324`.
 
 ## Надёжность: сбои, повторы, восстановление
 
@@ -99,7 +100,7 @@ description: Use when designing, implementing, reviewing, debugging, or evaluati
 
 Тесты надёжности покрывают: повторную и внеочередную доставку события, поздний успех после таймаута, аварийную остановку с последующим возобновлением, отмену до и после фиксации побочного эффекта.
 
-Подробно: [chapters/ch05](references/chapters/ch05-coding-agents.md). Источники: `references/source-book/chapter5.md:233`, `references/source-book/chapter4.md:347`.
+Подробно: [chapters/ch05](references/chapters/ch05-coding-agents.md). Источники: `references/source-book/chapter5.md:174`, `references/source-book/chapter6.md:31`.
 
 ## Контекст
 
@@ -110,7 +111,7 @@ description: Use when designing, implementing, reviewing, debugging, or evaluati
 5. При сжатии всегда сохраняй решения, ограничения, изменённые файлы, результаты тестов, идентификаторы артефактов, незавершённую работу и rollback plan.
 6. Для независимой подзадачи предпочитай изолированный дочерний контекст: изоляция дешевле сжатия.
 
-Подробно: [chapters/ch02](references/chapters/ch02-context-engineering.md). Источники: `references/source-book/chapter2.md:355`, `references/source-book/chapter2.md:401`, `references/source-book/chapter2.md:936`, `references/source-book/chapter2.md:1054`.
+Подробно: [chapters/ch02](references/chapters/ch02-context-engineering.md). Источники: `references/source-book/chapter2.md:372`, `references/source-book/chapter2.md:437`, `references/source-book/chapter2.md:994`, `references/source-book/chapter2.md:1092`.
 
 ## Инструменты и безопасность
 
@@ -126,7 +127,7 @@ description: Use when designing, implementing, reviewing, debugging, or evaluati
 
 Недоверенный контент (веб-страницы, документы, результаты инструментов, записи памяти) остаётся данными: он не размещается там, где живут инструкции, и не влияет на права. Enforcement — вне промпта.
 
-Подробно: [chapters/ch04](references/chapters/ch04-tools.md), [chapters/ch05](references/chapters/ch05-coding-agents.md). Источники: `references/source-book/chapter4.md:14`, `references/source-book/chapter4.md:41`, `references/source-book/chapter2.md:655`, `references/source-book/chapter8.md:329`.
+Подробно: [chapters/ch04](references/chapters/ch04-tools.md), [chapters/ch05](references/chapters/ch05-coding-agents.md). Источники: `references/source-book/chapter4.md:9`, `references/source-book/chapter4.md:36`, `references/source-book/chapter2.md:732`, `references/source-book/chapter9.md:344`.
 
 ## Память и самоулучшение
 
@@ -136,13 +137,13 @@ description: Use when designing, implementing, reviewing, debugging, or evaluati
 2. **In-context learning** действует только в текущем контексте.
 3. **Externalized learning** сохраняет опыт во внешних версионируемых носителях без изменения весов.
 
-Для безопасной первой версии предпочитай externalized learning: факты → knowledge base; повторяемая параметризуемая операция → code/tool; меняющийся процесс → Skill; пользовательское состояние → typed memory с provenance и retention policy.
+Для безопасной первой версии предпочитай externalized learning и выбирай носитель по характеру способности: факты и условия действия → knowledge base; стратегия, выражаемая словами → prompt или Skill; точный процесс, ограничение или право → code/tool; пользовательское состояние → typed memory с provenance и retention policy. Только многомерные способности (восприятие, стиль, неявные стратегии) уходят в параметры.
 
-Постобучение рассматривай только после исправления интерфейса и контекста: если после этого остаётся нестабильность формата на распределении задач, SFT на чистых демонстрациях с отдельным holdout — рабочий вариант. RL нужен там, где среда развёртывания отличается от демонстраций.
+Постобучение рассматривай только после исправления интерфейса и контекста, и сначала определи, чего не хватает: базовых знаний (Mid-training), протокола (SFT) или стратегии (RL). Если остаётся нестабильность формата на распределении задач, SFT на чистых демонстрациях с отдельным holdout — рабочий вариант. RL нужен там, где траектории уже различаются по проверяемому вознаграждению, а среда развёртывания отличается от демонстраций.
 
-Не превращай сырой лог или единичную неудачу в правило. Проводи цепочку `episode → extraction → candidate → review/eval → promotion` и храни origin, supporting episodes, confidence, version, scope и rollback. Запись в память проходит ту же проверку доверия, что и внешний ввод, иначе инъекция переживёт сессию.
+Не превращай сырой лог или единичную неудачу в правило. Проводи цепочку `episode → extraction → candidate → review/eval → promotion` и храни origin, supporting episodes, confidence, version, scope и rollback. Предпочитай локальные патчи правил полному переписыванию промпта. Запись в память проходит ту же проверку доверия, что и внешний ввод, иначе инъекция переживёт сессию; агент не меняет корень доверия, который утверждает его собственные обновления.
 
-Подробно: [chapters/ch03](references/chapters/ch03-memory-and-knowledge.md), [chapters/ch08](references/chapters/ch08-self-evolution.md), [chapters/ch07](references/chapters/ch07-post-training.md). Источники: `references/source-book/chapter3.md:49`, `references/source-book/chapter8.md:23`, `references/source-book/chapter8.md:319`.
+Подробно: [chapters/ch03](references/chapters/ch03-memory-and-knowledge.md), [chapters/ch09](references/chapters/ch09-continual-evolution.md), [chapters/ch08](references/chapters/ch08-post-training.md). Источники: `references/source-book/chapter3.md:47`, `references/source-book/chapter9.md:58`, `references/source-book/chapter9.md:258`, `references/source-book/chapter9.md:344`, `references/source-book/chapter8.md:387`.
 
 ## Построй eval-loop до оптимизации
 
@@ -156,7 +157,7 @@ description: Use when designing, implementing, reviewing, debugging, or evaluati
 
 Если данных ещё нет, дай instrumentation plan и эксперимент; не заявляй улучшение заранее.
 
-Подробно: [chapters/ch06](references/chapters/ch06-evaluation.md). Источники: `references/source-book/chapter6.md:71`, `references/source-book/chapter6.md:239`, `references/source-book/chapter6.md:520`, `references/source-book/chapter6.md:563`.
+Подробно: [chapters/ch07](references/chapters/ch07-evaluation.md). Источники: `references/source-book/chapter7.md:165`, `references/source-book/chapter7.md:132`, `references/source-book/chapter7.md:675`, `references/source-book/chapter7.md:721`.
 
 ## Realtime и multi-agent
 
@@ -174,7 +175,7 @@ Race-тесты обязательны и покрывают: перебиван
 
 В сравнении single-agent и multi-agent отдельно проверяй каскадные ошибки: внедри правдоподобное неверное upstream evidence и измерь `false_accept`, `cascade_depth` и итоговый вред. `handoff failure` эту проверку не заменяет.
 
-Подробно: [chapters/ch09](references/chapters/ch09-realtime-multimodal.md), [chapters/ch10](references/chapters/ch10-multi-agent.md). Источники: `references/source-book/chapter9.md:28`, `references/source-book/chapter9.md:192`, `references/source-book/chapter10.md:11`, `references/source-book/chapter10.md:481`.
+Подробно: [chapters/ch06](references/chapters/ch06-interaction.md), [chapters/ch10](references/chapters/ch10-multi-agent.md). Источники: `references/source-book/chapter6.md:315`, `references/source-book/chapter6.md:418`, `references/source-book/chapter10.md:13`, `references/source-book/chapter10.md:525`.
 
 ## Формат результата
 
@@ -194,7 +195,7 @@ Race-тесты обязательны и покрывают: перебиван
 
 **Справочники:** [cheatsheet.md](references/cheatsheet.md) — быстрый выбор архитектуры и проверок · [patterns.md](references/patterns.md) — 16 паттернов «failure mode → механизм → проверка» · [antipatterns.md](references/antipatterns.md) — каталог ошибок по симптомам · [glossary.md](references/glossary.md) — термины · [source-map.md](references/source-map.md) — карта книги по темам.
 
-**Конспекты глав:** [ch00 введение](references/chapters/ch00-introduction.md) · [ch01 основы, ReAct, Harness](references/chapters/ch01-agent-foundations.md) · [ch02 контекст, кэш, сжатие](references/chapters/ch02-context-engineering.md) · [ch03 память и RAG](references/chapters/ch03-memory-and-knowledge.md) · [ch04 инструменты и MCP](references/chapters/ch04-tools.md) · [ch05 coding-агенты и recovery](references/chapters/ch05-coding-agents.md) · [ch06 оценка](references/chapters/ch06-evaluation.md) · [ch07 постобучение](references/chapters/ch07-post-training.md) · [ch08 самоэволюция](references/chapters/ch08-self-evolution.md) · [ch09 realtime](references/chapters/ch09-realtime-multimodal.md) · [ch10 multi-agent](references/chapters/ch10-multi-agent.md) · [ch11 послесловие](references/chapters/ch11-afterword.md)
+**Конспекты глав:** [ch00 введение](references/chapters/ch00-introduction.md) · [ch01 основы, ReAct, Harness](references/chapters/ch01-agent-foundations.md) · [ch02 контекст, кэш, сжатие](references/chapters/ch02-context-engineering.md) · [ch03 память и RAG](references/chapters/ch03-memory-and-knowledge.md) · [ch04 инструменты и MCP](references/chapters/ch04-tools.md) · [ch05 coding-агенты и recovery](references/chapters/ch05-coding-agents.md) · [ch06 асинхронность, голос, Computer Use, роботы](references/chapters/ch06-interaction.md) · [ch07 оценка](references/chapters/ch07-evaluation.md) · [ch08 постобучение](references/chapters/ch08-post-training.md) · [ch09 непрерывная эволюция](references/chapters/ch09-continual-evolution.md) · [ch10 multi-agent](references/chapters/ch10-multi-agent.md) · [ch11 послесловие](references/chapters/ch11-afterword.md) · [ch12 справочные ответы на вопросы для размышления](references/chapters/ch12-reference-answers.md)
 
 **Процедуры:** [design-agent](references/playbooks/design-agent.md) · [diagnose-trace](references/playbooks/diagnose-trace.md) · [harness-review](references/playbooks/harness-review.md) · [build-evals](references/playbooks/build-evals.md) · [memory-design](references/playbooks/memory-design.md) · [realtime-latency](references/playbooks/realtime-latency.md) · [multi-agent-choice](references/playbooks/multi-agent-choice.md)
 
