@@ -211,7 +211,7 @@ python3 scripts/build_source_lock.py
 скилла на книгу v2.0 не обнаружена. Данные:
 [`benchmarks/v4/`](plugins/developing-ai-agents/benchmarks/v4/).
 
-### Триггеринг
+### Триггеринг (v3, 36 запросов)
 
 | Метрика | Значение |
 |---|---:|
