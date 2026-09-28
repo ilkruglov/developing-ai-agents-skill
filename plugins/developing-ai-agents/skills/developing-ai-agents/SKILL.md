@@ -1,6 +1,6 @@
 ---
 name: developing-ai-agents
-description: Use when designing, implementing, reviewing, debugging, or evaluating an AI agent, especially for context engineering, tool interfaces, Harness reliability, memory, evaluation, post-training, continual evolution or self-evolution, asynchronous or realtime interaction, computer use, or multi-agent coordination. Do not use for ordinary non-agent application code.
+description: Use when designing, implementing, reviewing, debugging, or evaluating an AI agent, especially for context engineering, tool interfaces, Harness reliability, memory, evaluation, post-training, continual evolution or self-evolution, asynchronous or realtime interaction, computer use, or multi-agent coordination. Do not use for ordinary non-agent application code. Not for AI infrastructure — GPU and serving capacity sizing, training clusters, or the token and task cost of running models (use designing-ai-infra); the agent's own logic, prompts, tools and memory stay here.
 ---
 
 # Разработка AI-агентов
