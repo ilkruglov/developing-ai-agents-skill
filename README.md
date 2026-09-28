@@ -223,6 +223,21 @@ python3 scripts/build_source_lock.py
 Сырые оценки, метод и ограничения прогонов —
 [`benchmarks/v3/`](plugins/developing-ai-agents/benchmarks/v3/).
 
+### Триггеринг (0.7.1, 40 запросов)
+
+Набор v3 дополнен четырьмя посторонними запросами про GPU и сайзинг
+инференса — это граница со skill `designing-ai-infra`.
+
+| Метрика | Значение |
+|---|---:|
+| Срабатывание на целевых запросах | 18/18 |
+| Ложные срабатывания | 0/22 |
+| Из них на запросах про инфраструктуру | 0/4 |
+
+Один прогон 2026-09-28 на установленных плагинах `developing-ai-agents` 0.7.1
+и `designing-ai-infra` 0.1.0. Результат —
+[`benchmarks/v4/trigger-metrics.json`](plugins/developing-ai-agents/benchmarks/v4/trigger-metrics.json).
+
 ## Автор книги и исходные материалы
 
 - Автор: [Bojie Li](https://github.com/bojieli).
