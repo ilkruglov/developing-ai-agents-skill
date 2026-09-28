@@ -135,7 +135,7 @@ claude plugin update developing-ai-agents@developing-ai-agents-skill
   `references/source-map.md` и `references/source-map.lock.json` — карта тем и
   фиксация якорей.
 - `plugins/developing-ai-agents/evals/` — быстрый набор, benchmark v2 и v3,
-  триггер-набор из 36 запросов.
+  триггер-набор из 40 запросов.
 - `scripts/validate.py`, `scripts/build_source_lock.py` — проверки и генератор
   lock-файла.
 
