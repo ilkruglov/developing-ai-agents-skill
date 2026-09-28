@@ -5,7 +5,17 @@
     "negative": 22,
     "recall": 1.0,
     "false_trigger_rate": 0.0,
-    "runs_failed": 0
+    "runs_failed": 0,
+    "run": {
+      "date": "2026-09-28",
+      "installed_plugins": {
+        "designing-ai-infra": "0.1.0",
+        "developing-ai-agents": "0.7.1"
+      },
+      "model": "claude -p default",
+      "workers": 4
+    },
+    "note": "один прогон на установленных плагинах: developing-ai-agents 0.7.1 из GitHub marketplace, designing-ai-infra 0.1.0 из локального marketplace; набор из 40 запросов ветки test/cross-skill-trigger; скрипт фиксирует вызов только своего skill"
   },
   "results": [
     {

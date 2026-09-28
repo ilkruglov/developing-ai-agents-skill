@@ -235,7 +235,9 @@ python3 scripts/build_source_lock.py
 | Из них на запросах про инфраструктуру | 0/4 |
 
 Один прогон 2026-09-28 на установленных плагинах `developing-ai-agents` 0.7.1
-и `designing-ai-infra` 0.1.0. Результат —
+и `designing-ai-infra` 0.1.0. Скрипт фиксирует только вызов своего skill,
+поэтому замер не показывает, срабатывают ли оба skill на одном целевом
+запросе. Результат —
 [`benchmarks/v4/trigger-metrics.json`](plugins/developing-ai-agents/benchmarks/v4/trigger-metrics.json).
 
 ## Автор книги и исходные материалы
