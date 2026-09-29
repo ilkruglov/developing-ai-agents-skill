@@ -1,6 +1,13 @@
 {
-  "include": ["scripts", "tests"],
-  "extraPaths": ["scripts"],
+  "include": [
+    "scripts",
+    "tests",
+    "plugins/developing-ai-agents/skills/developing-ai-agents/scripts"
+  ],
+  "extraPaths": [
+    "scripts",
+    "plugins/developing-ai-agents/skills/developing-ai-agents/scripts"
+  ],
   "pythonVersion": "3.12",
   "typeCheckingMode": "standard"
 }

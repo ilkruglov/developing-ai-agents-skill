@@ -17,7 +17,11 @@ scripts/update_calc_docs.py, который переписывает показ�
 2. Инлайн-команды. Спан `python3 scripts/eval_calc.py …` вне блоков без
    подстановок (`<…>`, `…`) — полная команда: она запускается, сверяется
    код возврата.
-3. Упоминания. Любое `eval_calc.py [команда] [флаги]` в инлайн-спане
+3. Списки команд. На строке, где упомянут `eval_calc.py`, каждый инлайн-спан
+   из одного слова (`passk`, `required-p`) — имя команды и обязан быть в
+   COMMANDS; строка калькулятора в SKILL.md перечисляет все команды, а
+   `--help` калькулятора — ровно их.
+4. Упоминания. Любое `eval_calc.py [команда] [флаги]` в инлайн-спане
    (в том числе в команде с подстановками) или в строке блока кода, который
    не является блоком команд или вывода (например, форма шаблона), не
    запускается, но команда обязана существовать, а флаги — быть в её
@@ -51,6 +55,7 @@ FRAGMENT = re.compile(
 )
 FLAG = re.compile(r"(?<![\w-])--[a-z][\w-]*")
 PLACEHOLDER = re.compile(r"<[^>]+>|…|\.\.\.")
+BARE_WORD = re.compile(r"^[a-z][a-z0-9-]*$")
 
 
 def label(path: Path) -> str:
@@ -72,6 +77,20 @@ def inline_spans(text: str) -> Iterator[tuple[int, str]]:
             continue
         for match in INLINE.finditer(line):
             yield number, match.group("code").strip()
+
+
+def listed_commands(text: str) -> list[tuple[int, str]]:
+    """Однословные спаны на строках вне блоков, где упомянут eval_calc.py."""
+    _, inside = parse_fences(text)
+    found = []
+    for number, line in enumerate(text.splitlines(), 1):
+        if number in inside or not FRAGMENT.search(line):
+            continue
+        for match in INLINE.finditer(line):
+            code = match.group("code").strip()
+            if BARE_WORD.match(code):
+                found.append((number, code))
+    return found
 
 
 def mention_places(text: str) -> list[tuple[int, str]]:
@@ -191,6 +210,20 @@ class DocCommandsTest(unittest.TestCase):
             with self.subTest(place=f"{path}:{line}", command=code):
                 self.assertEqual(0, result.returncode, result.stdout + result.stderr)
 
+    def test_calculator_help_lists_exactly_the_commands(self) -> None:
+        result = run(f"{PREFIX} --help")
+        match = re.search(r"\{(?P<commands>[a-z,-]+)\}", result.stdout)
+        assert match is not None, result.stdout
+        self.assertEqual(set(COMMANDS), set(match.group("commands").split(",")))
+
+    def test_command_lists_name_real_commands(self) -> None:
+        for path in documents():
+            for line, word in listed_commands(path.read_text(encoding="utf-8")):
+                with self.subTest(place=f"{label(path)}:{line}", command=word):
+                    self.assertIn(word, COMMANDS)
+        skill = (SKILL / "SKILL.md").read_text(encoding="utf-8")
+        self.assertEqual(set(COMMANDS), {word for _, word in listed_commands(skill)})
+
     def test_mentions_name_existing_commands_and_flags(self) -> None:
         self.assertTrue(self.mentions)
         for path, line, code in self.mentions:
@@ -261,6 +294,14 @@ class ParsingTest(unittest.TestCase):
         self.assertIn((24, "eval_calc.py compare"), places)
         # блоки команд и их вывода — не упоминания, их проверяют запуском
         self.assertNotIn(5, [line for line, _ in places])
+
+    def test_listed_commands_are_bare_spans_next_to_a_mention(self) -> None:
+        text = (
+            "**Калькулятор:** `scripts/eval_calc.py` — `passk`, `required-q`.\n"
+            "Без упоминания: `noise` здесь не список команд."
+        )
+
+        self.assertEqual([(1, "passk"), (1, "required-q")], listed_commands(text))
 
     def test_fragments_and_placeholders(self) -> None:
         match = FRAGMENT.search("eval_calc.py compare --only-a 2")
