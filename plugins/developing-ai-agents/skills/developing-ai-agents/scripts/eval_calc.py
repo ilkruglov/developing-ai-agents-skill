@@ -105,6 +105,58 @@ def _require_inner_probability(value: float, name: str) -> None:
         )
 
 
+# --- доли у краёв ------------------------------------------------------------
+
+
+def _ln(value: float) -> float:
+    return math.log(value) if value > 0.0 else -math.inf
+
+
+def _ln_one_minus(value: float) -> float:
+    """ln(1 − x) без вычитания: точен и при x около 0."""
+    return math.log1p(-value) if value < 1.0 else -math.inf
+
+
+def _ln_one_minus_exp(ln_value: float) -> float:
+    """ln(1 − eˣ) при x ≤ 0 без потери точности у обоих краёв."""
+    if ln_value == 0.0:
+        return -math.inf
+    if ln_value == -math.inf:
+        return 0.0
+    if ln_value > -math.log(2.0):
+        return math.log(-math.expm1(ln_value))
+    return math.log1p(-math.exp(ln_value))
+
+
+@dataclass(frozen=True)
+class Share:
+    """Доля через логарифмы её самой и дополнения до 1.
+
+    1 − (1 − p)^k при (1 − p)^k < 1e-16 в float становится ровно 1, а p^k
+    при k·ln p < −745 — ровно 0: печать показала бы гарантированный успех или
+    невозможность. Share хранит обе стороны, и меньшая из них считается прямо,
+    а не как разность с единицей.
+    """
+
+    ln_value: float
+    ln_rest: float
+
+    @classmethod
+    def of(cls, value: float) -> Share:
+        return cls(_ln(value), _ln_one_minus(value))
+
+    @classmethod
+    def from_ln_value(cls, ln_value: float) -> Share:
+        return cls(ln_value, _ln_one_minus_exp(ln_value))
+
+    @classmethod
+    def from_ln_rest(cls, ln_rest: float) -> Share:
+        return cls(_ln_one_minus_exp(ln_rest), ln_rest)
+
+    def complement(self) -> Share:
+        return Share(self.ln_rest, self.ln_value)
+
+
 # --- расчёт -----------------------------------------------------------------
 
 
@@ -120,6 +172,20 @@ def pass_hat_k(p: float, k: int) -> float:
     _require_probability(p, "--p")
     _require_count(k, "--k", 1)
     return p**k
+
+
+def pass_at_share(p: float, k: int) -> Share:
+    """Pass@k с хвостом (1 − p)^k, посчитанным напрямую."""
+    _require_probability(p, "--p")
+    _require_count(k, "--k", 1)
+    return Share.from_ln_rest(k * _ln_one_minus(p))
+
+
+def pass_hat_share(p: float, k: int) -> Share:
+    """Pass^k через k · ln p: не обращается в 0 при p^k < 1e-308."""
+    _require_probability(p, "--p")
+    _require_count(k, "--k", 1)
+    return Share.from_ln_value(k * _ln(p))
 
 
 def required_p_for_pass_hat(target: float, k: int) -> float:
@@ -157,7 +223,10 @@ def wilson_interval(successes: int, total: int, z: float = Z_95) -> tuple[float,
     denominator = 1 + z**2 / total
     centre = (p + z**2 / (2 * total)) / denominator
     spread = z * math.sqrt(p * (1 - p) / total + z**2 / (4 * total**2)) / denominator
-    return (max(0.0, centre - spread), min(1.0, centre + spread))
+    # у краёв граница равна 0 или 1 точно; float даёт 0.9999999999999999
+    low = 0.0 if successes == 0 else max(0.0, centre - spread)
+    high = 1.0 if successes == total else min(1.0, centre + spread)
+    return (low, high)
 
 
 def _ceil(value: float) -> int:
@@ -303,36 +372,77 @@ class Result:
 
 
 def _num(value: float) -> str:
-    return f"{value:.6g}"
+    """Входное число: шесть значащих цифр, но 0.99999999 не превращается в 1."""
+    shown = f"{value:.6g}"
+    if float(shown) in (0.0, 1.0) and value not in (0.0, 1.0):
+        return f"{value:.12g}"
+    return shown
+
+
+def _fixed(value: float, decimals: int, edges: tuple[float, ...]) -> str:
+    """Число с decimals знаками; если округление попало на край, которого у
+    значения нет (0, 100), знаков добавляется, пока край не исчезнет."""
+    shown = f"{value:.{decimals}f}"
+    while decimals < 12 and float(shown) in edges and value not in edges:
+        decimals += 1
+        shown = f"{value:.{decimals}f}"
+    return shown
 
 
 def _pct(value: float) -> str:
-    return f"{value * 100:.2f}%"
+    return f"{_fixed(value * 100, 2, (0.0, 100.0))}%"
 
 
-def _frac(value: float) -> str:
-    """Доля: пять знаков, но у краёв без округления до 0 или 1."""
-    if 0.0 < value < TINY:
+def _sci(ln_value: float) -> str:
+    """Малое положительное число по его логарифму, в том числе ниже порога float."""
+    value = math.exp(ln_value)
+    if value >= sys.float_info.min:
         return f"{value:.3g}"
-    if 1.0 - TINY < value < 1.0:
-        return f"1 − {1.0 - value:.3g}"
-    return f"{value:.5f}"
+    power = ln_value / math.log(10.0)
+    exponent = math.floor(power)
+    mantissa = f"{10 ** (power - exponent):.3g}"
+    if mantissa == "10":
+        mantissa, exponent = "1", exponent + 1
+    return f"{mantissa}e{exponent:+03d}"
 
 
-def _share(value: float) -> str:
-    if 0.0 < value < TINY:
+def _as_share(value: float | Share) -> Share:
+    return value if isinstance(value, Share) else Share.of(value)
+
+
+def _frac(value: float | Share) -> str:
+    """Доля: пять знаков, у краёв — сама малая сторона, без округления до 0 или 1."""
+    share = _as_share(value)
+    if share.ln_value == -math.inf:
+        return "0.00000"
+    if share.ln_rest == -math.inf:
+        return "1.00000"
+    if math.exp(share.ln_value) < TINY:
+        return _sci(share.ln_value)
+    if math.exp(share.ln_rest) < TINY:
+        return f"1 − {_sci(share.ln_rest)}"
+    return f"{math.exp(share.ln_value):.5f}"
+
+
+def _share(value: float | Share) -> str:
+    share = _as_share(value)
+    if share.ln_value == -math.inf:
+        return "0.00%"
+    if share.ln_rest == -math.inf:
+        return "100.00%"
+    if math.exp(share.ln_value) < TINY:
         return f"< {TINY * 100:g}%"
-    if 1.0 - TINY < value < 1.0:
+    if math.exp(share.ln_rest) < TINY:
         return f"> {(1.0 - TINY) * 100:g}%"
-    return _pct(value)
+    return _pct(math.exp(share.ln_value))
 
 
-def _prob(value: float) -> str:
+def _prob(value: float | Share) -> str:
     return f"{_frac(value)} ({_share(value)})"
 
 
 def _pp(value: float) -> str:
-    return f"{value * 100:.2f} п.п."
+    return f"{_fixed(value * 100, 2, (0.0,))} п.п."
 
 
 def _p_value(value: float) -> str:
@@ -372,14 +482,14 @@ def report_passk(p: float, k: int) -> str:
         [
             Result(
                 f"Pass@{k}",
-                _prob(pass_at_k(p, k)),
+                _prob(pass_at_share(p, k)),
                 "Pass@k = 1 − (1 − p)^k",
                 inputs,
                 ANCHOR_PASS_K,
             ),
             Result(
                 f"Pass^{k}",
-                _prob(pass_hat_k(p, k)),
+                _prob(pass_hat_share(p, k)),
                 "Pass^k = p^k",
                 inputs,
                 ANCHOR_PASS_K,
@@ -392,10 +502,12 @@ def report_passk(p: float, k: int) -> str:
 def report_required_p(metric: str, target: float, k: int) -> str:
     """Какая доля успеха попытки нужна, чтобы Pass^k или Pass@k достиг T."""
     if metric == "pass-hat":
-        p = required_p_for_pass_hat(target, k)
+        required_p_for_pass_hat(target, k)  # проверка ввода
+        p = Share.from_ln_value(_ln(target) / k)
         name, formula, inverted = f"Pass^{k}", "p = T^(1/k)", "Pass^k = p^k"
     else:
-        p = required_p_for_pass_at(target, k)
+        required_p_for_pass_at(target, k)  # проверка ввода
+        p = Share.from_ln_rest(_ln_one_minus(target) / k)
         name, formula = f"Pass@{k}", "p = 1 − (1 − T)^(1/k)"
         inverted = "Pass@k = 1 − (1 − p)^k"
     return _report(
@@ -408,7 +520,7 @@ def report_required_p(metric: str, target: float, k: int) -> str:
                 ANCHOR_PASS_K,
                 derivation=f"обращение формулы книги {inverted}; метрика монотонно "
                 f"растёт по p, поэтому при p не ниже этой доли {name} ≥ {_num(target)}",
-                notes=(f"доля неудачных попыток 1 − p = {_frac(1.0 - p)}",),
+                notes=(f"доля неудачных попыток 1 − p = {_frac(p.complement())}",),
             )
         ],
         PASS_K_CAVEATS,
@@ -442,8 +554,8 @@ def report_passk_observed(successes: int, total: int, k: int) -> str:
             ),
             Result(
                 f"Pass@{k}",
-                f"{_prob(pass_at_k(p, k))}, 95%-границы: "
-                f"{_frac(pass_at_k(low, k))} – {_frac(pass_at_k(high, k))}",
+                f"{_prob(pass_at_share(p, k))}, 95%-границы: "
+                f"{_frac(pass_at_share(low, k))} – {_frac(pass_at_share(high, k))}",
                 "Pass@k = 1 − (1 − p)^k",
                 inputs,
                 ANCHOR_PASS_K,
@@ -451,8 +563,8 @@ def report_passk_observed(successes: int, total: int, k: int) -> str:
             ),
             Result(
                 f"Pass^{k}",
-                f"{_prob(pass_hat_k(p, k))}, 95%-границы: "
-                f"{_frac(pass_hat_k(low, k))} – {_frac(pass_hat_k(high, k))}",
+                f"{_prob(pass_hat_share(p, k))}, 95%-границы: "
+                f"{_frac(pass_hat_share(low, k))} – {_frac(pass_hat_share(high, k))}",
                 "Pass^k = p^k",
                 inputs,
                 ANCHOR_PASS_K,
@@ -501,7 +613,7 @@ def report_interval(successes: int, total: int) -> str:
             ),
             Result(
                 "Стандартная ошибка",
-                f"{se:.5f}",
+                _frac(se),
                 "SE(p) ≈ √(p(1 − p)/n)",
                 f"p = {_num(p)}, n = {total}",
                 ANCHOR_SIGNIFICANCE,

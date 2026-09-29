@@ -126,6 +126,110 @@ class HandDerivedGoldenTests(unittest.TestCase):
         self.assertIn("**Pass^6**: 0.46440 (46.44%)", high)
         self.assertNotIn("1.00000", high)
 
+    def test_saturated_tails_are_computed_not_rounded(self) -> None:
+        # Хвост считается сам, а не как 1 − значение; эталоны — Decimal, 50 знаков:
+        #   p = 0.99, k = 10: 1 − Pass@10 = 0.01^10 = 1e-20;
+        #     Pass^10 = 0.99^10 = 0.904382075
+        #   p = 0.9, k = 20: 1 − Pass@20 = 0.1^20 = 1e-20
+        #   p = 0.5, k = 60: 0.5^60 = 8.67361738e-19 — и Pass^60, и 1 − Pass@60
+        #   p = 0.01, k = 200: Pass^200 = 0.01^200 = 1e-400 — ниже порога float,
+        #     печатается через показатель 200 · log10 0.01 = −400;
+        #     Pass@200 = 1 − 0.99^200 = 1 − 0.133979675 = 0.866020325
+        #   p = 0.5, k = 2000: 1 − Pass@2000 = 0.5^2000 = 10^−602.0599913
+        #     = 8.7098e-603
+        cases = {
+            ("0.99", "10"): [
+                "**Pass@10**: 1 − 1e-20 (> 99.99%)",
+                "**Pass^10**: 0.90438 (90.44%)",
+            ],
+            ("0.9", "20"): ["**Pass@20**: 1 − 1e-20 (> 99.99%)"],
+            ("0.5", "60"): [
+                "**Pass@60**: 1 − 8.67e-19 (> 99.99%)",
+                "**Pass^60**: 8.67e-19 (< 0.01%)",
+            ],
+            ("0.01", "200"): [
+                "**Pass@200**: 0.86602 (86.60%)",
+                "**Pass^200**: 1e-400 (< 0.01%)",
+            ],
+            ("0.5", "2000"): [
+                "**Pass@2000**: 1 − 8.71e-603 (> 99.99%)",
+                "**Pass^2000**: 8.71e-603 (< 0.01%)",
+            ],
+        }
+        for (p, k), lines in cases.items():
+            with self.subTest(p=p, k=k):
+                stdout = run("passk", "--p", p, "--k", k).stdout
+                for line in lines:
+                    self.assertIn(line, stdout)
+                self.assertNotIn("1.00000", stdout)
+                self.assertNotIn("0.00000", stdout)
+
+    def test_saturated_bounds_from_observation(self) -> None:
+        # 99/100, k = 10. Уилсон (Decimal): p ∈ [0.945512475; 0.998232613].
+        #   1 − Pass@10: точка 0.01^10 = 1e-20; границы 0.054487525^10 =
+        #   2.30659e-13 и 0.001767387^10 = 2.97383e-28.
+        #   Pass^10: 0.945512475^10 = 0.571048; 0.998232613^10 = 0.982466
+        stdout = run("passk", "--successes", "99", "--total", "100", "--k", "10").stdout
+        self.assertIn(
+            "**Pass@10**: 1 − 1e-20 (> 99.99%), 95%-границы: "
+            "1 − 2.31e-13 – 1 − 2.97e-28",
+            stdout,
+        )
+        self.assertIn(
+            "**Pass^10**: 0.90438 (90.44%), 95%-границы: 0.57105 – 0.98247", stdout
+        )
+        self.assertNotIn("1.00000", stdout)
+
+    def test_other_numbers_do_not_round_onto_an_edge(self) -> None:
+        # 99999/100000: SE = √(0.99999 · 0.00001 / 1e5) = 9.99995e-6;
+        #   нормальная верхняя граница 0.99999 + 1.96 · SE = 1.0000096 —
+        #   выше 1, два знака дали бы «100.00%»; полуширина 0.00196 п.п.
+        #   дала бы «0.00 п.п.»
+        # required-p --pass-hat 0.99999999 --k 3: входное T печаталось «1»
+        interval = run("interval", "--successes", "99999", "--total", "100000").stdout
+        normal = next(
+            line
+            for line in interval.splitlines()
+            if line.startswith("**95%-интервал, н")
+        )
+        self.assertIn("– 100.001%", normal)
+        self.assertIn("(±0.002 п.п.)", normal)
+        self.assertNotIn("0.00 п.п.", interval)
+        # SE = 9.99995e-6: пять знаков дали бы 0.00001, для SE = 1e-7 — 0.00000
+        self.assertIn("**Стандартная ошибка**: 1e-05", interval)
+        required = run("required-p", "--pass-hat", "0.99999999", "--k", "3").stdout
+        self.assertIn("T = 0.99999999, k = 3", required)
+        self.assertIn("Pass^3 ≥ 0.99999999", required)
+
+    def test_wilson_edges_are_exact(self) -> None:
+        # при s = n верхняя граница Уилсона равна 1 точно, при s = 0 нижняя — 0:
+        # (p + z²/2n + z·√(z²/4n²)) / (1 + z²/n) = (1 + z²/n) / (1 + z²/n);
+        # в float 100/100 давало 0.9999999999999999 и печаталось бы «1 − 1.11e-16»
+        for n in (100, 105, 12345):
+            with self.subTest(n=n):
+                self.assertEqual(1.0, eval_calc.wilson_interval(n, n)[1])
+                self.assertEqual(0.0, eval_calc.wilson_interval(0, n)[0])
+
+    def test_exact_edges_stay_exact(self) -> None:
+        # p = 0 и p = 1 — не насыщение, а точные 0 и 1
+        zero = run("passk", "--p", "0", "--k", "3").stdout
+        one = run("passk", "--p", "1", "--k", "3").stdout
+        self.assertIn("**Pass^3**: 0.00000 (0.00%)", zero)
+        self.assertIn("**Pass@3**: 0.00000 (0.00%)", zero)
+        self.assertIn("**Pass@3**: 1.00000 (100.00%)", one)
+        self.assertIn("**Pass^3**: 1.00000 (100.00%)", one)
+
+    def test_interval_percent_does_not_round_to_the_edge(self) -> None:
+        # 99999/100000: Уилсон, z² = 3.8416, n = 1e5 (Decimal):
+        #   верхняя граница 0.99999823…, двух знаков в процентах мало —
+        #   печатается столько знаков, чтобы граница не стала 100.00%
+        stdout = run("interval", "--successes", "99999", "--total", "100000").stdout
+        wilson = next(
+            line for line in stdout.splitlines() if line.startswith("**95%-интервал У")
+        )
+        self.assertNotIn("100.00%", wilson)
+        self.assertRegex(wilson, r"– 99\.9998\d*%")
+
     def test_wilson_interval_eight_of_ten(self) -> None:
         # 8/10, z = 1.96, z² = 3.8416:
         #   знаменатель = 1 + 3.8416/10 = 1.38416
