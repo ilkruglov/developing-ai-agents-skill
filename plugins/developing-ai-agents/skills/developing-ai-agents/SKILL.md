@@ -155,6 +155,8 @@ description: Use when designing, implementing, reviewing, debugging, or evaluati
 6. Для стохастической системы измерь границу шума повторными прогонами: разница меньше неё решением не является. При сравнении многих вариантов повышай порог.
 7. Выпускай через shadow/canary, держи проверенный rollback, отслеживай drift после релиза.
 
+Любое число, от которого зависит вывод оценки (Pass@k и Pass^k, интервал доли, объём выборки, парное сравнение, граница шума), считает `scripts/eval_calc.py`, а не модель в уме; в ответе приводи команду и её вывод. Команды запускаются из каталога скилла.
+
 Если данных ещё нет, дай instrumentation plan и эксперимент; не заявляй улучшение заранее.
 
 Подробно: [chapters/ch07](references/chapters/ch07-evaluation.md). Источники: `references/source-book/chapter7.md:165`, `references/source-book/chapter7.md:132`, `references/source-book/chapter7.md:675`, `references/source-book/chapter7.md:721`.
@@ -198,5 +200,7 @@ Race-тесты обязательны и покрывают: перебиван
 **Конспекты глав:** [ch00 введение](references/chapters/ch00-introduction.md) · [ch01 основы, ReAct, Harness](references/chapters/ch01-agent-foundations.md) · [ch02 контекст, кэш, сжатие](references/chapters/ch02-context-engineering.md) · [ch03 память и RAG](references/chapters/ch03-memory-and-knowledge.md) · [ch04 инструменты и MCP](references/chapters/ch04-tools.md) · [ch05 coding-агенты и recovery](references/chapters/ch05-coding-agents.md) · [ch06 асинхронность, голос, Computer Use, роботы](references/chapters/ch06-interaction.md) · [ch07 оценка](references/chapters/ch07-evaluation.md) · [ch08 постобучение](references/chapters/ch08-post-training.md) · [ch09 непрерывная эволюция](references/chapters/ch09-continual-evolution.md) · [ch10 multi-agent](references/chapters/ch10-multi-agent.md) · [ch11 послесловие](references/chapters/ch11-afterword.md) · [ch12 справочные ответы на вопросы для размышления](references/chapters/ch12-reference-answers.md)
 
 **Процедуры:** [design-agent](references/playbooks/design-agent.md) · [diagnose-trace](references/playbooks/diagnose-trace.md) · [harness-review](references/playbooks/harness-review.md) · [build-evals](references/playbooks/build-evals.md) · [memory-design](references/playbooks/memory-design.md) · [realtime-latency](references/playbooks/realtime-latency.md) · [multi-agent-choice](references/playbooks/multi-agent-choice.md)
+
+**Калькулятор:** `scripts/eval_calc.py` — статистика оценки по главе 7: `passk`, `interval`, `sample-size`, `compare`, `noise`; каждый результат с формулой, входами и якорем на книгу; справка — `python3 scripts/eval_calc.py --help`.
 
 **Артефакты:** [agent-design](references/templates/agent-design.md) · [harness-spec](references/templates/harness-spec.md) · [tool-contract](references/templates/tool-contract.md) · [eval-plan](references/templates/eval-plan.md) · [memory-policy](references/templates/memory-policy.md) · [trace-diagnosis](references/templates/trace-diagnosis.md)
