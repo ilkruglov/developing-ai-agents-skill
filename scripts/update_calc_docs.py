@@ -185,18 +185,21 @@ def main(argv: Sequence[str] | None = None) -> int:
     arguments = parser.parse_args(argv)
     paths = [path.resolve() for path in arguments.paths] or documents()
 
-    stale = []
+    # сначала считаются все файлы, потом пишутся: ошибка в любом из них не
+    # оставляет часть документов переписанной
+    updates: dict[Path, str] = {}
     for path in paths:
         text = path.read_text(encoding="utf-8")
         try:
             updated = update_text(text, run_command)
         except (ValueError, RuntimeError) as error:
-            print(f"ошибка: {path}: {error}", file=sys.stderr)
+            print(f"ошибка: {path}: {error}; ничего не записано", file=sys.stderr)
             return 2
-        if updated == text:
-            continue
-        stale.append(path)
-        if not arguments.check:
+        if updated != text:
+            updates[path] = updated
+    stale = list(updates)
+    if not arguments.check:
+        for path, updated in updates.items():
             path.write_text(updated, encoding="utf-8")
     verb = "устарел вывод" if arguments.check else "переписан вывод"
     for path in stale:

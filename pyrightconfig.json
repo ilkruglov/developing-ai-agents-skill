@@ -8,6 +8,6 @@
     "scripts",
     "plugins/developing-ai-agents/skills/developing-ai-agents/scripts"
   ],
-  "pythonVersion": "3.12",
+  "pythonVersion": "3.10",
   "typeCheckingMode": "standard"
 }

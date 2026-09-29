@@ -114,6 +114,22 @@ class CommandLineTests(unittest.TestCase):
         self.assertIn("ошибка", errors.getvalue())
         self.assertIn("--p", errors.getvalue())
 
+    def test_error_in_a_later_file_writes_nothing(self) -> None:
+        # сначала все файлы считаются, потом пишутся: ошибка во втором файле
+        # не должна оставить первый переписанным без сообщения
+        stale = f"```bash\n{PREFIX} passk --p 0.5 --k 2\n```\n\n```text\nстарый\n```\n"
+        first = self.temporary_document(stale)
+        second = self.temporary_document(f"```bash\n{PREFIX} passk --p 2 --k 1\n```\n")
+        errors = io.StringIO()
+
+        with contextlib.redirect_stderr(errors):
+            code = self.main(str(first), str(second))
+
+        self.assertEqual(2, code)
+        self.assertEqual(stale, first.read_text(encoding="utf-8"))
+        self.assertIn(str(second), errors.getvalue())
+        self.assertIn("ничего не записано", errors.getvalue())
+
     def test_runs_without_docstrings(self) -> None:
         # python3 -OO убирает __doc__; описание для argparse не должно на нём держаться
         result = subprocess.run(
