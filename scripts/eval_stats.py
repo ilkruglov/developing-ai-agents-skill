@@ -69,7 +69,7 @@ def command_noise(values: list[float]) -> int:
     print(f"размах: {summary.low * 100:.1f}% – {summary.high * 100:.1f}%")
     print(f"стандартное отклонение: {summary.stdev * 100:.1f} п.п.")
     print(f"\nграница шума: {summary.spread * 100:.1f} п.п. (размах)")
-    print(f"консервативно: {2 * summary.stdev * 100:.1f} п.п. (два отклонения)")
+    print(f"два отклонения: {2 * summary.stdev * 100:.1f} п.п. (для справки)")
     print("\nРазница меньше границы шума решением не является.")
     return 0
 

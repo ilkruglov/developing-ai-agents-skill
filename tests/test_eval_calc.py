@@ -84,6 +84,48 @@ class HandDerivedGoldenTests(unittest.TestCase):
         self.assertEqual(0.0, eval_calc.pass_at_k(0.0, 4))
         self.assertEqual(1.0, eval_calc.pass_hat_k(1.0, 4))
 
+    def test_required_p_for_target(self) -> None:
+        # Pass^k ≥ T ⇔ p ≥ T^(1/k); Pass@k ≥ T ⇔ p ≥ 1 − (1 − T)^(1/k):
+        #   Pass^6 ≥ 0.9: 0.9^(1/6) = exp(ln 0.9 / 6) = exp(−0.0175601) = 0.9825932
+        #   Pass^2 ≥ 0.81: √0.81 = 0.9
+        #   Pass@3 ≥ 0.936: 1 − 0.064^(1/3) = 1 − 0.4 = 0.6
+        #   Pass@5 ≥ 0.99: 1 − 0.01^(1/5) = 1 − 0.3981072 = 0.6018928
+        self.assertAlmostEqual(
+            0.9825932, eval_calc.required_p_for_pass_hat(0.9, 6), places=7
+        )
+        self.assertAlmostEqual(0.9, eval_calc.required_p_for_pass_hat(0.81, 2))
+        self.assertAlmostEqual(0.6, eval_calc.required_p_for_pass_at(0.936, 3))
+        self.assertAlmostEqual(
+            0.6018928, eval_calc.required_p_for_pass_at(0.99, 5), places=7
+        )
+
+    def test_required_p_cli(self) -> None:
+        hat = run("required-p", "--pass-hat", "0.9", "--k", "6")
+        at = run("required-p", "--pass-at", "0.936", "--k", "3")
+
+        self.assertEqual(0, hat.returncode, hat.stderr)
+        self.assertIn("(вывод): 0.98259 (98.26%)", hat.stdout)
+        self.assertIn("p = T^(1/k)", hat.stdout)
+        self.assertIn("источник: `references/source-book/chapter7.md:150`", hat.stdout)
+        self.assertIn("независим", hat.stdout)
+        self.assertIn("1 − p = 0.01741", hat.stdout)
+        self.assertEqual(0, at.returncode, at.stderr)
+        self.assertIn("(вывод): 0.60000 (60.00%)", at.stdout)
+        self.assertIn("p = 1 − (1 − T)^(1/k)", at.stdout)
+
+    def test_small_and_near_one_values_are_not_rounded_away(self) -> None:
+        # p = 0.1, k = 10: Pass^10 = 1e-10, пять знаков дали бы 0.00000;
+        #   Pass@10 = 1 − 0.9^10 = 0.6513216
+        # p = 0.88, k = 6: Pass@6 = 1 − 0.12^6 = 1 − 2.985984e-06 = 0.999997,
+        #   пять знаков дали бы 1.00000 — будто успех гарантирован
+        low = run("passk", "--p", "0.1", "--k", "10").stdout
+        self.assertIn("**Pass^10**: 1e-10 (< 0.01%)", low)
+        self.assertIn("**Pass@10**: 0.65132 (65.13%)", low)
+        high = run("passk", "--p", "0.88", "--k", "6").stdout
+        self.assertIn("**Pass@6**: 1 − 2.99e-06 (> 99.99%)", high)
+        self.assertIn("**Pass^6**: 0.46440 (46.44%)", high)
+        self.assertNotIn("1.00000", high)
+
     def test_wilson_interval_eight_of_ten(self) -> None:
         # 8/10, z = 1.96, z² = 3.8416:
         #   знаменатель = 1 + 3.8416/10 = 1.38416
@@ -167,6 +209,35 @@ class HandDerivedGoldenTests(unittest.TestCase):
         self.assertEqual(1.0, eval_calc.mcnemar_exact(1, 1))
         self.assertEqual(1.0, eval_calc.mcnemar_exact(0, 0))
 
+    def test_mcnemar_exact_on_large_counts(self) -> None:
+        # b = 20000, c = 20500, n = 40500. Независимая сверка: сумма
+        # exp(lgamma(n+1) − lgamma(i+1) − lgamma(n−i+1) − n·ln 2) по i ≤ 20000,
+        # удвоенная, = 0.0131538; нормальное приближение с поправкой на
+        # непрерывность: z = (500 − 1)/√40500 = 2.4796 → p = 0.0131548.
+        # Раньше каждый член считался math.comb заново, и счёт не укладывался
+        # в 120 s; теперь рекуррентно.
+        self.assertAlmostEqual(
+            0.0131538, eval_calc.mcnemar_exact(20000, 20500), places=6
+        )
+        result = subprocess.run(
+            [
+                sys.executable,
+                str(SCRIPT),
+                "compare",
+                "--only-a",
+                "20000",
+                "--only-b",
+                "20500",
+            ],
+            cwd=SKILL,
+            check=False,
+            capture_output=True,
+            text=True,
+            timeout=10,
+        )
+        self.assertEqual(0, result.returncode, result.stderr)
+        self.assertIn("p-value = 0.0132", result.stdout)
+
     def test_compare_from_counts_is_significant(self) -> None:
         result = run("compare", "--only-a", "2", "--only-b", "10")
 
@@ -209,6 +280,8 @@ class OutputContractTests(unittest.TestCase):
             ("sample-size", "--p", "0.7", "--p2", "0.73", "--half-width", "0.03"),
             ("compare", "--only-a", "2", "--only-b", "10"),
             ("noise", "0.784", "0.812", "0.795", "0.846", "0.803"),
+            ("required-p", "--pass-hat", "0.9", "--k", "6"),
+            ("required-p", "--pass-at", "0.99", "--k", "5"),
         ]
         for arguments in commands:
             with self.subTest(arguments=arguments):
@@ -245,6 +318,22 @@ class OutputContractTests(unittest.TestCase):
                 self.assertTrue(marked, stdout)
                 self.assertIn("(вывод)", marked[0])
                 self.assertIn("- вывод: ", stdout)
+
+    def test_non_book_steps_inside_book_results_are_noted(self) -> None:
+        interval = run("interval", "--successes", "70", "--total", "100").stdout
+        normal = next(
+            block
+            for block in interval.split("\n\n")
+            if block.startswith("**95%-интервал, нормальное")
+        )
+        self.assertIn("- вывод: множитель 1.96", normal)
+        self.assertIn("±9", normal)
+        noise = run("noise", "0.784", "0.812", "0.795", "0.846", "0.803").stdout
+        spread = noise.split("\n\n")[0]
+        self.assertTrue(spread.startswith("**Граница шума (размах)**"), spread)
+        self.assertIn("- вывод: ", spread)
+        self.assertIn("build-evals", spread)
+        self.assertIn("диапазон колебаний", spread)
 
     def test_book_formulas_are_not_marked(self) -> None:
         stdout = run("passk", "--p", "0.6", "--k", "5").stdout
@@ -302,6 +391,11 @@ class InputRefusalTests(unittest.TestCase):
             (eval_calc.wilson_interval, (-1, 10)),
             (eval_calc.sample_size, (0.7, 0.0)),
             (eval_calc.sample_size, (0.0, 0.05)),
+            (eval_calc.sample_size, (0.7, 1e-170)),
+            (eval_calc.sample_size_difference, (0.7, 0.73, 1e-170)),
+            (eval_calc.required_p_for_pass_hat, (1.2, 3)),
+            (eval_calc.required_p_for_pass_at, (0.9, 0)),
+            (eval_calc.mcnemar_exact, (150000, 150001)),
             (eval_calc.sample_size_difference, (0.7, 1.5, 0.05)),
             (eval_calc.mcnemar_exact, (-1, 3)),
             (eval_calc.discordant, ([1, 0], [1])),
@@ -328,6 +422,14 @@ class InputRefusalTests(unittest.TestCase):
             (("compare", "--a", "1,2", "--b", "1,0"), "0 или 1"),
             (("compare", "--only-a", "2"), "--only-b"),
             (("noise", "0.8", "0.82"), "минимум три"),
+            (("sample-size", "--p", "0.7", "--half-width", "1e-170"), "half-width"),
+            (("required-p", "--pass-hat", "1.5", "--k", "3"), "[0; 1]"),
+            (("required-p", "--k", "3"), "--pass-hat"),
+            (("compare", "--only-a", "150000", "--only-b", "150001"), "200000"),
+            (
+                ("required-p", "--pass-hat", "0.9", "--pass-at", "0.9", "--k", "3"),
+                "оба",
+            ),
         ]
         for arguments, fragment in cases:
             with self.subTest(arguments=arguments):
@@ -347,13 +449,15 @@ class WrapperTests(unittest.TestCase):
                 self.assertIs(getattr(eval_calc, name), getattr(eval_stats, name))
 
     def test_wrapper_output_is_unchanged(self) -> None:
-        # вывод обёртки до переноса расчёта в скилл (0.7.2), байт в байт
+        # вывод обёртки 0.7.2 байт в байт, кроме подписи двух отклонений: 2σ
+        # при пяти прогонах обычно меньше размаха (≈ 2.33σ), «консервативно»
+        # вводило в заблуждение
         expected = {
             ("noise", "0.784", "0.812", "0.795", "0.846", "0.803"): (
                 "прогонов: 5\nсреднее: 80.8%\nразмах: 78.4% – 84.6%\n"
                 "стандартное отклонение: 2.4 п.п.\n\n"
                 "граница шума: 6.2 п.п. (размах)\n"
-                "консервативно: 4.7 п.п. (два отклонения)\n\n"
+                "два отклонения: 4.7 п.п. (для справки)\n\n"
                 "Разница меньше границы шума решением не является.\n"
             ),
             ("compare", "--a", "1,1,0,1,0", "--b", "1,0,0,1,1"): (

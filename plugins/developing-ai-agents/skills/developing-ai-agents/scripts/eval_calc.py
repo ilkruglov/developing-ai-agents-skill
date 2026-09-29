@@ -3,7 +3,8 @@
 
 Числа, от которых зависит вывод оценки, считает этот скрипт, а не модель в
 уме: Pass@k и Pass^k, интервал для доли успеха, объём выборки, парное
-сравнение двух конфигураций и границу шума повторных прогонов.
+сравнение двух конфигураций, границу шума повторных прогонов и обратную
+задачу — какая доля успеха попытки нужна для целевого Pass^k или Pass@k.
 
 Каждый результат печатается с формулой, входными данными, числом и якорем на
 заголовок раздела книги (`references/source-book/chapter7.md:<строка>`).
@@ -14,6 +15,8 @@
 
     python3 scripts/eval_calc.py passk --p 0.6 --k 5
     python3 scripts/eval_calc.py passk --successes 8 --total 10 --k 2
+    python3 scripts/eval_calc.py required-p --pass-hat 0.95 --k 4
+    python3 scripts/eval_calc.py required-p --pass-at 0.99 --k 5
     python3 scripts/eval_calc.py interval --successes 70 --total 100
     python3 scripts/eval_calc.py sample-size --p 0.7 --half-width 0.05
     python3 scripts/eval_calc.py sample-size --p 0.7 --p2 0.73 --half-width 0.03
@@ -44,6 +47,14 @@ ANCHOR_PASS_K = f"{BOOK}:150"
 # «## Статистическая значимость результатов оценки» — SE(p), пример 70 ± 9,
 # парный анализ (Мак-Немар), 3–5 запусков, среднее и диапазон колебаний.
 ANCHOR_SIGNIFICANCE = f"{BOOK}:675"
+
+# Меньшая полуширина даёт n порядка 10⁸ и больше, а δ² при δ около 1e-170
+# обращается в ноль; такой запрос — ошибка ввода, а не план эксперимента.
+MIN_HALF_WIDTH = 1e-4
+# Точный перебор по расхождениям: 200 000 — около 3 s; дальше отказ.
+MAX_DISCORDANT = 200_000
+# Доли ближе к 0 или 1, чем TINY, печатаются без округления до 0 или 1.
+TINY = 1e-4
 
 # Сравнение с запасом на двоичное представление: 3.8416 · 0.25 / 0.098²
 # даёт 100.00000000000001, а объём должен быть ровно 100.
@@ -77,10 +88,10 @@ def _require_successes(successes: int, total: int) -> None:
 
 
 def _require_half_width(half_width: float) -> None:
-    if not 0.0 < half_width < 1.0:
+    if not MIN_HALF_WIDTH <= half_width < 1.0:
         raise InputError(
-            f"--half-width должно быть в (0; 1) как доля, например 0.05 для ±5 п.п.; "
-            f"получено {half_width}"
+            f"--half-width должно быть в [{MIN_HALF_WIDTH}; 1) как доля, например "
+            f"0.05 для ±5 п.п.; получено {half_width}"
         )
 
 
@@ -109,6 +120,20 @@ def pass_hat_k(p: float, k: int) -> float:
     _require_probability(p, "--p")
     _require_count(k, "--k", 1)
     return p**k
+
+
+def required_p_for_pass_hat(target: float, k: int) -> float:
+    """p, при которой Pass^k = T: p = T^(1/k) — обращение p^k."""
+    _require_probability(target, "--pass-hat")
+    _require_count(k, "--k", 1)
+    return target ** (1.0 / k)
+
+
+def required_p_for_pass_at(target: float, k: int) -> float:
+    """p, при которой Pass@k = T: p = 1 − (1 − T)^(1/k) — обращение 1 − (1 − p)^k."""
+    _require_probability(target, "--pass-at")
+    _require_count(k, "--k", 1)
+    return 1.0 - (1.0 - target) ** (1.0 / k)
 
 
 def standard_error(successes: int, total: int) -> float:
@@ -183,10 +208,19 @@ def discordant(a: Sequence[int], b: Sequence[int]) -> tuple[int, int]:
 
 
 def binomial_two_sided(k: int, n: int) -> float:
-    """Точный двусторонний биномиальный тест при вероятности 0.5."""
+    """Точный двусторонний биномиальный тест при вероятности 0.5.
+
+    Хвост C(n, 0) + … + C(n, m) считается рекуррентно в целых числах:
+    C(n, i + 1) = C(n, i) · (n − i) / (i + 1). Вызов math.comb на каждый член
+    давал квадратичное время, и 40 500 расхождений не считались за 120 s.
+    """
     if n == 0:
         return 1.0
-    tail = sum(math.comb(n, i) for i in range(min(k, n - k) + 1))
+    term = 1
+    tail = 1
+    for i in range(min(k, n - k)):
+        term = term * (n - i) // (i + 1)
+        tail += term
     return min(1.0, 2 * tail / 2**n)
 
 
@@ -194,6 +228,12 @@ def mcnemar_exact(only_a: int, only_b: int) -> float:
     """Точный критерий Мак-Немара: биномиальный тест по расхождениям."""
     _require_count(only_a, "--only-a")
     _require_count(only_b, "--only-b")
+    if only_a + only_b > MAX_DISCORDANT:
+        raise InputError(
+            f"расхождений {only_a + only_b}, больше {MAX_DISCORDANT}: точный "
+            "перебор слишком долог для калькулятора; сократите данные или "
+            "используйте приближённый критерий вне калькулятора"
+        )
     return binomial_two_sided(min(only_a, only_b), only_a + only_b)
 
 
@@ -270,8 +310,25 @@ def _pct(value: float) -> str:
     return f"{value * 100:.2f}%"
 
 
+def _frac(value: float) -> str:
+    """Доля: пять знаков, но у краёв без округления до 0 или 1."""
+    if 0.0 < value < TINY:
+        return f"{value:.3g}"
+    if 1.0 - TINY < value < 1.0:
+        return f"1 − {1.0 - value:.3g}"
+    return f"{value:.5f}"
+
+
+def _share(value: float) -> str:
+    if 0.0 < value < TINY:
+        return f"< {TINY * 100:g}%"
+    if 1.0 - TINY < value < 1.0:
+        return f"> {(1.0 - TINY) * 100:g}%"
+    return _pct(value)
+
+
 def _prob(value: float) -> str:
-    return f"{value:.5f} ({_pct(value)})"
+    return f"{_frac(value)} ({_share(value)})"
 
 
 def _pp(value: float) -> str:
@@ -332,6 +389,32 @@ def report_passk(p: float, k: int) -> str:
     )
 
 
+def report_required_p(metric: str, target: float, k: int) -> str:
+    """Какая доля успеха попытки нужна, чтобы Pass^k или Pass@k достиг T."""
+    if metric == "pass-hat":
+        p = required_p_for_pass_hat(target, k)
+        name, formula, inverted = f"Pass^{k}", "p = T^(1/k)", "Pass^k = p^k"
+    else:
+        p = required_p_for_pass_at(target, k)
+        name, formula = f"Pass@{k}", "p = 1 − (1 − T)^(1/k)"
+        inverted = "Pass@k = 1 − (1 − p)^k"
+    return _report(
+        [
+            Result(
+                f"Нужная доля успеха попытки p для {name} ≥ {_num(target)}",
+                _prob(p),
+                formula,
+                f"T = {_num(target)}, k = {k}",
+                ANCHOR_PASS_K,
+                derivation=f"обращение формулы книги {inverted}; метрика монотонно "
+                f"растёт по p, поэтому при p не ниже этой доли {name} ≥ {_num(target)}",
+                notes=(f"доля неудачных попыток 1 − p = {_frac(1.0 - p)}",),
+            )
+        ],
+        PASS_K_CAVEATS,
+    )
+
+
 def report_passk_observed(successes: int, total: int, k: int) -> str:
     _require_successes(successes, total)
     _require_count(k, "--k", 1)
@@ -346,7 +429,7 @@ def report_passk_observed(successes: int, total: int, k: int) -> str:
         [
             Result(
                 "Доля успеха попытки p",
-                f"{_prob(p)}, 95%-границы: {low:.5f} – {high:.5f}",
+                f"{_prob(p)}, 95%-границы: {_frac(low)} – {_frac(high)}",
                 "p = успехов / попыток",
                 f"успехов = {successes}, попыток = {total}",
                 ANCHOR_SIGNIFICANCE,
@@ -360,7 +443,7 @@ def report_passk_observed(successes: int, total: int, k: int) -> str:
             Result(
                 f"Pass@{k}",
                 f"{_prob(pass_at_k(p, k))}, 95%-границы: "
-                f"{pass_at_k(low, k):.5f} – {pass_at_k(high, k):.5f}",
+                f"{_frac(pass_at_k(low, k))} – {_frac(pass_at_k(high, k))}",
                 "Pass@k = 1 − (1 − p)^k",
                 inputs,
                 ANCHOR_PASS_K,
@@ -369,7 +452,7 @@ def report_passk_observed(successes: int, total: int, k: int) -> str:
             Result(
                 f"Pass^{k}",
                 f"{_prob(pass_hat_k(p, k))}, 95%-границы: "
-                f"{pass_hat_k(low, k):.5f} – {pass_hat_k(high, k):.5f}",
+                f"{_frac(pass_hat_k(low, k))} – {_frac(pass_hat_k(high, k))}",
                 "Pass^k = p^k",
                 inputs,
                 ANCHOR_PASS_K,
@@ -429,7 +512,14 @@ def report_interval(successes: int, total: int) -> str:
                 "p ± 1.96 · SE",
                 f"p = {_num(p)}, SE = {_num(se)}, z = {Z_95}",
                 ANCHOR_SIGNIFICANCE,
-                notes=(f"1.96 · SE = {_num(z_se)}",),
+                notes=(
+                    (
+                        "вывод: множитель 1.96 — стандартный квантиль нормального "
+                        "распределения для 95%; книга приводит SE и для 70 из 100 итог "
+                        "примерно ±9 п.п., но множитель не называет"
+                    ),
+                    f"1.96 · SE = {_num(z_se)}",
+                ),
             ),
             Result(
                 "95%-интервал Уилсона",
@@ -585,6 +675,13 @@ def report_noise(values: Sequence[float]) -> str:
                 "max − min по долям успеха прогонов неизменной конфигурации",
                 f"прогонов = {summary.runs}: {shown_values}",
                 ANCHOR_SIGNIFICANCE,
+                notes=(
+                    (
+                        "вывод: размах как граница шума — правило шага 5 playbook "
+                        "build-evals; книга просит указывать среднее и диапазон "
+                        "колебаний"
+                    ),
+                ),
             ),
             Result(
                 "Среднее",
@@ -665,6 +762,14 @@ def build_parser() -> argparse.ArgumentParser:
     compare.add_argument("--only-a", type=int, help="задач, где успешна только A")
     compare.add_argument("--only-b", type=int, help="задач, где успешна только B")
 
+    required = sub.add_parser(
+        "required-p",
+        help="какая доля успеха попытки p нужна для целевого Pass^k или Pass@k",
+    )
+    required.add_argument("--pass-hat", type=float, help="целевой Pass^k, 0..1")
+    required.add_argument("--pass-at", type=float, help="целевой Pass@k, 0..1")
+    required.add_argument("--k", type=int, required=True, help="число попыток k ≥ 1")
+
     noise = sub.add_parser("noise", help="граница шума по повторным прогонам")
     noise.add_argument(
         "values", nargs="+", type=float, help="доли успеха прогонов, 0..1"
@@ -683,6 +788,14 @@ def _run(arguments: argparse.Namespace) -> str:
         if arguments.successes is None or arguments.total is None:
             raise InputError("задайте --p или пару --successes и --total")
         return report_passk_observed(arguments.successes, arguments.total, arguments.k)
+    if command == "required-p":
+        if arguments.pass_hat is not None and arguments.pass_at is not None:
+            raise InputError("задайте либо --pass-hat, либо --pass-at, не оба")
+        if arguments.pass_hat is not None:
+            return report_required_p("pass-hat", arguments.pass_hat, arguments.k)
+        if arguments.pass_at is not None:
+            return report_required_p("pass-at", arguments.pass_at, arguments.k)
+        raise InputError("задайте целевой --pass-hat или --pass-at")
     if command == "interval":
         return report_interval(arguments.successes, arguments.total)
     if command == "sample-size":
