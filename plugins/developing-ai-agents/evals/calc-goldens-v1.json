@@ -1,6 +1,6 @@
 {
   "suite": "benchmark-calc-v1",
-  "note": "Эталоны посчитаны независимо от калькулятора скилла: вручную и stdlib-скриптом по формулам (Pass@k/Pass^k и SE — глава 7; Уилсон, точный Мак-Немар, объём выборки — стандартные формулы с соглашениями, зафиксированными в запросах). У сценария может быть несколько эталонов; первый по порядку — основной. skill_cross_check — последующая сверка с scripts/eval_calc.py скилла.",
+  "note": "Эталоны посчитаны независимо от калькулятора скилла: вручную и stdlib-скриптом по формулам (Pass@k/Pass^k и SE — глава 7; Уилсон, точный Мак-Немар, объём выборки — стандартные формулы с соглашениями, зафиксированными в запросах). У сценария может быть несколько эталонов; основной помечен \"primary\": true и стоит первым — по основным считается итоговая доля чисел в допуске без двойного счёта производных величин (433, 424). Эталон с \"calculator_command_added_after_scenario\": true проверяет число, для которого команда калькулятора появилась после написания сценария: точность отчитывается с ним и без него. skill_cross_check — последующая сверка с scripts/eval_calc.py скилла.",
   "goldens": [
     {
       "id": 401,
@@ -9,7 +9,8 @@
       "unit": "fraction",
       "relative_tolerance": 0.01,
       "derivation": "Вручную: Pass^k = p^k (независимые попытки, формула главы 7). 0,88² = 0,7744; 0,88³ = 0,681472; 0,88^6 = 0,681472² = 0,464404086784 (точно, дробь (88/100)^6). Справочно Pass@6 = 1 − 0,12^6 = 1 − 2,985984·10^-6 = 0,999997014016. Скрипт: stdlib-скрипт по формулам (math.comb, fractions.Fraction, statistics), написан независимо от scripts/eval_calc.py.",
-      "skill_cross_check": "из каталога скилла: python3 scripts/eval_calc.py passk --p 0.88 --k 6 → Pass^6 0.46440, Pass@6 1.00000 (0,999997 при 5 знаках округляется до 1). Совпадает."
+      "skill_cross_check": "из каталога скилла, HEAD 1e17cb3: python3 scripts/eval_calc.py passk --p 0.88 --k 6 → Pass^6 0.46440; Pass@6 печатается как «1 − 2.99e-06 (> 99.99%)». Совпадает.",
+      "primary": true
     },
     {
       "id": 401,
@@ -18,7 +19,8 @@
       "unit": "fraction",
       "relative_tolerance": 0.01,
       "derivation": "Вручную: p^6 ≥ 0,9 ⇒ p ≥ 0,9^(1/6) = exp(ln 0,9 / 6) = exp(−0,1053605 / 6) = exp(−0,01756008) = 0,98259319; проверка 0,98259319^6 = 0,9000000. Доля ошибок попытки 1 − p ≈ 0,017407 против 0,12 (в ≈ 6,9 раза меньше). Скрипт: stdlib-скрипт по формулам (math.comb, fractions.Fraction, statistics), написан независимо от scripts/eval_calc.py.",
-      "skill_cross_check": "Обратной команды у калькулятора нет; прямая проверка из каталога скилла: python3 scripts/eval_calc.py passk --p 0.9825931938526898 --k 6 → Pass^6 0.90000. Совпадает."
+      "skill_cross_check": "из каталога скилла, HEAD 1e17cb3: python3 scripts/eval_calc.py required-p --pass-hat 0.9 --k 6 → 0.98259 (98.26%), 1 − p = 0.01741. Совпадает. Команда required-p добавлена в калькулятор после того, как сценарий был написан (коммит e10a7c9); итоговую точность отчитывать и с этим эталоном, и без него.",
+      "calculator_command_added_after_scenario": true
     },
     {
       "id": 402,
@@ -27,7 +29,8 @@
       "unit": "fraction",
       "relative_tolerance": 0.01,
       "derivation": "Вручную, Уилсон без поправки на непрерывность, z = 1,96: p̂ = 0,975, n = 80, z² = 3,8416, z²/n = 0,04802, знаменатель 1,04802; центр = (0,975 + 0,02401)/1,04802 = 0,953236; полуширина = 1,96·√(0,975·0,025/80 + 3,8416/25 600)/1,04802 = 1,96·√(0,000304688 + 0,000150063)/1,04802 = 1,96·0,0213249/1,04802 = 0,0398816; нижняя = 0,913354. Сверка вторым способом: корни уравнения (p̂ − p)² = z²·p(1 − p)/n бисекцией дают 0,9133540 и 0,9931173. Скрипт: stdlib-скрипт по формулам (math.comb, fractions.Fraction, statistics), написан независимо от scripts/eval_calc.py.",
-      "skill_cross_check": "из каталога скилла: python3 scripts/eval_calc.py interval --successes 78 --total 80 → Уилсон 91.34% – 99.31%. Совпадает."
+      "skill_cross_check": "из каталога скилла, HEAD 1e17cb3: python3 scripts/eval_calc.py interval --successes 78 --total 80 → Уилсон 91.34% – 99.31%. Совпадает.",
+      "primary": true
     },
     {
       "id": 402,
@@ -36,16 +39,16 @@
       "unit": "fraction",
       "relative_tolerance": 0.01,
       "derivation": "Та же формула Уилсона: 0,953236 + 0,0398816 = 0,993117 (совпадает с корнем квадратного уравнения). Скрипт: stdlib-скрипт по формулам (math.comb, fractions.Fraction, statistics), написан независимо от scripts/eval_calc.py.",
-      "skill_cross_check": "из каталога скилла: python3 scripts/eval_calc.py interval --successes 78 --total 80 → Уилсон 91.34% – 99.31%. Совпадает."
+      "skill_cross_check": "из каталога скилла, HEAD 1e17cb3: python3 scripts/eval_calc.py interval --successes 78 --total 80 → Уилсон 91.34% – 99.31%. Совпадает."
     },
     {
       "id": 402,
-      "quantity": "wald_upper_78_of_80",
-      "value": 1.009212388107234,
+      "quantity": "wald_half_width_1_96_se",
+      "value": 0.034212388107233906,
       "unit": "fraction",
       "relative_tolerance": 0.01,
-      "derivation": "Вручную, нормальное приближение (формула SE главы 7): SE = √(0,975·0,025/80) = √0,000304688 = 0,0174553; 1,96·SE = 0,0342124; интервал [0,940788; 1,009212] — верхняя граница выходит за 1, признак неприменимости у края. Скрипт: stdlib-скрипт по формулам (math.comb, fractions.Fraction, statistics), написан независимо от scripts/eval_calc.py.",
-      "skill_cross_check": "из каталога скилла: python3 scripts/eval_calc.py interval --successes 78 --total 80 → нормальное 94.08% – 100.92%, 1.96·SE = 0.0342124, пометка «выходит за [0; 1]». Совпадает."
+      "derivation": "Вручную, нормальное приближение (формула SE главы 7): SE² = 0,975·0,025/80 = 39/128 000 = 0,000304688; SE = 0,0174553; 1,96·SE = 0,0342124; интервал [0,940788; 1,009212] выходит за 1. Полуширина заменила верхнюю границу 1,009212 (раунд 1): верхняя граница, обрезанная до 1, отличалась бы всего на 0,91 % и попадала бы в допуск, а полуширину обрезка не маскирует. Скрипт: stdlib-скрипт по формулам (math.comb, fractions.Fraction, statistics), написан независимо от scripts/eval_calc.py.",
+      "skill_cross_check": "из каталога скилла, HEAD 1e17cb3: python3 scripts/eval_calc.py interval --successes 78 --total 80 → 1.96 · SE = 0.0342124, нормальное 94.08% – 100.92%. Совпадает."
     },
     {
       "id": 403,
@@ -54,7 +57,8 @@
       "unit": "tasks",
       "relative_tolerance": 0,
       "derivation": "Вручную: n = z²·p(1 − p)/δ² = 3,8416·0,16/0,0009 = 0,614656/0,0009 = 682,951 → вверх 683. Проверка: 1,96·√(0,16/683) = 0,029999 ≤ 0,03, при 682 — 0,030021 > 0,03. При z = 1,959964 — 682,926 → тоже 683. Скрипт: stdlib-скрипт по формулам (math.comb, fractions.Fraction, statistics), написан независимо от scripts/eval_calc.py.",
-      "skill_cross_check": "из каталога скилла: python3 scripts/eval_calc.py sample-size --p 0.8 --half-width 0.03 → 683. Совпадает."
+      "skill_cross_check": "из каталога скилла, HEAD 1e17cb3: python3 scripts/eval_calc.py sample-size --p 0.8 --half-width 0.03 → 683. Совпадает.",
+      "primary": true
     },
     {
       "id": 403,
@@ -63,7 +67,7 @@
       "unit": "tasks",
       "relative_tolerance": 0,
       "derivation": "Вручную: 3,8416·0,25/0,0009 = 1067,111 → вверх 1068. Проверка: при 1068 полуширина 0,029988, при 1067 — 0,030002 > 0,03. При z = 1,959964 — 1067,072 → тоже 1068. Скрипт: stdlib-скрипт по формулам (math.comb, fractions.Fraction, statistics), написан независимо от scripts/eval_calc.py.",
-      "skill_cross_check": "из каталога скилла: python3 scripts/eval_calc.py sample-size --p 0.5 --half-width 0.03 → 1068. Совпадает."
+      "skill_cross_check": "из каталога скилла, HEAD 1e17cb3: python3 scripts/eval_calc.py sample-size --p 0.5 --half-width 0.03 → 1068. Совпадает."
     },
     {
       "id": 403,
@@ -72,25 +76,7 @@
       "unit": "tasks",
       "relative_tolerance": 0,
       "derivation": "Вручную: 683 − 250 = 433. Текущая полуширина 1,96·√(0,16/250) = 1,96·0,0252982 = 0,0495845 (≈ ±5,0 п.п.). Скрипт: stdlib-скрипт по формулам (math.comb, fractions.Fraction, statistics), написан независимо от scripts/eval_calc.py.",
-      "skill_cross_check": "Разность вручную (683 − 250); текущая полуширина: из каталога скилла: python3 scripts/eval_calc.py interval --successes 200 --total 250 → 1.96·SE = 0.0495845. Совпадает."
-    },
-    {
-      "id": 404,
-      "quantity": "discordant_a_pass_b_fail",
-      "value": 3,
-      "unit": "tasks",
-      "relative_tolerance": 0,
-      "derivation": "Подсчёт по evals/fixtures/paired-outcomes-v1-v2.csv (40 строк): version_a = 1, version_b = 0 — refund-002, refund-016, refund-039. Всего A 26/40, B 31/40, обе 23, ни одна 6. Фикстура сгенерирована из этих четырёх клеток таблицы и перемешана с seed 404; счёт по файлу повторён скриптом. Скрипт: stdlib-скрипт по формулам (math.comb, fractions.Fraction, statistics), написан независимо от scripts/eval_calc.py.",
-      "skill_cross_check": "из каталога скилла: python3 scripts/eval_calc.py compare --a <столбец version_a> --b <столбец version_b> (40 значений из фикстуры) → только A — 3, только B — 8 из 40. Совпадает."
-    },
-    {
-      "id": 404,
-      "quantity": "discordant_a_fail_b_pass",
-      "value": 8,
-      "unit": "tasks",
-      "relative_tolerance": 0,
-      "derivation": "Подсчёт по фикстуре: version_a = 0, version_b = 1 — refund-001, 011, 014, 015, 020, 023, 031, 037. Скрипт: stdlib-скрипт по формулам (math.comb, fractions.Fraction, statistics), написан независимо от scripts/eval_calc.py.",
-      "skill_cross_check": "из каталога скилла: python3 scripts/eval_calc.py compare --a … --b … (фикстура) → только B — 8. Совпадает."
+      "skill_cross_check": "Разность вручную (683 − 250); текущая полуширина: из каталога скилла, HEAD 1e17cb3: python3 scripts/eval_calc.py interval --successes 200 --total 250 → 1.96 · SE = 0.0495845. Совпадает."
     },
     {
       "id": 404,
@@ -99,7 +85,26 @@
       "unit": "p-value",
       "relative_tolerance": 0.01,
       "derivation": "Вручную: b + c = 11, меньший хвост P(X ≤ 3), X ~ Bin(11; 0,5) = (C(11,0) + C(11,1) + C(11,2) + C(11,3))/2^11 = (1 + 11 + 55 + 165)/2048 = 232/2048 = 0,11328125; двусторонний p = 2·0,11328125 = 0,2265625 = 29/128 (точно). Справочно асимптотический χ² с поправкой (|3 − 8| − 1)²/11 = 1,4545 → p ≈ 0,228, без поправки 25/11 → p ≈ 0,132; запрос фиксирует точный критерий. Скрипт: stdlib-скрипт по формулам (math.comb, fractions.Fraction, statistics), написан независимо от scripts/eval_calc.py.",
-      "skill_cross_check": "из каталога скилла: python3 scripts/eval_calc.py compare --a … --b … (фикстура) → p-value = 0.2266. Совпадает."
+      "skill_cross_check": "из каталога скилла, HEAD 1e17cb3: python3 scripts/eval_calc.py compare --a <столбец version_a> --b <столбец version_b> (40 значений из фикстуры) → p-value = 0.2266. Совпадает.",
+      "primary": true
+    },
+    {
+      "id": 404,
+      "quantity": "discordant_a_pass_b_fail",
+      "value": 3,
+      "unit": "tasks",
+      "relative_tolerance": 0,
+      "derivation": "Подсчёт по evals/fixtures/paired-outcomes-v1-v2.csv (40 строк): version_a = 1, version_b = 0 — refund-002, refund-016, refund-039. Всего A 26/40, B 31/40, обе 23, ни одна 6. Фикстура сгенерирована из этих четырёх клеток таблицы и перемешана с seed 404; счёт по файлу повторён скриптом. Скрипт: stdlib-скрипт по формулам (math.comb, fractions.Fraction, statistics), написан независимо от scripts/eval_calc.py.",
+      "skill_cross_check": "из каталога скилла, HEAD 1e17cb3: python3 scripts/eval_calc.py compare --a … --b … (фикстура) → только A — 3 из 40. Совпадает."
+    },
+    {
+      "id": 404,
+      "quantity": "discordant_a_fail_b_pass",
+      "value": 8,
+      "unit": "tasks",
+      "relative_tolerance": 0,
+      "derivation": "Подсчёт по фикстуре: version_a = 0, version_b = 1 — refund-001, 011, 014, 015, 020, 023, 031, 037. Скрипт: stdlib-скрипт по формулам (math.comb, fractions.Fraction, statistics), написан независимо от scripts/eval_calc.py.",
+      "skill_cross_check": "из каталога скилла, HEAD 1e17cb3: python3 scripts/eval_calc.py compare --a … --b … (фикстура) → только B — 8 из 40. Совпадает."
     },
     {
       "id": 405,
@@ -107,17 +112,18 @@
       "value": 0.03201874451005226,
       "unit": "fraction",
       "relative_tolerance": 0.01,
-      "derivation": "Вручную: среднее (0,713 + 0,740 + 0,727 + 0,753 + 0,720)/5 = 3,653/5 = 0,7306; отклонения −0,0176, 0,0094, −0,0036, 0,0224, −0,0106; квадраты 0,00030976 + 0,00008836 + 0,00001296 + 0,00050176 + 0,00011236 = 0,0010252; s² = 0,0010252/4 = 0,0002563; s = 0,01600937; 2s = 0,03201874. Кандидат 0,758 − 0,7306 = 0,0274 = 1,71·s < 2s. Справочно: размах прогонов 0,040 — по размаху кандидат тоже в пределах шума. Скрипт: stdlib-скрипт по формулам (math.comb, fractions.Fraction, statistics), написан независимо от scripts/eval_calc.py.",
-      "skill_cross_check": "из каталога скилла: python3 scripts/eval_calc.py noise 0.713 0.740 0.727 0.753 0.720 → среднее 0.73060, s = 1.60 п.п., размах 4.00 п.п. 2s калькулятор не выводит: 2 × 0,0160 = 0,0320. Совпадает (в пределах округления вывода до 0,01 п.п.)."
+      "derivation": "Вручную: среднее (0,713 + 0,740 + 0,727 + 0,753 + 0,720)/5 = 3,653/5 = 0,7306; отклонения −0,0176, 0,0094, −0,0036, 0,0224, −0,0106; квадраты 0,00030976 + 0,00008836 + 0,00001296 + 0,00050176 + 0,00011236 = 0,0010252; s² = 0,0010252/4 = 0,0002563; s = 0,01600937; 2s = 0,03201874; полоса [0,69858; 0,76262]. С σ (знаменатель n) вышло бы 2σ = 0,02864 — вне допуска. Справочно: размах прогонов 0,040. Скрипт: stdlib-скрипт по формулам (math.comb, fractions.Fraction, statistics), написан независимо от scripts/eval_calc.py.",
+      "skill_cross_check": "из каталога скилла, HEAD 1e17cb3: python3 scripts/eval_calc.py noise 0.713 0.740 0.727 0.753 0.720 → среднее 0.73060, s = 1.60 п.п., «Граница шума (размах)» 4.00 п.п. (71.30% – 75.30%). 2s калькулятор не выводит: 2 × 0,0160 = 0,0320. Совпадает в пределах округления вывода до 0,01 п.п.",
+      "primary": true
     },
     {
       "id": 405,
-      "quantity": "noise_upper_bound_mean_plus_2s",
-      "value": 0.7626187445100523,
-      "unit": "fraction",
+      "quantity": "candidate_z_in_s",
+      "value": 1.8364242852039323,
+      "unit": "s",
       "relative_tolerance": 0.01,
-      "derivation": "Вручную: 0,7306 + 0,03201874 = 0,76261874; нижняя граница 0,69858126. Допуск 1 % от 0,7626 (± 0,0076) шире зазора до кандидата 0,758, поэтому решение проверяется отдельным ожиданием, а основной эталон шума — 2s. Скрипт: stdlib-скрипт по формулам (math.comb, fractions.Fraction, statistics), написан независимо от scripts/eval_calc.py.",
-      "skill_cross_check": "По выводу noise вручную: 0,73060 + 2 × 0,0160 = 0,7626. Совпадает."
+      "derivation": "Вручную: кандидат 0,760 = 114/150; z = (0,760 − 0,7306)/s = 0,0294/0,01600937 = 1,83642 < 2 — внутри полосы ± 2s. С σ (знаменатель n, σ = 0,0143192) вышло бы 2,0532 — вне допуска и с обратным решением, поэтому эталон различает соглашения. Заменил верхнюю границу полосы 0,7626 (раунд 1): её допуск ± 0,0076 пропускал и σ-вариант. Кандидат изменён с 0,758 на 0,760 (раунд 1), чтобы доля была k/150; прогоны базы — округления 107/150, 111/150, 109/150, 113/150, 108/150 до трёх знаков. Скрипт: stdlib-скрипт по формулам (math.comb, fractions.Fraction, statistics), написан независимо от scripts/eval_calc.py.",
+      "skill_cross_check": "Калькулятор z не выводит; по выводу noise вручную: (0,760 − 0,73060)/0,0160 = 1,8375 — отличие 0,06 % от эталона из-за округления s в выводе. Совпадает."
     },
     {
       "id": 406,
@@ -126,7 +132,8 @@
       "unit": "p-value",
       "relative_tolerance": 0.01,
       "derivation": "Вручную: b = 6 (только v1), c = 15 (только v2), b + c = 21; P(X ≤ 6), X ~ Bin(21; 0,5) = (1 + 21 + 210 + 1330 + 5985 + 20 349 + 54 264)/2^21 = 82 160/2 097 152 = 0,0391769; двусторонний p = 164 320/2 097 152 = 5135/65 536 = 0,0783539 (точно). Скрипт: stdlib-скрипт по формулам (math.comb, fractions.Fraction, statistics), написан независимо от scripts/eval_calc.py.",
-      "skill_cross_check": "из каталога скилла: python3 scripts/eval_calc.py compare --only-a 6 --only-b 15 → p-value = 0.0784. Совпадает."
+      "skill_cross_check": "из каталога скилла, HEAD 1e17cb3: python3 scripts/eval_calc.py compare --only-a 6 --only-b 15 → p-value = 0.0784. Совпадает.",
+      "primary": true
     },
     {
       "id": 406,
@@ -135,7 +142,7 @@
       "unit": "tasks",
       "relative_tolerance": 0,
       "derivation": "Вручную: p₁ = 108/150 = 0,72, p₂ = 117/150 = 0,78; p₁(1 − p₁) + p₂(1 − p₂) = 0,2016 + 0,1716 = 0,3732; n = 3,8416·0,3732/0,0025 = 1,43368512/0,0025 = 573,474 → вверх 574. Проверка: при 574 полуширина 0,049977, при 573 — 0,050021 > 0,05. При z = 1,959964 — 573,453 → тоже 574. Справочно, парная оценка (дисперсия разности по задачам 0,14 − 0,06² = 0,1364) дала бы ≈ 210 — формула запроса консервативна. Скрипт: stdlib-скрипт по формулам (math.comb, fractions.Fraction, statistics), написан независимо от scripts/eval_calc.py.",
-      "skill_cross_check": "из каталога скилла: python3 scripts/eval_calc.py sample-size --p 0.72 --p2 0.78 --half-width 0.05 → 574 на группу. Совпадает."
+      "skill_cross_check": "из каталога скилла, HEAD 1e17cb3: python3 scripts/eval_calc.py sample-size --p 0.72 --p2 0.78 --half-width 0.05 → 574 на группу. Совпадает."
     },
     {
       "id": 406,
