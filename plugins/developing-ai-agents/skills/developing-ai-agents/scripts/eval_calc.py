@@ -379,18 +379,50 @@ def _num(value: float) -> str:
     return shown
 
 
-def _fixed(value: float, decimals: int, edges: tuple[float, ...]) -> str:
-    """Число с decimals знаками; если округление попало на край, которого у
-    значения нет (0, 100), знаков добавляется, пока край не исчезнет."""
-    shown = f"{value:.{decimals}f}"
-    while decimals < 12 and float(shown) in edges and value not in edges:
+MAX_DECIMALS = 12
+
+
+def _decimals(value: float, decimals: int, edges: tuple[float, ...]) -> int | None:
+    """Сколько знаков нужно, чтобы округление не попало на край, которого у
+    значения нет (0, 100); None — больше MAX_DECIMALS, нужен другой вид."""
+    while float(f"{value:.{decimals}f}") in edges and value not in edges:
+        if decimals >= MAX_DECIMALS:
+            return None
         decimals += 1
-        shown = f"{value:.{decimals}f}"
-    return shown
+    return decimals
+
+
+def _fixed(value: float, decimals: int, edges: tuple[float, ...]) -> str:
+    """Число с decimals знаками, а вплотную к краю — отклонение от края:
+    1.11e-14 вместо 0.000000000000, «100 − 1.42e-14» вместо 100.000000000000."""
+    needed = _decimals(value, decimals, edges)
+    if needed is not None:
+        return f"{value:.{needed}f}"
+    return _from_edge(value, edges)
+
+
+def _from_edge(value: float, edges: tuple[float, ...]) -> str:
+    edge = min(edges, key=lambda candidate: abs(value - candidate))
+    if edge == 0.0:
+        return f"{value:.3g}"
+    sign = "−" if value < edge else "+"
+    return f"{edge:g} {sign} {abs(value - edge):.3g}"
 
 
 def _pct(value: float) -> str:
     return f"{_fixed(value * 100, 2, (0.0, 100.0))}%"
+
+
+def _pct_range(low: float, high: float) -> str:
+    """Два конца интервала с одинаковым числом знаков: 99.9943% – 99.9998%."""
+    edges = (0.0, 100.0)
+    needed = [_decimals(value * 100, 2, edges) for value in (low, high)]
+    if None in needed:
+        # один конец вплотную к краю — оба в виде отклонения от края
+        shown = [_from_edge(value * 100, edges) for value in (low, high)]
+        return f"{shown[0]}% – {shown[1]}%"
+    decimals = max(d for d in needed if d is not None)
+    return f"{low * 100:.{decimals}f}% – {high * 100:.{decimals}f}%"
 
 
 def _sci(ln_value: float) -> str:
@@ -620,7 +652,7 @@ def report_interval(successes: int, total: int) -> str:
             ),
             Result(
                 "95%-интервал, нормальное приближение",
-                f"{_pct(normal_low)} – {_pct(normal_high)} (±{_pp(z_se)})",
+                f"{_pct_range(normal_low, normal_high)} (±{_pp(z_se)})",
                 "p ± 1.96 · SE",
                 f"p = {_num(p)}, SE = {_num(se)}, z = {Z_95}",
                 ANCHOR_SIGNIFICANCE,
@@ -635,7 +667,7 @@ def report_interval(successes: int, total: int) -> str:
             ),
             Result(
                 "95%-интервал Уилсона",
-                f"{_pct(wilson_low)} – {_pct(wilson_high)} "
+                f"{_pct_range(wilson_low, wilson_high)} "
                 f"(полуширина {_pp((wilson_high - wilson_low) / 2)})",
                 "(p + z²/2n ± z · √(p(1 − p)/n + z²/4n²)) / (1 + z²/n)",
                 f"успехов = {successes}, n = {total}, z = {Z_95}",
@@ -778,12 +810,14 @@ def report_compare(
 
 def report_noise(values: Sequence[float]) -> str:
     summary = noise_summary(values)
-    shown_values = ", ".join(_num(value) for value in values)
+    # как введено: repr — кратчайшая запись, которая читается обратно в то же
+    # число; 0.5000000000000001 не сливается с 0.5, как при шести знаках
+    shown_values = ", ".join(repr(value) for value in values)
     return _report(
         [
             Result(
                 "Граница шума (размах)",
-                f"{_pp(summary.spread)} ({_pct(summary.low)} – {_pct(summary.high)})",
+                f"{_pp(summary.spread)} ({_pct_range(summary.low, summary.high)})",
                 "max − min по долям успеха прогонов неизменной конфигурации",
                 f"прогонов = {summary.runs}: {shown_values}",
                 ANCHOR_SIGNIFICANCE,

@@ -201,6 +201,34 @@ class HandDerivedGoldenTests(unittest.TestCase):
         self.assertIn("T = 0.99999999, k = 3", required)
         self.assertIn("Pass^3 ≥ 0.99999999", required)
 
+    def test_numbers_beyond_twelve_decimals_are_not_shown_as_zero(self) -> None:
+        # noise 0.5 0.5 0.5000000000000001: размах = 2^−53 = 1.11022e-16,
+        #   в п.п. 1.11022e-14; s = размах · √(1/3) = 6.40988e-17 → 6.41e-15 п.п.
+        #   Двенадцать знаков дали бы «0.000000000000 п.п.»
+        noise = run("noise", "0.5", "0.5", "0.5000000000000001").stdout
+        self.assertIn("**Граница шума (размах)**: 1.11e-14 п.п.", noise)
+        self.assertIn("**Стандартное отклонение** (вывод): 6.41e-15 п.п.", noise)
+        # interval 1 / 1e15: p = 1e-15, SE = √(1e-15 · (1 − 1e-15) / 1e15) ≈ 1e-15,
+        #   1.96 · SE = 1.96e-15 → нормальный интервал 1e-13% ± 1.96e-13%:
+        #   от −9.6e-14% до 2.96e-13%; ни одно число не должно стать нулём
+        interval = run("interval", "--successes", "1", "--total", "1000000000000000")
+        self.assertEqual(0, interval.returncode, interval.stderr)
+        self.assertNotIn("0.000000000000", interval.stdout)
+        self.assertIn("-9.6e-14% – 2.96e-13% (±1.96e-13 п.п.)", interval.stdout)
+        # Уилсон (Decimal, 60 знаков): 1.76520e-14% и 5.66508e-13%; нижнему концу
+        # нужен вид с показателем, верхний печатается так же, а не 0.000000000001%
+        self.assertIn("(вывод): 1.77e-14% – 5.67e-13%", interval.stdout)
+
+    def test_interval_ends_share_the_same_precision(self) -> None:
+        # 99999/100000, Уилсон (Decimal): 0.9999433514… и 0.9999982347…;
+        #   верхней границе нужно 4 знака (99.9998%), нижняя печатается так же:
+        #   99.9943%, а не 99.99%
+        stdout = run("interval", "--successes", "99999", "--total", "100000").stdout
+        self.assertIn("(вывод): 99.9943% – 99.9998% (", stdout)
+        self.assertIn(
+            "**95%-интервал, нормальное приближение**: 99.997% – 100.001%", stdout
+        )
+
     def test_wilson_edges_are_exact(self) -> None:
         # при s = n верхняя граница Уилсона равна 1 точно, при s = 0 нижняя — 0:
         # (p + z²/2n + z·√(z²/4n²)) / (1 + z²/n) = (1 + z²/n) / (1 + z²/n);
