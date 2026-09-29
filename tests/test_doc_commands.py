@@ -41,7 +41,7 @@ sys.path.insert(0, str(ROOT / "scripts"))
 from update_calc_docs import PREFIX, SKILL, CommandBlock, command_blocks, documents
 from update_calc_docs import parse_blocks as parse_fences
 
-COMMANDS = ("passk", "interval", "sample-size", "compare", "noise")
+COMMANDS = ("passk", "required-p", "interval", "sample-size", "compare", "noise")
 TIMEOUT_SECONDS = 30
 
 INLINE = re.compile(r"(?<!`)`(?P<code>[^`\n]+)`(?!`)")

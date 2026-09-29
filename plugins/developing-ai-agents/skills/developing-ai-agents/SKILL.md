@@ -155,7 +155,7 @@ description: Use when designing, implementing, reviewing, debugging, or evaluati
 6. Для стохастической системы измерь границу шума повторными прогонами: разница меньше неё решением не является. При сравнении многих вариантов повышай порог.
 7. Выпускай через shadow/canary, держи проверенный rollback, отслеживай drift после релиза.
 
-Любое число, от которого зависит вывод оценки (Pass@k и Pass^k, интервал доли, объём выборки, парное сравнение, граница шума), считает `scripts/eval_calc.py`, а не модель в уме; в ответе приводи команду и её вывод. Команды запускаются из каталога скилла.
+Любое число, от которого зависит вывод оценки (Pass@k и Pass^k, нужная для них доля успеха попытки, интервал доли, объём выборки, парное сравнение, граница шума), считает `scripts/eval_calc.py`, а не модель в уме; в ответе приводи команду и её вывод. Команды запускаются из каталога скилла.
 
 Если данных ещё нет, дай instrumentation plan и эксперимент; не заявляй улучшение заранее.
 
@@ -201,6 +201,6 @@ Race-тесты обязательны и покрывают: перебиван
 
 **Процедуры:** [design-agent](references/playbooks/design-agent.md) · [diagnose-trace](references/playbooks/diagnose-trace.md) · [harness-review](references/playbooks/harness-review.md) · [build-evals](references/playbooks/build-evals.md) · [memory-design](references/playbooks/memory-design.md) · [realtime-latency](references/playbooks/realtime-latency.md) · [multi-agent-choice](references/playbooks/multi-agent-choice.md)
 
-**Калькулятор:** `scripts/eval_calc.py` — статистика оценки по главе 7: `passk`, `interval`, `sample-size`, `compare`, `noise`; каждый результат с формулой, входами и якорем на книгу; справка — `python3 scripts/eval_calc.py --help`.
+**Калькулятор:** `scripts/eval_calc.py` — статистика оценки по главе 7: `passk`, `required-p`, `interval`, `sample-size`, `compare`, `noise`; каждый результат с формулой, входами и якорем на книгу; справка — `python3 scripts/eval_calc.py --help`.
 
 **Артефакты:** [agent-design](references/templates/agent-design.md) · [harness-spec](references/templates/harness-spec.md) · [tool-contract](references/templates/tool-contract.md) · [eval-plan](references/templates/eval-plan.md) · [memory-policy](references/templates/memory-policy.md) · [trace-diagnosis](references/templates/trace-diagnosis.md)
