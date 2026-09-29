@@ -140,7 +140,7 @@ claude plugin update developing-ai-agents@developing-ai-agents-skill
   `references/source-map.md` и `references/source-map.lock.json` — карта тем и
   фиксация якорей.
 - `plugins/developing-ai-agents/evals/` — быстрый набор, benchmark v2 и v3,
-  триггер-набор из 40 запросов.
+  триггер-набор из 42 запросов.
 - `scripts/validate.py`, `scripts/build_source_lock.py` — проверки и генератор
   lock-файла.
 
@@ -274,7 +274,7 @@ p19 — стоимость задачи растёт из-за накоплен�
 Набор `designing-ai-infra` из 36 запросов при первом описании 0.7.2 дал 17/18
 целевых и 1/18 ложных. Данных о связи отклонений с новым описанием нет:
 infra/p09 — таймаут, а не отказ (4/4 на повторах); infra/n09 нестабилен и при
-0.7.1 (2/6, включая полный прогон), при 0.7.2 — 4/5, разница в пределах шума
+0.7.1 (2/6, включая записанный прогон), при 0.7.2 — 4/5; связь не обнаружена
 (точный тест Фишера, p ≈ 0,24). Исключить эффект можно только большим N.
 Сырые данные повторов —
 [`benchmarks/v1/trigger-reruns.json`](https://github.com/ilkruglov/designing-ai-infra-skill/blob/main/plugins/designing-ai-infra/benchmarks/v1/trigger-reruns.json)
