@@ -1,0 +1,473 @@
+{
+  "suite": "calc-goldens-v1",
+  "goldens_file": "plugins/developing-ai-agents/evals/calc-goldens-v1.json",
+  "arms": {
+    "v080": ".tmp/bench-v5/v080",
+    "v072": ".tmp/bench-v5/v072"
+  },
+  "method": "Для каждой golden-величины взято итоговое значение, которое ответ приводит как результат; значение переведено в единицу golden; rel_err = |x − g|/|g|; in_tolerance = rel_err ≤ relative_tolerance, для целых (tolerance 0) — точное совпадение. Процедурная оговорка: поле skill_cross_check в файле goldens содержит числа эталона, и оно было видно при первом чтении списка величин до извлечения значений из ответов.",
+  "summary": {
+    "v080": {
+      "all": {
+        "in_tolerance": 16,
+        "total": 16
+      },
+      "primary": {
+        "in_tolerance": 6,
+        "total": 6
+      },
+      "excluding_flagged_401_inverse": {
+        "in_tolerance": 15,
+        "total": 15
+      }
+    },
+    "v072": {
+      "all": {
+        "in_tolerance": 16,
+        "total": 16
+      },
+      "primary": {
+        "in_tolerance": 6,
+        "total": 6
+      },
+      "excluding_flagged_401_inverse": {
+        "in_tolerance": 15,
+        "total": 15
+      }
+    }
+  },
+  "results": [
+    {
+      "id": 401,
+      "quantity": "pass_hat_6_at_p_0_88",
+      "unit": "fraction",
+      "golden_value": 0.464404086784,
+      "relative_tolerance": 0.01,
+      "primary": true,
+      "calculator_command_added_after_scenario": false,
+      "arms": {
+        "v080": {
+          "extracted_value": 0.4644,
+          "snippet": "| Pass^6 | 0,88^6 | 0,4644 (46,44 %) | прошли все 6 возвратов |",
+          "location": "v080/401.md:33",
+          "rel_err": 8.8e-06,
+          "in_tolerance": true,
+          "note": "также в вердикте «46,44 %» (401.md:1), вывод калькулятора 0.46440 (401.md:15)"
+        },
+        "v072": {
+          "extracted_value": 0.4644,
+          "snippet": "Pass^6 = p^6 = 0,88^6 = **0,4644 (46,44 %)**",
+          "location": "v072/401.md:13",
+          "rel_err": 8.8e-06,
+          "in_tolerance": true,
+          "note": "в вердикте округлено до «≈46,4 %» (401.md:1); при 0.464 rel_err ≈ 8.7e-4, тоже в допуске"
+        }
+      }
+    },
+    {
+      "id": 401,
+      "quantity": "required_per_attempt_success_for_pass_hat_6_0_9",
+      "unit": "fraction",
+      "golden_value": 0.9825931938526898,
+      "relative_tolerance": 0.01,
+      "primary": false,
+      "calculator_command_added_after_scenario": true,
+      "arms": {
+        "v080": {
+          "extracted_value": 0.98259,
+          "snippet": "успех одной попытки должен быть **p ≥ 0,98259 (98,26 %)**",
+          "location": "v080/401.md:1",
+          "rel_err": 3.25e-06,
+          "in_tolerance": true,
+          "note": ""
+        },
+        "v072": {
+          "extracted_value": 0.98259,
+          "snippet": "p^6 ≥ 0,90 ⇒ p ≥ 0,90^(1/6) = exp(ln 0,9 / 6) ≈ **0,98259**",
+          "location": "v072/401.md:19",
+          "rel_err": 3.25e-06,
+          "in_tolerance": true,
+          "note": "в вердикте «≈ 0,9826 (98,26 %)» (401.md:1)"
+        }
+      }
+    },
+    {
+      "id": 402,
+      "quantity": "wilson_lower_78_of_80",
+      "unit": "fraction",
+      "golden_value": 0.9133539994467789,
+      "relative_tolerance": 0.01,
+      "primary": true,
+      "calculator_command_added_after_scenario": false,
+      "arms": {
+        "v080": {
+          "extracted_value": 0.9134,
+          "snippet": "| Уилсон | **0,9134** | 0,9931 | **нет** |",
+          "location": "v080/402.md:35",
+          "rel_err": 5.036e-05,
+          "in_tolerance": true,
+          "note": ""
+        },
+        "v072": {
+          "extracted_value": 0.9134,
+          "snippet": "Интервал Уилсона даёт нижнюю границу **0,9134 < 0,93**",
+          "location": "v072/402.md:1",
+          "rel_err": 5.036e-05,
+          "in_tolerance": true,
+          "note": ""
+        }
+      }
+    },
+    {
+      "id": 402,
+      "quantity": "wilson_upper_78_of_80",
+      "unit": "fraction",
+      "golden_value": 0.9931172511018748,
+      "relative_tolerance": 0.01,
+      "primary": false,
+      "calculator_command_added_after_scenario": false,
+      "arms": {
+        "v080": {
+          "extracted_value": 0.9931,
+          "snippet": "| Уилсон | **0,9134** | 0,9931 | **нет** |",
+          "location": "v080/402.md:35",
+          "rel_err": 1.737e-05,
+          "in_tolerance": true,
+          "note": ""
+        },
+        "v072": {
+          "extracted_value": 0.9931,
+          "snippet": "**[0,9134; 0,9931]**",
+          "location": "v072/402.md:25",
+          "rel_err": 1.737e-05,
+          "in_tolerance": true,
+          "note": ""
+        }
+      }
+    },
+    {
+      "id": 402,
+      "quantity": "wald_half_width_1_96_se",
+      "unit": "fraction",
+      "golden_value": 0.034212388107233906,
+      "relative_tolerance": 0.01,
+      "primary": false,
+      "calculator_command_added_after_scenario": false,
+      "arms": {
+        "v080": {
+          "extracted_value": 0.034212,
+          "snippet": "z·SE = 1,96·0,017455 = 0,034212",
+          "location": "v080/402.md:23",
+          "rel_err": 1.134e-05,
+          "in_tolerance": true,
+          "note": "интервал записан как 0,975 ± 0,0342"
+        },
+        "v072": {
+          "extracted_value": 0.034212,
+          "snippet": "z·SE = 1,96 · 0,017455 = 0,034212",
+          "location": "v072/402.md:12",
+          "rel_err": 1.134e-05,
+          "in_tolerance": true,
+          "note": ""
+        }
+      }
+    },
+    {
+      "id": 403,
+      "quantity": "n_for_half_width_0_03_at_p_0_8",
+      "unit": "tasks",
+      "golden_value": 683,
+      "relative_tolerance": 0,
+      "primary": true,
+      "calculator_command_added_after_scenario": false,
+      "arms": {
+        "v080": {
+          "extracted_value": 683,
+          "snippet": "при p ≈ 0,8 нужно **683 задачи**",
+          "location": "v080/403.md:1",
+          "rel_err": 0.0,
+          "in_tolerance": true,
+          "note": ""
+        },
+        "v072": {
+          "extracted_value": 683,
+          "snippet": "при p ≈ 0,8 нужно **683 задачи**",
+          "location": "v072/403.md:1",
+          "rel_err": 0.0,
+          "in_tolerance": true,
+          "note": ""
+        }
+      }
+    },
+    {
+      "id": 403,
+      "quantity": "n_for_half_width_0_03_worst_case_p_0_5",
+      "unit": "tasks",
+      "golden_value": 1068,
+      "relative_tolerance": 0,
+      "primary": false,
+      "calculator_command_added_after_scenario": false,
+      "arms": {
+        "v080": {
+          "extracted_value": 1068,
+          "snippet": "В худшем случае (p = 0,5) нужно **1068**",
+          "location": "v080/403.md:1",
+          "rel_err": 0.0,
+          "in_tolerance": true,
+          "note": ""
+        },
+        "v072": {
+          "extracted_value": 1068,
+          "snippet": "в худшем случае (p = 0,5) — **1068**",
+          "location": "v072/403.md:1",
+          "rel_err": 0.0,
+          "in_tolerance": true,
+          "note": ""
+        }
+      }
+    },
+    {
+      "id": 403,
+      "quantity": "tasks_to_add_to_250_at_p_0_8",
+      "unit": "tasks",
+      "golden_value": 433,
+      "relative_tolerance": 0,
+      "primary": false,
+      "calculator_command_added_after_scenario": false,
+      "arms": {
+        "v080": {
+          "extracted_value": 433,
+          "snippet": "до цели не хватает **433 задач**",
+          "location": "v080/403.md:1",
+          "rel_err": 0.0,
+          "in_tolerance": true,
+          "note": ""
+        },
+        "v072": {
+          "extracted_value": 433,
+          "snippet": "нужно добавить **433 задачи** (при p ≈ 0,8)",
+          "location": "v072/403.md:1",
+          "rel_err": 0.0,
+          "in_tolerance": true,
+          "note": ""
+        }
+      }
+    },
+    {
+      "id": 404,
+      "quantity": "mcnemar_exact_two_sided_p",
+      "unit": "p-value",
+      "golden_value": 0.2265625,
+      "relative_tolerance": 0.001,
+      "primary": true,
+      "calculator_command_added_after_scenario": false,
+      "arms": {
+        "v080": {
+          "extracted_value": 0.2266,
+          "snippet": "| p-значение (точный Мак-Немар, двусторонний) | **0,2266** |",
+          "location": "v080/404.md:12",
+          "rel_err": 0.00016552,
+          "in_tolerance": true,
+          "note": ""
+        },
+        "v072": {
+          "extracted_value": 0.2266,
+          "snippet": "**p = min(1; 2 · 0,11328) = 464/2048 = 0,2266**",
+          "location": "v072/404.md:21",
+          "rel_err": 0.00016552,
+          "in_tolerance": true,
+          "note": ""
+        }
+      }
+    },
+    {
+      "id": 404,
+      "quantity": "discordant_a_pass_b_fail",
+      "unit": "tasks",
+      "golden_value": 3,
+      "relative_tolerance": 0,
+      "primary": false,
+      "calculator_command_added_after_scenario": false,
+      "arms": {
+        "v080": {
+          "extracted_value": 3,
+          "snippet": "| Задачи, где успешна только A (b) | **3**: refund-002, refund-016, refund-039 |",
+          "location": "v080/404.md:9",
+          "rel_err": 0.0,
+          "in_tolerance": true,
+          "note": ""
+        },
+        "v072": {
+          "extracted_value": 3,
+          "snippet": "**Расхождения в пользу A** (A = 1, B = 0): **c = 3**",
+          "location": "v072/404.md:14",
+          "rel_err": 0.0,
+          "in_tolerance": true,
+          "note": "ответ обозначает эту клетку буквой c (а не b), но направление A=1,B=0 указано явно"
+        }
+      }
+    },
+    {
+      "id": 404,
+      "quantity": "discordant_a_fail_b_pass",
+      "unit": "tasks",
+      "golden_value": 8,
+      "relative_tolerance": 0,
+      "primary": false,
+      "calculator_command_added_after_scenario": false,
+      "arms": {
+        "v080": {
+          "extracted_value": 8,
+          "snippet": "| Задачи, где успешна только B (c) | **8**: refund-001, 011, 014, 015, 020, 023, 031, 037 |",
+          "location": "v080/404.md:10",
+          "rel_err": 0.0,
+          "in_tolerance": true,
+          "note": ""
+        },
+        "v072": {
+          "extracted_value": 8,
+          "snippet": "**Расхождения в пользу B** (A = 0, B = 1): **b = 8**",
+          "location": "v072/404.md:13",
+          "rel_err": 0.0,
+          "in_tolerance": true,
+          "note": "ответ обозначает эту клетку буквой b, направление A=0,B=1 указано явно"
+        }
+      }
+    },
+    {
+      "id": 405,
+      "quantity": "noise_half_width_2s",
+      "unit": "fraction",
+      "golden_value": 0.03201874451005226,
+      "relative_tolerance": 0.01,
+      "primary": true,
+      "calculator_command_added_after_scenario": false,
+      "arms": {
+        "v080": {
+          "extracted_value": 0.032019,
+          "snippet": "| 2·s | 0,032019 (3,20 п.п.) |",
+          "location": "v080/405.md:30",
+          "rel_err": 7.98e-06,
+          "in_tolerance": true,
+          "note": ""
+        },
+        "v072": {
+          "extracted_value": 0.03202,
+          "snippet": "6. 2·s = **0,03202**.",
+          "location": "v072/405.md:14",
+          "rel_err": 3.921e-05,
+          "in_tolerance": true,
+          "note": ""
+        }
+      }
+    },
+    {
+      "id": 405,
+      "quantity": "candidate_z_in_s",
+      "unit": "s",
+      "golden_value": 1.8364242852039323,
+      "relative_tolerance": 0.01,
+      "primary": false,
+      "calculator_command_added_after_scenario": false,
+      "arms": {
+        "v080": {
+          "extracted_value": 1.84,
+          "snippet": "| Расстояние в единицах s | 0,0294 / 0,0160 ≈ 1,84 s |",
+          "location": "v080/405.md:35",
+          "rel_err": 0.00194711,
+          "in_tolerance": true,
+          "note": ""
+        },
+        "v072": {
+          "extracted_value": 1.84,
+          "snippet": "| Разница с x̄ базы | +0,0294 ≈ 1,84·s |",
+          "location": "v072/405.md:24",
+          "rel_err": 0.00194711,
+          "in_tolerance": true,
+          "note": ""
+        }
+      }
+    },
+    {
+      "id": 406,
+      "quantity": "mcnemar_exact_two_sided_p",
+      "unit": "p-value",
+      "golden_value": 0.0783538818359375,
+      "relative_tolerance": 0.001,
+      "primary": true,
+      "calculator_command_added_after_scenario": false,
+      "arms": {
+        "v080": {
+          "extracted_value": 0.0784,
+          "snippet": "точный критерий Мак-Немара даёт **p = 0,0784**",
+          "location": "v080/406.md:3",
+          "rel_err": 0.00058859,
+          "in_tolerance": true,
+          "note": ""
+        },
+        "v072": {
+          "extracted_value": 0.0784,
+          "snippet": "Двусторонний p = 2 · 0,039177 = **0,0784**",
+          "location": "v072/406.md:16",
+          "rel_err": 0.00058859,
+          "in_tolerance": true,
+          "note": ""
+        }
+      }
+    },
+    {
+      "id": 406,
+      "quantity": "n_per_version_half_width_diff_0_05",
+      "unit": "tasks",
+      "golden_value": 574,
+      "relative_tolerance": 0,
+      "primary": false,
+      "calculator_command_added_after_scenario": false,
+      "arms": {
+        "v080": {
+          "extracted_value": 574,
+          "snippet": "нужно **574 задачи на каждую версию**",
+          "location": "v080/406.md:5",
+          "rel_err": 0.0,
+          "in_tolerance": true,
+          "note": ""
+        },
+        "v072": {
+          "extracted_value": 574,
+          "snippet": "нужно **574 задачи на версию**",
+          "location": "v072/406.md:1",
+          "rel_err": 0.0,
+          "in_tolerance": true,
+          "note": ""
+        }
+      }
+    },
+    {
+      "id": 406,
+      "quantity": "tasks_to_add_to_150",
+      "unit": "tasks",
+      "golden_value": 424,
+      "relative_tolerance": 0,
+      "primary": false,
+      "calculator_command_added_after_scenario": false,
+      "arms": {
+        "v080": {
+          "extracted_value": 424,
+          "snippet": "то есть **добавить 424 задачи** к текущим 150",
+          "location": "v080/406.md:5",
+          "rel_err": 0.0,
+          "in_tolerance": true,
+          "note": ""
+        },
+        "v072": {
+          "extracted_value": 424,
+          "snippet": "то есть **добавить 424** к текущим 150",
+          "location": "v072/406.md:1",
+          "rel_err": 0.0,
+          "in_tolerance": true,
+          "note": ""
+        }
+      }
+    }
+  ]
+}
