@@ -2,7 +2,7 @@
   "schema_version": 1,
   "book": {
     "upstream_commit": "c3352738f4b6fe42fe34e3cf6a79bcb424a133b8",
-    "translation_commit": "dd3bec63e5bbbd613a38b1a2f03f4aeba859ab1e"
+    "translation_commit": "dc8d50b0966f8ffae59d9ea625edb255d83d63a3"
   },
   "anchors": {
     "afterword.md:15": {
@@ -83,6 +83,16 @@
     "chapter1.md:509": {
       "line_sha256": "8cf15653c22f42e7abb01ba1f856215b95dc9988894ba18f725a11dfffcb9b3b",
       "line_text": "### Соответствие пяти функций Harness разделу «Построение»",
+      "kind": "heading"
+    },
+    "chapter1.md:528": {
+      "line_sha256": "4ba60646ae4bf8cc7741af8d18467202a1080554aaea5816870b1cb0dd0bd5fb",
+      "line_text": "## Сквозные паттерны проектирования",
+      "kind": "heading"
+    },
+    "chapter1.md:542": {
+      "line_sha256": "ce8eb7fc4f4558e3e8b9bec6197129ea00583dc4b7c61d484d7efa5548985ea3",
+      "line_text": "## Итоги главы",
       "kind": "heading"
     },
     "chapter10.md:104": {

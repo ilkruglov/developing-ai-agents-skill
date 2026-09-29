@@ -14,7 +14,7 @@
   "russian_translation": {
     "attribution": "Русский перевод: community edition",
     "repository": "https://github.com/ilkruglov/ai-agent-book",
-    "commit": "dd3bec63e5bbbd613a38b1a2f03f4aeba859ab1e"
+    "commit": "dc8d50b0966f8ffae59d9ea625edb255d83d63a3"
   },
   "bundled_sources": {
     "directory": "skills/developing-ai-agents/references/source-book",

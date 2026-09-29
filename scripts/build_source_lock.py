@@ -23,7 +23,7 @@ from source_anchors import (
 )
 
 UPSTREAM_COMMIT = "c3352738f4b6fe42fe34e3cf6a79bcb424a133b8"
-TRANSLATION_COMMIT = "dd3bec63e5bbbd613a38b1a2f03f4aeba859ab1e"
+TRANSLATION_COMMIT = "dc8d50b0966f8ffae59d9ea625edb255d83d63a3"
 LINE_TEXT_LIMIT = 200
 
 
