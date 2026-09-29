@@ -14,7 +14,9 @@ tests/test_doc_commands.py сверяет его побайтно. Когда м
 Строка-маркер `<<CALC аргументы>>` разворачивается в блок команды
 `python3 scripts/eval_calc.py аргументы` и блок её вывода — так новая
 команда добавляется в документ без ручного копирования. Блок команд без
-блока вывода получает его. Команды запускаются из каталога скилла.
+блока вывода получает его. Маркер внутри блока кода — пример синтаксиса,
+он остаётся как есть; маркер с отступом — ошибка: развёрнутый с отступом
+блок перестал бы быть блоком кода. Команды запускаются из каталога скилла.
 """
 
 from __future__ import annotations
@@ -33,7 +35,8 @@ SKILL = ROOT / "plugins" / "developing-ai-agents" / "skills" / "developing-ai-ag
 PREFIX = "python3 scripts/eval_calc.py"
 
 FENCE_OPEN = re.compile(r"^ {0,3}(?P<fence>`{3,}|~{3,})(?P<info>.*)$")
-MARKER = re.compile(r"^<<CALC (?P<args>.+)>>$")
+MARKER = re.compile(r"^(?P<indent>\s*)<<CALC (?P<args>.+)>>\s*$")
+DESCRIPTION = "Переписать показанный вывод калькулятора в документах скилла."
 
 
 @dataclass
@@ -128,17 +131,27 @@ def run_command(command: str) -> str:
         check=False,
     )
     if result.returncode != 0:
-        raise RuntimeError(f"{command}: код {result.returncode}\n{result.stderr}")
+        raise RuntimeError(
+            f"команда завершилась с кодом {result.returncode}: {command}\n"
+            f"{result.stderr.strip()}"
+        )
     return result.stdout
 
 
 def expand_markers(text: str) -> str:
+    """Маркеры `<<CALC …>>` вне блоков кода — в блоки команд."""
+    _, inside = parse_blocks(text)
     lines = []
-    for line in text.splitlines():
+    for number, line in enumerate(text.splitlines(), 1):
         match = MARKER.match(line)
-        if match is None:
+        if match is None or number in inside:
             lines.append(line)
             continue
+        if match.group("indent"):
+            raise ValueError(
+                f"маркер с отступом в строке {number}: ставьте <<CALC …>> с начала "
+                "строки"
+            )
         lines += ["```bash", f"{PREFIX} {match.group('args')}", "```"]
     return "\n".join(lines) + ("\n" if text.endswith("\n") else "")
 
@@ -159,7 +172,7 @@ def update_text(text: str, run: Callable[[str], str]) -> str:
 
 
 def main(argv: Sequence[str] | None = None) -> int:
-    parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
+    parser = argparse.ArgumentParser(description=DESCRIPTION)
     parser.add_argument(
         "--check", action="store_true", help="не писать, код 1 при расхождении"
     )
@@ -175,7 +188,11 @@ def main(argv: Sequence[str] | None = None) -> int:
     stale = []
     for path in paths:
         text = path.read_text(encoding="utf-8")
-        updated = update_text(text, run_command)
+        try:
+            updated = update_text(text, run_command)
+        except (ValueError, RuntimeError) as error:
+            print(f"ошибка: {path}: {error}", file=sys.stderr)
+            return 2
         if updated == text:
             continue
         stale.append(path)
