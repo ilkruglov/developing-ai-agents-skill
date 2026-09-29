@@ -1,0 +1,462 @@
+{
+ "skill_name": "developing-ai-agents",
+ "suite": "benchmark-v3 (критерии переписаны, см. expectations.json)",
+ "comparison": {
+  "treatment": "with_skill (0.7.3, коммит 90dd7b5)",
+  "baseline": "without_skill",
+  "note": "Одна и та же модель (claude-opus-5-5), отдельный контекст на сценарий, одинаковый запрос и приложенные данные; со скиллом ей дополнительно дан путь к копии скилла. Обе конфигурации прогнаны 2026-09-29. Что именно читала модель, не логировалось; в записи — только промпты."
+ },
+ "runs_per_configuration": 1,
+ "grading": {
+  "method": "слепое парное сравнение",
+  "blinded": true,
+  "grader_model": "claude-opus-5-5",
+  "note": "A = со скиллом, если последний байт sha256(id) чётный (11 сценариев). Оценщик видел запрос, критерии и два ответа; приложенные данные не открывал. Критерий засчитывается, только если ответ выполняет его явно и по существу; формулировка и словарь значения не имеют. Пояснения оценщика в note даны в терминах позиций A/B, позиция скилла — в with_skill_position."
+ },
+ "prompts": {
+  "run_with_skill": "Ты инженер-ассистент. Тебе доступен skill по пути /home/ikruglov/developing-ai-agents-skill/.tmp/bench-v6/skill/\n\n1. Прочитай SKILL.md по этому пути.\n2. Следуй его указаниям. Читай только те reference-файлы, которые он рекомендует для этой задачи, а не всё подряд.\n3. Ответь на запрос пользователя по-русски, соблюдая требования и формат из скилла.\n\nЗапрос пользователя находится в файле /home/ikruglov/developing-ai-agents-skill/.tmp/bench-v6/prompts/{id}.txt, прочитай его. Если в запросе указаны приложенные данные, прочитай их по указанным путям. Кроме пути скилла и приложенных данных, другие файлы не открывай. В интернет не ходи.\n\nСохрани финальный ответ пользователю в файл /home/ikruglov/developing-ai-agents-skill/.tmp/bench-v6/with/{id}.md. В файле должен быть только сам ответ, без служебных комментариев о процессе.\n\nВерни одну строку: saved",
+  "run_without_skill": "Ты инженер-ассистент. Ответь на запрос пользователя по-русски.\n\nЗапрос пользователя находится в файле /home/ikruglov/developing-ai-agents-skill/.tmp/bench-v6/prompts/{id}.txt, прочитай его. Если в запросе указаны приложенные данные, прочитай их по указанным путям. Кроме приложенных данных, другие файлы не открывай. В интернет не ходи.\n\nСохрани финальный ответ пользователю в файл /home/ikruglov/developing-ai-agents-skill/.tmp/bench-v6/without/{id}.md. В файле должен быть только сам ответ, без служебных комментариев о процессе.\n\nВерни одну строку: saved",
+  "grader": "Ты строгий оценщик ответов. Оцени пары ответов вслепую: ты не знаешь, какая конфигурация стоит за A и B, и не строй догадок об этом.\n\nФайлы:\n__FILES__\n\nКаждый файл содержит задание, список критериев, ответ A и ответ B. Больше никаких файлов не открывай.\n\nПравила оценки, соблюдай строго:\n1. Критерий засчитан (true), только если ответ выполняет его явно и по существу. Формулировка может быть любой; словарь, названия полей и разделов значения не имеют. Правдоподобное общее рассуждение, из которого критерий лишь «следует», не засчитывается.\n2. Длина ответа не является достоинством. Не поощряй многословие.\n3. Оценивай A и B отдельно по каждому критерию.\n4. Дополнительно укажи, какой ответ лучше по существу (winner: \"A\", \"B\" или \"tie\"), и объясни одной фразой почему.\n\nДля каждого файла NN-input.md запиши результат в тот же каталог в файл NN.json строго в формате:\n{\"id\": \"NN\", \"A\": [true, false, ...], \"B\": [true, false, ...], \"winner\": \"A\", \"why\": \"одна фраза\"}\nДлина массивов A и B равна числу критериев в файле.\n\nВерни одну строку: done",
+  "expectations_review": "Review the fairness of an existing benchmark scenario set before it is used for a NEW comparison. The set is plugins/developing-ai-agents/evals/benchmark-v3.json in /home/ikruglov/developing-ai-agents-skill: 32 scenarios, 26 free-form answers and 6 filled artifacts.\n\nIt was built to compare two versions of the same skill. Now it will compare the answer of the current skill 0.7.3 against the answer of the same model with no skill at all. Both arms get identical prompts and the same attached fixtures, and neither may open other files.\n\nRead the skill for reference: plugins/developing-ai-agents/skills/developing-ai-agents/SKILL.md, plus references/templates/ and references/playbooks/.\n\nYou are read-only. Do not dispatch subagents.\n\nFor every expectation, decide whether a strong engineer who never saw this skill, but knows the field and the book's ideas, could satisfy it from the prompt and fixtures alone. Flag expectations that grade any of these instead of engineering substance:\n- the skill's own vocabulary, template field names or section headings;\n- file or command names;\n- the required order of sections;\n- labels such as «evidence/inference/unknown».\n\nAlso flag:\n- composite expectations that bundle 3 or more claims;\n- expectations that are unanswerable from the prompt;\n- expectations the prompt does not ask for.\n\nFor each flagged expectation, propose a rewrite that keeps the engineering substance, can be graded by meaning in any wording, and is a single checkable claim. Keep 3–5 expectations per scenario. Do not change the prompts.\n\nWrite the result as a JSON file at /home/ikruglov/developing-ai-agents-skill/.tmp/bench-v6/expectations-fair.json. Format:\n{\"<id>\": {\"expectations\": [ ...final list... ], \"changed\": [indices], \"why\": {\"<index>\": \"reason\"}}}\nInclude every scenario, including unchanged ones with \"changed\": []. Write nothing else in the repo.\n\nReply with: how many expectations changed out of the total, the ids of the artifact scenarios, and whether the artifact scenarios needed changes.",
+  "note": "Промпты прогонов в разных сценариях немного отличались формулировкой («находится»/«лежит», «никаких других файлов»), смысл одинаков; записан последний вариант."
+ },
+ "summary": {
+  "criteria_total": 135,
+  "criteria_met": {
+   "with_skill": 130,
+   "without_skill": 114
+  },
+  "criteria_rate": {
+   "with_skill": 96.3,
+   "without_skill": 84.4
+  },
+  "discordant_criteria": {
+   "with_skill_better": 19,
+   "without_skill_better": 3
+  },
+  "mcnemar_p": 0.0009,
+  "discordant_without_artifacts": {
+   "with_skill_better": 12,
+   "without_skill_better": 1,
+   "mcnemar_p": 0.0034
+  },
+  "scenario_sign_test": {
+   "with_skill_more": 13,
+   "without_skill_more": 0,
+   "equal": 19,
+   "p": 0.0002
+  },
+  "blind_wins": {
+   "with_skill": 21,
+   "without_skill": 5,
+   "tie": 6
+  },
+  "wins_binomial_p": 0.0025,
+  "wins_by_position": {
+   "with_skill_as_A": {
+    "scenarios": 11,
+    "with_skill": 6,
+    "without_skill": 4,
+    "tie": 1
+   },
+   "with_skill_as_B": {
+    "scenarios": 21,
+    "with_skill": 15,
+    "without_skill": 1,
+    "tie": 5
+   },
+   "fisher_p": 0.055
+  },
+  "median_words_wc": {
+   "with_skill": 1070.0,
+   "without_skill": 888.5
+  },
+  "verdict": "Со скиллом выполнено больше критериев; разница значима по McNemar и по знаковому тесту по сценариям и сохраняется без сценариев-артефактов. Перевес по победам вслепую может частично объясняться позицией B."
+ },
+ "scenarios": [
+  {
+   "id": "101",
+   "name": "minimal-architecture",
+   "with_skill_position": "A",
+   "met": {
+    "with_skill": 5,
+    "without_skill": 3,
+    "of": 5
+   },
+   "blind_winner": "with_skill",
+   "note": "A сравнивает варианты при равном бюджете и закрывает подтверждение возврата сверкой с провайдером по idempotency key, чего нет в B."
+  },
+  {
+   "id": "102",
+   "name": "trace-diagnosis",
+   "with_skill_position": "B",
+   "met": {
+    "with_skill": 5,
+    "without_skill": 5,
+    "of": 5
+   },
+   "blind_winner": "tie",
+   "note": "Оба ответа одинаково точно отделяют факты trace от гипотез, называют потерю constraints при сжатии узким дефектом и дают равноценные исправления и regression-тесты."
+  },
+  {
+   "id": "103",
+   "name": "tool-interface-security",
+   "with_skill_position": "B",
+   "met": {
+    "with_skill": 5,
+    "without_skill": 5,
+    "of": 5
+   },
+   "blind_winner": "tie",
+   "note": "Оба закрывают все пять пунктов конкретными схемами; A компактнее, B добавляет разделение propose/execute, но существенного превосходства ни у кого нет."
+  },
+  {
+   "id": "104",
+   "name": "event-driven-idempotency",
+   "with_skill_position": "B",
+   "met": {
+    "with_skill": 5,
+    "without_skill": 4,
+    "of": 5
+   },
+   "blind_winner": "with_skill",
+   "note": "B явно запрещает любой повтор до сверки с ledger провайдера, а A допускает retry с тем же ключом без предварительного чтения состояния."
+  },
+  {
+   "id": "105",
+   "name": "memory-rag-isolation",
+   "with_skill_position": "A",
+   "met": {
+    "with_skill": 5,
+    "without_skill": 5,
+    "of": 5
+   },
+   "blind_winner": "without_skill",
+   "note": "При равном покрытии критериев B даёт более конкретные тесты (граничные даты, кэш, второй рубеж фильтра) и замечает разрыв в периодах действия политик."
+  },
+  {
+   "id": "106",
+   "name": "coding-agent-recovery",
+   "with_skill_position": "A",
+   "met": {
+    "with_skill": 4,
+    "without_skill": 4,
+    "of": 5
+   },
+   "blind_winner": "without_skill",
+   "note": "Оба допускают повтор сети по одному лишь backoff без изменения условия, но B даёт более проверяемый протокол restart и fault-injection тест сохранности пользовательских изменений."
+  },
+  {
+   "id": "107",
+   "name": "confounded-evaluation",
+   "with_skill_position": "B",
+   "met": {
+    "with_skill": 5,
+    "without_skill": 5,
+    "of": 5
+   },
+   "blind_winner": "tie",
+   "note": "Оба ответа отвергают вывод по одной задаче t03, выравнивают бюджеты, делают external_success основной метрикой на held-out с повторами и задают гейт по CI; у A чище разбор, у B точнее граница шума и плечо «B при бюджете A», но B ошибочно называет оценку судьи «несмещённой»."
+  },
+  {
+   "id": "108",
+   "name": "training-strategy",
+   "with_skill_position": "B",
+   "met": {
+    "with_skill": 5,
+    "without_skill": 5,
+    "of": 5
+   },
+   "blind_winner": "tie",
+   "note": "Оба ставят Harness-правки первыми, SFT только на остаток формата, RL откладывают до воспроизводимой среды для long-horizon с оракулом и используют однофакторные шаги плюс 2×2; содержательно равноценны."
+  },
+  {
+   "id": "109",
+   "name": "poisoned-self-improvement",
+   "with_skill_position": "B",
+   "met": {
+    "with_skill": 5,
+    "without_skill": 5,
+    "of": 5
+   },
+   "blind_winner": "with_skill",
+   "note": "Оба выполняют все критерии, но B явнее задаёт sandbox без секретов и сети по умолчанию, детерминированные гейты, независимого reviewer и реакцию на инцидент e3 (отзыв секретов, аудит активных правил)."
+  },
+  {
+   "id": "110",
+   "name": "realtime-stale-action",
+   "with_skill_position": "B",
+   "met": {
+    "with_skill": 5,
+    "without_skill": 5,
+    "of": 5
+   },
+   "blind_winner": "with_skill",
+   "note": "Оба верно разбирают trace и разводят семантику отмены, но B добавляет двухфазный заказ, обработку unknown-статуса коммита, калибровку бюджета по реальным traces и race-сьют с release gate."
+  },
+  {
+   "id": "111",
+   "name": "multiagent-cascade",
+   "with_skill_position": "A",
+   "met": {
+    "with_skill": 5,
+    "without_skill": 4,
+    "of": 5
+   },
+   "blind_winner": "with_skill",
+   "note": "Оба верно разбирают каскад, но только A требует равного бюджета для всех вариантов, а B сравнивает руки без выравнивания токенов и инструментов."
+  },
+  {
+   "id": "112",
+   "name": "source-grounded-review",
+   "with_skill_position": "B",
+   "met": {
+    "with_skill": 5,
+    "without_skill": 5,
+    "of": 5
+   },
+   "blind_winner": "with_skill",
+   "note": "Оба выполняют критерии, но B опирается на конкретные ссылки на книгу, как требует задание, а A честно отказывается от ссылок и оставляет выводы неподкреплёнными."
+  },
+  {
+   "id": "13",
+   "name": "design-from-scratch",
+   "with_skill_position": "A",
+   "met": {
+    "with_skill": 4,
+    "without_skill": 4,
+    "of": 4
+   },
+   "blind_winner": "with_skill",
+   "note": "Оба закрывают все критерии, но A жёстче привязывает каждый критерий приёмки к механической проверке и точнее задаёт контракт платёжного вызова (ключ на намерение, таймаут как unknown, state machine)."
+  },
+  {
+   "id": "14",
+   "name": "harness-review-existing",
+   "with_skill_position": "B",
+   "met": {
+    "with_skill": 4,
+    "without_skill": 4,
+    "of": 4
+   },
+   "blind_winner": "tie",
+   "note": "Оба дают однозначное «не готово» с теми же блокерами; B добавляет проверку к каждой находке, A прямее утверждает отсутствие лимитов и логирования и даёт практичные детали (stop_reason, tool_call_id) — по существу равноценно."
+  },
+  {
+   "id": "15",
+   "name": "tool-description-quality",
+   "with_skill_position": "B",
+   "met": {
+    "with_skill": 3,
+    "without_skill": 3,
+    "of": 3
+   },
+   "blind_winner": "with_skill",
+   "note": "B явно формулирует «Use when…» в описании, даёт полную схему с glob-примерами и контрпримером в параметре и план измерения с защитой от обратного перекоса."
+  },
+  {
+   "id": "16",
+   "name": "eval-noise-threshold",
+   "with_skill_position": "B",
+   "met": {
+    "with_skill": 4,
+    "without_skill": 3,
+    "of": 4
+   },
+   "blind_winner": "with_skill",
+   "note": "B явно назначает решающую метрику и различает Pass@k и Pass^k, задаёт release gate и holdout, тогда как A ограничивается порогом «3 из 5» без выбора решающей метрики."
+  },
+  {
+   "id": "17",
+   "name": "memory-deletion-policy",
+   "with_skill_position": "B",
+   "met": {
+    "with_skill": 3,
+    "without_skill": 2,
+    "of": 3
+   },
+   "blind_winner": "with_skill",
+   "note": "B явно требует закладывать provenance при записи, так как иначе связь не восстановить, а A считает её восстановимой косвенно."
+  },
+  {
+   "id": "18",
+   "name": "realtime-cancel-semantics",
+   "with_skill_position": "A",
+   "met": {
+    "with_skill": 3,
+    "without_skill": 3,
+    "of": 3
+   },
+   "blind_winner": "tie",
+   "note": "Оба ответа разделяют отмену речи и отмену инструмента, вводят двухфазную отправку с проверкой актуальности хода; A сильнее по устаревшим результатам и сверке unknown, B сильнее по обрезке истории, так что по существу они равны."
+  },
+  {
+   "id": "19",
+   "name": "multiagent-equal-budget",
+   "with_skill_position": "B",
+   "met": {
+    "with_skill": 3,
+    "without_skill": 2,
+    "of": 3
+   },
+   "blind_winner": "with_skill",
+   "note": "B требует сравнения с одиночным агентом при равном бюджете токенов, вызовов и времени, а A сравнивает с baseline без выравнивания бюджета."
+  },
+  {
+   "id": "20",
+   "name": "injection-through-memory",
+   "with_skill_position": "B",
+   "met": {
+    "with_skill": 3,
+    "without_skill": 3,
+    "of": 3
+   },
+   "blind_winner": "with_skill",
+   "note": "Оба выполняют все критерии, но B точнее разделяет носители по правам записи и добавляет карантин кандидатов и транзитивный откат по provenance."
+  },
+  {
+   "id": "21",
+   "name": "post-training-gate",
+   "with_skill_position": "B",
+   "met": {
+    "with_skill": 3,
+    "without_skill": 3,
+    "of": 3
+   },
+   "blind_winner": "with_skill",
+   "note": "Оба покрывают все критерии, но B даёт решающий диагностический эксперимент с oracle context, который отделяет нехватку знаний от проблем извлечения и задаёт чёткий gate на обучение."
+  },
+  {
+   "id": "22",
+   "name": "context-cache-regression",
+   "with_skill_position": "B",
+   "met": {
+    "with_skill": 3,
+    "without_skill": 3,
+    "of": 3
+   },
+   "blind_winner": "without_skill",
+   "note": "Оба верно диагностируют инвалидацию кэша префикса, но A короче и точнее количественно объясняет оба симптома через цены cache read/write и конкретные поля usage."
+  },
+  {
+   "id": "23",
+   "name": "retrieval-precision",
+   "with_skill_position": "A",
+   "met": {
+    "with_skill": 3,
+    "without_skill": 2,
+    "of": 3
+   },
+   "blind_winner": "with_skill",
+   "note": "A предлагает полный конвейер dense+BM25 с RRF и cross-encoder reranking и измеримый gate по срезам, а B не предлагает переранжирование."
+  },
+  {
+   "id": "24",
+   "name": "silent-hang-detection",
+   "with_skill_position": "B",
+   "met": {
+    "with_skill": 3,
+    "without_skill": 1,
+    "of": 3
+   },
+   "blind_winner": "with_skill",
+   "note": "B явно объясняет, почему зависание не превращается в ошибку, и задаёт полную реакцию (обрыв, ограниченные повторы, эскалация), а A не описывает эскалацию и не говорит явно о непойманном исключении."
+  },
+  {
+   "id": "25",
+   "name": "holdout-contamination",
+   "with_skill_position": "B",
+   "met": {
+    "with_skill": 2,
+    "without_skill": 1,
+    "of": 3
+   },
+   "blind_winner": "with_skill",
+   "note": "B явно фиксирует необратимость засветки holdout и требует технически закрыть доступ к новому набору, а также даёт схему разложения разрыва; A лишь предлагает свежую выборку без запрета доступа."
+  },
+  {
+   "id": "26",
+   "name": "tool-explosion",
+   "with_skill_position": "A",
+   "met": {
+    "with_skill": 2,
+    "without_skill": 2,
+    "of": 3
+   },
+   "blind_winner": "without_skill",
+   "note": "По существу ответы покрывают одно и то же (ядро + поиск, объединение инструментов, диагностика кэша), но B короче и прямее при равном содержании."
+  },
+  {
+   "id": "113",
+   "name": "artifact-tool-contract",
+   "with_skill_position": "B",
+   "met": {
+    "with_skill": 4,
+    "without_skill": 4,
+    "of": 5
+   },
+   "blind_winner": "with_skill",
+   "note": "B явно перечисляет запрещённые сценарии с альтернативами и аккуратнее обрабатывает 504 (повтор только при гарантированной дедупликации), хотя не приводит перечень reason_code."
+  },
+  {
+   "id": "114",
+   "name": "artifact-eval-plan",
+   "with_skill_position": "A",
+   "met": {
+    "with_skill": 4,
+    "without_skill": 3,
+    "of": 5
+   },
+   "blind_winner": "with_skill",
+   "note": "A называет решающую метрику и вето и описывает откат с конкретным сигналом, тогда как у B нет отката, а решение опирается на набор блокирующих условий."
+  },
+  {
+   "id": "115",
+   "name": "artifact-harness-spec",
+   "with_skill_position": "A",
+   "met": {
+    "with_skill": 5,
+    "without_skill": 5,
+    "of": 5
+   },
+   "blind_winner": "without_skill",
+   "note": "Оба закрывают все критерии, но B строго держится фактического состояния с явными статусами есть/нет/не указано, а A наполовину уходит в непрошенное целевое состояние."
+  },
+  {
+   "id": "116",
+   "name": "artifact-memory-policy",
+   "with_skill_position": "B",
+   "met": {
+    "with_skill": 5,
+    "without_skill": 4,
+    "of": 5
+   },
+   "blind_winner": "with_skill",
+   "note": "B задаёт для каждого типа данных отдельный носитель и схему и явные сроки актуальности, тогда как A даёт одну общую схему записи без привязки места хранения к типу."
+  },
+  {
+   "id": "117",
+   "name": "artifact-trace-diagnosis",
+   "with_skill_position": "B",
+   "met": {
+    "with_skill": 5,
+    "without_skill": 4,
+    "of": 5
+   },
+   "blind_winner": "with_skill",
+   "note": "B явно называет шаг 3 точкой расхождения и даёт опровергающее измерение с ожидаемыми исходами до исправления, A этого явно не формулирует."
+  },
+  {
+   "id": "118",
+   "name": "artifact-agent-design",
+   "with_skill_position": "A",
+   "met": {
+    "with_skill": 5,
+    "without_skill": 3,
+    "of": 5
+   },
+   "blind_winner": "with_skill",
+   "note": "A даёт критерии приёмки с механической проверкой и таблицу границ с действием при срабатывании, у B критериев приёмки нет, а лимиты оставлены незаданными (T, SLA согласовать)."
+  }
+ ]
+}

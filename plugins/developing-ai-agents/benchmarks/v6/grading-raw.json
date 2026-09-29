@@ -1,0 +1,624 @@
+[
+ {
+  "id": "101",
+  "name": "minimal-architecture",
+  "with_skill_position": "A",
+  "with": [
+   true,
+   true,
+   true,
+   true,
+   true
+  ],
+  "without": [
+   true,
+   true,
+   true,
+   false,
+   false
+  ],
+  "winner": "with",
+  "why": "A сравнивает варианты при равном бюджете и закрывает подтверждение возврата сверкой с провайдером по idempotency key, чего нет в B."
+ },
+ {
+  "id": "102",
+  "name": "trace-diagnosis",
+  "with_skill_position": "B",
+  "with": [
+   true,
+   true,
+   true,
+   true,
+   true
+  ],
+  "without": [
+   true,
+   true,
+   true,
+   true,
+   true
+  ],
+  "winner": "tie",
+  "why": "Оба ответа одинаково точно отделяют факты trace от гипотез, называют потерю constraints при сжатии узким дефектом и дают равноценные исправления и regression-тесты."
+ },
+ {
+  "id": "103",
+  "name": "tool-interface-security",
+  "with_skill_position": "B",
+  "with": [
+   true,
+   true,
+   true,
+   true,
+   true
+  ],
+  "without": [
+   true,
+   true,
+   true,
+   true,
+   true
+  ],
+  "winner": "tie",
+  "why": "Оба закрывают все пять пунктов конкретными схемами; A компактнее, B добавляет разделение propose/execute, но существенного превосходства ни у кого нет."
+ },
+ {
+  "id": "104",
+  "name": "event-driven-idempotency",
+  "with_skill_position": "B",
+  "with": [
+   true,
+   true,
+   true,
+   true,
+   true
+  ],
+  "without": [
+   true,
+   true,
+   true,
+   false,
+   true
+  ],
+  "winner": "with",
+  "why": "B явно запрещает любой повтор до сверки с ledger провайдера, а A допускает retry с тем же ключом без предварительного чтения состояния."
+ },
+ {
+  "id": "105",
+  "name": "memory-rag-isolation",
+  "with_skill_position": "A",
+  "with": [
+   true,
+   true,
+   true,
+   true,
+   true
+  ],
+  "without": [
+   true,
+   true,
+   true,
+   true,
+   true
+  ],
+  "winner": "without",
+  "why": "При равном покрытии критериев B даёт более конкретные тесты (граничные даты, кэш, второй рубеж фильтра) и замечает разрыв в периодах действия политик."
+ },
+ {
+  "id": "106",
+  "name": "coding-agent-recovery",
+  "with_skill_position": "A",
+  "with": [
+   true,
+   true,
+   false,
+   true,
+   true
+  ],
+  "without": [
+   true,
+   true,
+   false,
+   true,
+   true
+  ],
+  "winner": "without",
+  "why": "Оба допускают повтор сети по одному лишь backoff без изменения условия, но B даёт более проверяемый протокол restart и fault-injection тест сохранности пользовательских изменений."
+ },
+ {
+  "id": "107",
+  "name": "confounded-evaluation",
+  "with_skill_position": "B",
+  "with": [
+   true,
+   true,
+   true,
+   true,
+   true
+  ],
+  "without": [
+   true,
+   true,
+   true,
+   true,
+   true
+  ],
+  "winner": "tie",
+  "why": "Оба ответа отвергают вывод по одной задаче t03, выравнивают бюджеты, делают external_success основной метрикой на held-out с повторами и задают гейт по CI; у A чище разбор, у B точнее граница шума и плечо «B при бюджете A», но B ошибочно называет оценку судьи «несмещённой»."
+ },
+ {
+  "id": "108",
+  "name": "training-strategy",
+  "with_skill_position": "B",
+  "with": [
+   true,
+   true,
+   true,
+   true,
+   true
+  ],
+  "without": [
+   true,
+   true,
+   true,
+   true,
+   true
+  ],
+  "winner": "tie",
+  "why": "Оба ставят Harness-правки первыми, SFT только на остаток формата, RL откладывают до воспроизводимой среды для long-horizon с оракулом и используют однофакторные шаги плюс 2×2; содержательно равноценны."
+ },
+ {
+  "id": "109",
+  "name": "poisoned-self-improvement",
+  "with_skill_position": "B",
+  "with": [
+   true,
+   true,
+   true,
+   true,
+   true
+  ],
+  "without": [
+   true,
+   true,
+   true,
+   true,
+   true
+  ],
+  "winner": "with",
+  "why": "Оба выполняют все критерии, но B явнее задаёт sandbox без секретов и сети по умолчанию, детерминированные гейты, независимого reviewer и реакцию на инцидент e3 (отзыв секретов, аудит активных правил)."
+ },
+ {
+  "id": "110",
+  "name": "realtime-stale-action",
+  "with_skill_position": "B",
+  "with": [
+   true,
+   true,
+   true,
+   true,
+   true
+  ],
+  "without": [
+   true,
+   true,
+   true,
+   true,
+   true
+  ],
+  "winner": "with",
+  "why": "Оба верно разбирают trace и разводят семантику отмены, но B добавляет двухфазный заказ, обработку unknown-статуса коммита, калибровку бюджета по реальным traces и race-сьют с release gate."
+ },
+ {
+  "id": "111",
+  "name": "multiagent-cascade",
+  "with_skill_position": "A",
+  "with": [
+   true,
+   true,
+   true,
+   true,
+   true
+  ],
+  "without": [
+   true,
+   true,
+   true,
+   false,
+   true
+  ],
+  "winner": "with",
+  "why": "Оба верно разбирают каскад, но только A требует равного бюджета для всех вариантов, а B сравнивает руки без выравнивания токенов и инструментов."
+ },
+ {
+  "id": "112",
+  "name": "source-grounded-review",
+  "with_skill_position": "B",
+  "with": [
+   true,
+   true,
+   true,
+   true,
+   true
+  ],
+  "without": [
+   true,
+   true,
+   true,
+   true,
+   true
+  ],
+  "winner": "with",
+  "why": "Оба выполняют критерии, но B опирается на конкретные ссылки на книгу, как требует задание, а A честно отказывается от ссылок и оставляет выводы неподкреплёнными."
+ },
+ {
+  "id": "13",
+  "name": "design-from-scratch",
+  "with_skill_position": "A",
+  "with": [
+   true,
+   true,
+   true,
+   true
+  ],
+  "without": [
+   true,
+   true,
+   true,
+   true
+  ],
+  "winner": "with",
+  "why": "Оба закрывают все критерии, но A жёстче привязывает каждый критерий приёмки к механической проверке и точнее задаёт контракт платёжного вызова (ключ на намерение, таймаут как unknown, state machine)."
+ },
+ {
+  "id": "14",
+  "name": "harness-review-existing",
+  "with_skill_position": "B",
+  "with": [
+   true,
+   true,
+   true,
+   true
+  ],
+  "without": [
+   true,
+   true,
+   true,
+   true
+  ],
+  "winner": "tie",
+  "why": "Оба дают однозначное «не готово» с теми же блокерами; B добавляет проверку к каждой находке, A прямее утверждает отсутствие лимитов и логирования и даёт практичные детали (stop_reason, tool_call_id) — по существу равноценно."
+ },
+ {
+  "id": "15",
+  "name": "tool-description-quality",
+  "with_skill_position": "B",
+  "with": [
+   true,
+   true,
+   true
+  ],
+  "without": [
+   true,
+   true,
+   true
+  ],
+  "winner": "with",
+  "why": "B явно формулирует «Use when…» в описании, даёт полную схему с glob-примерами и контрпримером в параметре и план измерения с защитой от обратного перекоса."
+ },
+ {
+  "id": "16",
+  "name": "eval-noise-threshold",
+  "with_skill_position": "B",
+  "with": [
+   true,
+   true,
+   true,
+   true
+  ],
+  "without": [
+   true,
+   true,
+   false,
+   true
+  ],
+  "winner": "with",
+  "why": "B явно назначает решающую метрику и различает Pass@k и Pass^k, задаёт release gate и holdout, тогда как A ограничивается порогом «3 из 5» без выбора решающей метрики."
+ },
+ {
+  "id": "17",
+  "name": "memory-deletion-policy",
+  "with_skill_position": "B",
+  "with": [
+   true,
+   true,
+   true
+  ],
+  "without": [
+   true,
+   false,
+   true
+  ],
+  "winner": "with",
+  "why": "B явно требует закладывать provenance при записи, так как иначе связь не восстановить, а A считает её восстановимой косвенно."
+ },
+ {
+  "id": "18",
+  "name": "realtime-cancel-semantics",
+  "with_skill_position": "A",
+  "with": [
+   true,
+   true,
+   true
+  ],
+  "without": [
+   true,
+   true,
+   true
+  ],
+  "winner": "tie",
+  "why": "Оба ответа разделяют отмену речи и отмену инструмента, вводят двухфазную отправку с проверкой актуальности хода; A сильнее по устаревшим результатам и сверке unknown, B сильнее по обрезке истории, так что по существу они равны."
+ },
+ {
+  "id": "19",
+  "name": "multiagent-equal-budget",
+  "with_skill_position": "B",
+  "with": [
+   true,
+   true,
+   true
+  ],
+  "without": [
+   true,
+   false,
+   true
+  ],
+  "winner": "with",
+  "why": "B требует сравнения с одиночным агентом при равном бюджете токенов, вызовов и времени, а A сравнивает с baseline без выравнивания бюджета."
+ },
+ {
+  "id": "20",
+  "name": "injection-through-memory",
+  "with_skill_position": "B",
+  "with": [
+   true,
+   true,
+   true
+  ],
+  "without": [
+   true,
+   true,
+   true
+  ],
+  "winner": "with",
+  "why": "Оба выполняют все критерии, но B точнее разделяет носители по правам записи и добавляет карантин кандидатов и транзитивный откат по provenance."
+ },
+ {
+  "id": "21",
+  "name": "post-training-gate",
+  "with_skill_position": "B",
+  "with": [
+   true,
+   true,
+   true
+  ],
+  "without": [
+   true,
+   true,
+   true
+  ],
+  "winner": "with",
+  "why": "Оба покрывают все критерии, но B даёт решающий диагностический эксперимент с oracle context, который отделяет нехватку знаний от проблем извлечения и задаёт чёткий gate на обучение."
+ },
+ {
+  "id": "22",
+  "name": "context-cache-regression",
+  "with_skill_position": "B",
+  "with": [
+   true,
+   true,
+   true
+  ],
+  "without": [
+   true,
+   true,
+   true
+  ],
+  "winner": "without",
+  "why": "Оба верно диагностируют инвалидацию кэша префикса, но A короче и точнее количественно объясняет оба симптома через цены cache read/write и конкретные поля usage."
+ },
+ {
+  "id": "23",
+  "name": "retrieval-precision",
+  "with_skill_position": "A",
+  "with": [
+   true,
+   true,
+   true
+  ],
+  "without": [
+   true,
+   false,
+   true
+  ],
+  "winner": "with",
+  "why": "A предлагает полный конвейер dense+BM25 с RRF и cross-encoder reranking и измеримый gate по срезам, а B не предлагает переранжирование."
+ },
+ {
+  "id": "24",
+  "name": "silent-hang-detection",
+  "with_skill_position": "B",
+  "with": [
+   true,
+   true,
+   true
+  ],
+  "without": [
+   false,
+   true,
+   false
+  ],
+  "winner": "with",
+  "why": "B явно объясняет, почему зависание не превращается в ошибку, и задаёт полную реакцию (обрыв, ограниченные повторы, эскалация), а A не описывает эскалацию и не говорит явно о непойманном исключении."
+ },
+ {
+  "id": "25",
+  "name": "holdout-contamination",
+  "with_skill_position": "B",
+  "with": [
+   true,
+   true,
+   false
+  ],
+  "without": [
+   false,
+   false,
+   true
+  ],
+  "winner": "with",
+  "why": "B явно фиксирует необратимость засветки holdout и требует технически закрыть доступ к новому набору, а также даёт схему разложения разрыва; A лишь предлагает свежую выборку без запрета доступа."
+ },
+ {
+  "id": "26",
+  "name": "tool-explosion",
+  "with_skill_position": "A",
+  "with": [
+   false,
+   true,
+   true
+  ],
+  "without": [
+   false,
+   true,
+   true
+  ],
+  "winner": "without",
+  "why": "По существу ответы покрывают одно и то же (ядро + поиск, объединение инструментов, диагностика кэша), но B короче и прямее при равном содержании."
+ },
+ {
+  "id": "113",
+  "name": "artifact-tool-contract",
+  "with_skill_position": "B",
+  "with": [
+   true,
+   false,
+   true,
+   true,
+   true
+  ],
+  "without": [
+   false,
+   true,
+   true,
+   true,
+   true
+  ],
+  "winner": "with",
+  "why": "B явно перечисляет запрещённые сценарии с альтернативами и аккуратнее обрабатывает 504 (повтор только при гарантированной дедупликации), хотя не приводит перечень reason_code."
+ },
+ {
+  "id": "114",
+  "name": "artifact-eval-plan",
+  "with_skill_position": "A",
+  "with": [
+   true,
+   true,
+   true,
+   false,
+   true
+  ],
+  "without": [
+   true,
+   true,
+   false,
+   true,
+   false
+  ],
+  "winner": "with",
+  "why": "A называет решающую метрику и вето и описывает откат с конкретным сигналом, тогда как у B нет отката, а решение опирается на набор блокирующих условий."
+ },
+ {
+  "id": "115",
+  "name": "artifact-harness-spec",
+  "with_skill_position": "A",
+  "with": [
+   true,
+   true,
+   true,
+   true,
+   true
+  ],
+  "without": [
+   true,
+   true,
+   true,
+   true,
+   true
+  ],
+  "winner": "without",
+  "why": "Оба закрывают все критерии, но B строго держится фактического состояния с явными статусами есть/нет/не указано, а A наполовину уходит в непрошенное целевое состояние."
+ },
+ {
+  "id": "116",
+  "name": "artifact-memory-policy",
+  "with_skill_position": "B",
+  "with": [
+   true,
+   true,
+   true,
+   true,
+   true
+  ],
+  "without": [
+   false,
+   true,
+   true,
+   true,
+   true
+  ],
+  "winner": "with",
+  "why": "B задаёт для каждого типа данных отдельный носитель и схему и явные сроки актуальности, тогда как A даёт одну общую схему записи без привязки места хранения к типу."
+ },
+ {
+  "id": "117",
+  "name": "artifact-trace-diagnosis",
+  "with_skill_position": "B",
+  "with": [
+   true,
+   true,
+   true,
+   true,
+   true
+  ],
+  "without": [
+   false,
+   true,
+   true,
+   true,
+   true
+  ],
+  "winner": "with",
+  "why": "B явно называет шаг 3 точкой расхождения и даёт опровергающее измерение с ожидаемыми исходами до исправления, A этого явно не формулирует."
+ },
+ {
+  "id": "118",
+  "name": "artifact-agent-design",
+  "with_skill_position": "A",
+  "with": [
+   true,
+   true,
+   true,
+   true,
+   true
+  ],
+  "without": [
+   true,
+   false,
+   true,
+   false,
+   true
+  ],
+  "winner": "with",
+  "why": "A даёт критерии приёмки с механической проверкой и таблицу границ с действием при срабатывании, у B критериев приёмки нет, а лимиты оставлены незаданными (T, SLA согласовать)."
+ }
+]
