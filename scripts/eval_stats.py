@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
-"""Статистика для сравнения прогонов агента.
+"""Статистика для сравнения прогонов агента — короткий вывод для репозитория.
 
-Отвечает на три вопроса, которые иначе решаются на глаз: какова граница шума,
-значима ли разница между конфигурациями и какой доверительный интервал у доли
-успеха. Скрипт существует, чтобы этот расчёт не переписывался заново при
-каждом сравнении: воспроизводимость важнее оригинальности реализации.
+Расчёт живёт в скилле: plugins/developing-ai-agents/skills/developing-ai-agents/
+scripts/eval_calc.py. Этот скрипт только сохраняет прежний компактный CLI
+(граница шума, парное сравнение, интервал Уилсона) и печатает те же строки,
+что и до переноса; формулы, входы и якоря на книгу выводит eval_calc.py.
 
 Только стандартная библиотека — скрипт должен работать в CI без установки
 зависимостей.
@@ -24,67 +24,62 @@
 from __future__ import annotations
 
 import argparse
-import math
-import statistics
 import sys
+from pathlib import Path
 
-# 1.96 — квантиль нормального распределения для двустороннего интервала 95%.
-# Уровень зафиксирован: подбор уровня под желаемый результат — это подгонка.
-Z_95 = 1.96
+SKILL_SCRIPTS = (
+    Path(__file__).resolve().parents[1]
+    / "plugins"
+    / "developing-ai-agents"
+    / "skills"
+    / "developing-ai-agents"
+    / "scripts"
+)
+sys.path.insert(0, str(SKILL_SCRIPTS))
 
+# путь к модулю скилла добавлен выше, поэтому импорт стоит после кода
+from eval_calc import (
+    Z_95,
+    binomial_two_sided,
+    discordant,
+    noise_summary,
+    parse_outcomes,
+    wilson_interval,
+)
 
-def parse_outcomes(raw: str) -> list[int]:
-    values = [v.strip() for v in raw.replace(" ", ",").split(",") if v.strip()]
-    outcomes = []
-    for value in values:
-        if value not in {"0", "1"}:
-            raise ValueError(f"исход должен быть 0 или 1, получено: {value}")
-        outcomes.append(int(value))
-    return outcomes
-
-
-def binomial_two_sided(k: int, n: int) -> float:
-    """Точный двусторонний биномиальный тест при p = 0.5."""
-    if n == 0:
-        return 1.0
-    tail = sum(math.comb(n, i) for i in range(min(k, n - k) + 1))
-    return min(1.0, 2 * tail / 2**n)
-
-
-def wilson_interval(successes: int, total: int, z: float = Z_95) -> tuple[float, float]:
-    """Интервал Уилсона: устойчив у краёв шкалы, где нормальное приближение врёт."""
-    if total == 0:
-        return (0.0, 0.0)
-    p = successes / total
-    denominator = 1 + z**2 / total
-    centre = (p + z**2 / (2 * total)) / denominator
-    spread = z * math.sqrt(p * (1 - p) / total + z**2 / (4 * total**2)) / denominator
-    return (max(0.0, centre - spread), min(1.0, centre + spread))
+__all__ = [
+    "Z_95",
+    "binomial_two_sided",
+    "command_compare",
+    "command_interval",
+    "command_noise",
+    "parse_outcomes",
+    "wilson_interval",
+]
 
 
 def command_noise(values: list[float]) -> int:
-    if len(values) < 3:
-        print("нужно минимум три прогона, иначе разброс не оценить", file=sys.stderr)
+    try:
+        summary = noise_summary(values)
+    except ValueError as error:
+        print(error, file=sys.stderr)
         return 2
-    spread = max(values) - min(values)
-    deviation = statistics.stdev(values)
-    print(f"прогонов: {len(values)}")
-    print(f"среднее: {statistics.mean(values) * 100:.1f}%")
-    print(f"размах: {min(values) * 100:.1f}% – {max(values) * 100:.1f}%")
-    print(f"стандартное отклонение: {deviation * 100:.1f} п.п.")
-    print(f"\nграница шума: {spread * 100:.1f} п.п. (размах)")
-    print(f"консервативно: {2 * deviation * 100:.1f} п.п. (два отклонения)")
+    print(f"прогонов: {summary.runs}")
+    print(f"среднее: {summary.mean * 100:.1f}%")
+    print(f"размах: {summary.low * 100:.1f}% – {summary.high * 100:.1f}%")
+    print(f"стандартное отклонение: {summary.stdev * 100:.1f} п.п.")
+    print(f"\nграница шума: {summary.spread * 100:.1f} п.п. (размах)")
+    print(f"консервативно: {2 * summary.stdev * 100:.1f} п.п. (два отклонения)")
     print("\nРазница меньше границы шума решением не является.")
     return 0
 
 
 def command_compare(a: list[int], b: list[int]) -> int:
-    if len(a) != len(b):
-        print("наборы должны быть одинаковой длины: сравнение парное", file=sys.stderr)
+    try:
+        only_a, only_b = discordant(a, b)
+    except ValueError as error:
+        print(error, file=sys.stderr)
         return 2
-
-    only_a = sum(1 for x, y in zip(a, b) if x and not y)
-    only_b = sum(1 for x, y in zip(a, b) if y and not x)
     p_value = binomial_two_sided(min(only_a, only_b), only_a + only_b)
 
     print(f"задач: {len(a)}")
@@ -107,7 +102,11 @@ def command_interval(successes: int, total: int) -> int:
     if successes > total:
         print("успехов не может быть больше числа задач", file=sys.stderr)
         return 2
-    low, high = wilson_interval(successes, total)
+    try:
+        low, high = wilson_interval(successes, total)
+    except ValueError as error:
+        print(error, file=sys.stderr)
+        return 2
     print(f"доля успеха: {successes}/{total} = {successes / total * 100:.1f}%")
     print(f"95% интервал: {low * 100:.1f}% – {high * 100:.1f}%")
     print(f"полуширина: {(high - low) / 2 * 100:.1f} п.п.")
@@ -136,7 +135,12 @@ def main() -> int:
     if arguments.command == "noise":
         return command_noise(arguments.values)
     if arguments.command == "compare":
-        return command_compare(parse_outcomes(arguments.a), parse_outcomes(arguments.b))
+        try:
+            a, b = parse_outcomes(arguments.a), parse_outcomes(arguments.b)
+        except ValueError as error:
+            print(error, file=sys.stderr)
+            return 2
+        return command_compare(a, b)
     return command_interval(arguments.successes, arguments.total)
 
 
