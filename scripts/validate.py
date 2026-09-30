@@ -15,6 +15,7 @@ from source_anchors import (
     LOCAL_SOURCE_ANCHOR,
     LOCK_RELATIVE_PATH,
     anchor_key,
+    anchor_kind,
     iter_skill_documents,
     normalize,
     section_text,
@@ -854,13 +855,6 @@ def validate_source_lock(root: Path, lock: dict, errors: list[str]) -> None:
                     f"anchor missing from lock: {key} (referenced in {relative_path})"
                 )
                 continue
-            if entry.get("kind") not in ANCHOR_KINDS and key not in allowed_keys:
-                errors.append(
-                    f"anchor is not a heading: {key} (referenced in {relative_path}); "
-                    "point at a section heading or an editorial note, or add it "
-                    "to allowed_inline "
-                    "with a reason"
-                )
             if source_path not in line_cache:
                 line_cache[source_path] = source_path.read_text(
                     encoding="utf-8"
@@ -868,6 +862,20 @@ def validate_source_lock(root: Path, lock: dict, errors: list[str]) -> None:
             lines = line_cache[source_path]
             if start > len(lines):
                 continue
+            # Вид якоря вычисляется по самой строке книги: поле kind в lock-файле
+            # можно отредактировать вручную, а текст книги сверяется по хэшу.
+            kind = anchor_kind(lines[start - 1])
+            if entry.get("kind") != kind:
+                errors.append(
+                    f"anchor kind mismatch: {key} is {kind}, lock says "
+                    f"{entry.get('kind')}; re-run scripts/build_source_lock.py"
+                )
+            if kind not in ANCHOR_KINDS and key not in allowed_keys:
+                errors.append(
+                    f"anchor is not a heading: {key} (referenced in {relative_path}); "
+                    "point at a section heading or an editorial note, or add it "
+                    "to allowed_inline with a reason"
+                )
             digest = hashlib.sha256(lines[start - 1].encode("utf-8")).hexdigest()
             if digest != entry.get("line_sha256"):
                 errors.append(

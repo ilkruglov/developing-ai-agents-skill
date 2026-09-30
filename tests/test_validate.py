@@ -541,6 +541,65 @@ class SourceLockTests(unittest.TestCase):
         self.assertEqual("note", lock["anchors"][f"chapter8.md:{note_line}"]["kind"])
         self.assertEqual(0, result.returncode, result.stdout + result.stderr)
 
+    @staticmethod
+    def paragraph_before_note(root: Path) -> int:
+        """Номер обычного абзаца, ближайшего к первой пометке главы 8."""
+        book_lines = (
+            (root / SKILL_DIRECTORY / "references" / "source-book" / "chapter8.md")
+            .read_text(encoding="utf-8")
+            .splitlines()
+        )
+        note_line = next(
+            number
+            for number, line in enumerate(book_lines, start=1)
+            if line.startswith("*Уточнение русского издания:")
+        )
+        return next(
+            number
+            for number in range(note_line - 1, 0, -1)
+            if book_lines[number - 1].strip()
+            and not book_lines[number - 1].startswith("#")
+        )
+
+    def append_anchor_and_build_lock(self, root: Path, line: int) -> None:
+        skill_path = root / SKILL_DIRECTORY / "SKILL.md"
+        skill_path.write_text(
+            skill_path.read_text(encoding="utf-8")
+            + f"\n\nАбзац: `references/source-book/chapter8.md:{line}`.\n",
+            encoding="utf-8",
+        )
+        subprocess.run(
+            [sys.executable, str(root / "scripts" / "build_source_lock.py")],
+            cwd=root,
+            check=True,
+            capture_output=True,
+        )
+
+    def test_rejects_paragraph_next_to_editorial_note(self) -> None:
+        with repository_copy() as copied_root:
+            line = self.paragraph_before_note(copied_root)
+            self.append_anchor_and_build_lock(copied_root, line)
+
+            result = run_validator(copied_root)
+
+        self.assertNotEqual(0, result.returncode)
+        self.assertIn("anchor is not a heading", result.stdout)
+        self.assertIn(f"chapter8.md:{line}", result.stdout)
+
+    def test_rejects_forged_anchor_kind_in_lock(self) -> None:
+        with repository_copy() as copied_root:
+            line = self.paragraph_before_note(copied_root)
+            self.append_anchor_and_build_lock(copied_root, line)
+            lock = json.loads(self.lock_path(copied_root).read_text(encoding="utf-8"))
+            lock["anchors"][f"chapter8.md:{line}"]["kind"] = "note"
+            self.write_lock(copied_root, lock)
+
+            result = run_validator(copied_root)
+
+        self.assertNotEqual(0, result.returncode)
+        self.assertIn("anchor kind mismatch", result.stdout)
+        self.assertIn(f"chapter8.md:{line}", result.stdout)
+
     def test_accepts_inline_anchor_listed_in_allowlist(self) -> None:
         with repository_copy() as copied_root:
             skill_path = copied_root / SKILL_DIRECTORY / "SKILL.md"

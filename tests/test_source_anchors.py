@@ -53,5 +53,21 @@ class SectionTextTests(unittest.TestCase):
         self.assertEqual("chapter2.md:401", key)
 
 
+class AnchorKindTests(unittest.TestCase):
+    def test_heading_and_note_lines(self) -> None:
+        self.assertEqual("heading", source_anchors.anchor_kind("## Раздел"))
+        self.assertEqual(
+            "note",
+            source_anchors.anchor_kind(
+                "> *Уточнение русского издания: у автора — «x».*"
+            ),
+        )
+
+    def test_marker_inside_paragraph_stays_inline(self) -> None:
+        line = "Текст абзаца, *Уточнение русского издания: у автора — «x».*"
+
+        self.assertEqual("inline", source_anchors.anchor_kind(line))
+
+
 if __name__ == "__main__":
     unittest.main()
