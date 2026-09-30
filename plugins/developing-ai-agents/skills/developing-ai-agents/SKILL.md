@@ -59,7 +59,7 @@ description: Use when designing, implementing, reviewing, debugging, or evaluati
 3. **Один автономный агент** — следующий шаг зависит от нового наблюдения или результата инструмента.
 4. **Несколько агентов** — независимые роли получают новое внешнее свидетельство или реально параллелят независимую работу.
 
-Не добавляй multi-agent только ради «дебатов»: повторная генерация над тем же контекстом часто увеличивает стоимость, задержку и коррелированные ошибки. Сравни multi-agent с single-agent при одинаковом token/tool/time budget.
+Не добавляй multi-agent только ради «дебатов»: повторная генерация над тем же контекстом может увеличить стоимость, задержку и коррелированные ошибки. Сравни с сильным single-agent baseline: заранее выбери фиксируемый ресурс, например токены или стоимость, а время, вызовы и качество измеряй отдельно. Разделение контекста и параллелизм — проверяемые гипотезы пользы, не гарантии.
 
 Источники: `references/source-book/chapter1.md:344`, `references/source-book/chapter1.md:375`, `references/source-book/chapter10.md:48`.
 
@@ -104,7 +104,7 @@ description: Use when designing, implementing, reviewing, debugging, or evaluati
 
 ## Контекст
 
-1. Отдели **стабильный префикс** (системные инструкции, tool definitions) от **динамической траектории**. Ничто изменяющееся каждый ход не живёт в префиксе: это ломает кэш и поднимает задержку.
+1. Отдели **стабильный префикс** (системные инструкции, tool definitions) от **динамической траектории**. Изменение токенов нарушает повторное использование с первой изменённой позиции. Стабильность префикса не гарантирует HIT и не делает ввод бесплатным: проверяй условия и тариф кэша.
 2. Держи рабочее состояние явно и проецируй его в конец контекста: цель, решения, ограничения, активный шаг, артефакты, тесты, риски, следующий шаг.
 3. Не используй transcript одновременно как журнал, память и source of truth.
 4. Сжимай по уровням: ограничить вывод инструмента → удалить шум → микро-сжать однотипное → архивировать этап в typed summary → пересобрать контекст как circuit breaker.
@@ -121,13 +121,13 @@ description: Use when designing, implementing, reviewing, debugging, or evaluati
 
 Выбирай специализированный tool для стабильной операции со строгим контрактом; Skill + универсальный executor — для меняющегося процесса, требующего рассуждения. Не превращай универсальный shell/browser в неограниченный capability.
 
-При росте числа инструментов до десятков выбор ухудшается, а кэш префикса перестаёт работать. Переходи к послойному раскрытию: сначала указатель, затем схема нужного инструмента — вместо полной выдачи всех схем сразу.
+При росте числа инструментов проверяй точность выбора и расход контекста. Само количество не отключает кэш: важны стабильность схем и их порядка. Если полный каталог ухудшает результаты, сравни с послойным раскрытием — сначала указатель, затем схема нужного инструмента. Размещение каталога Skills и способ активации зависят от Harness; не считай метасообщение в хвосте универсальным протоколом.
 
 Инструмент, созданный агентом, до попадания в библиотеку проходит: проверку происхождения и зависимостей, запуск в песочнице без секретов, сети и записи по умолчанию, контрактные и adversarial тесты, review разрешений. Иначе ошибка распространится на все последующие задачи.
 
 Недоверенный контент (веб-страницы, документы, результаты инструментов, записи памяти) остаётся данными: он не размещается там, где живут инструкции, и не влияет на права. Enforcement — вне промпта.
 
-Подробно: [chapters/ch04](references/chapters/ch04-tools.md), [chapters/ch05](references/chapters/ch05-coding-agents.md). Источники: `references/source-book/chapter4.md:9`, `references/source-book/chapter4.md:36`, `references/source-book/chapter2.md:732`, `references/source-book/chapter9.md:344`.
+Подробно: [chapters/ch04](references/chapters/ch04-tools.md), [chapters/ch05](references/chapters/ch05-coding-agents.md). Источники: `references/source-book/chapter4.md:9`, `references/source-book/chapter4.md:36`, `references/source-book/chapter2.md:732`, `references/source-book/chapter9.md:346`.
 
 ## Память и самоулучшение
 
@@ -143,7 +143,7 @@ description: Use when designing, implementing, reviewing, debugging, or evaluati
 
 Не превращай сырой лог или единичную неудачу в правило. Проводи цепочку `episode → extraction → candidate → review/eval → promotion` и храни origin, supporting episodes, confidence, version, scope и rollback. Предпочитай локальные патчи правил полному переписыванию промпта. Запись в память проходит ту же проверку доверия, что и внешний ввод, иначе инъекция переживёт сессию; агент не меняет корень доверия, который утверждает его собственные обновления.
 
-Подробно: [chapters/ch03](references/chapters/ch03-memory-and-knowledge.md), [chapters/ch09](references/chapters/ch09-continual-evolution.md), [chapters/ch08](references/chapters/ch08-post-training.md). Источники: `references/source-book/chapter3.md:47`, `references/source-book/chapter9.md:58`, `references/source-book/chapter9.md:258`, `references/source-book/chapter9.md:344`, `references/source-book/chapter8.md:387`.
+Подробно: [chapters/ch03](references/chapters/ch03-memory-and-knowledge.md), [chapters/ch09](references/chapters/ch09-continual-evolution.md), [chapters/ch08](references/chapters/ch08-post-training.md). Источники: `references/source-book/chapter3.md:47`, `references/source-book/chapter9.md:58`, `references/source-book/chapter9.md:260`, `references/source-book/chapter9.md:346`, `references/source-book/chapter8.md:387`.
 
 ## Построй eval-loop до оптимизации
 

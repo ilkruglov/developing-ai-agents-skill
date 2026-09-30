@@ -771,16 +771,16 @@
       "kind": "heading"
     },
     "chapter8.md:41": {
-      "line_sha256": "9c4f1f765356294cde6be7e459d6debeaa576d6afb0676801a0931bbef03bdc8",
-      "line_text": "### Что происходит при предобучении: предсказание следующего слова",
+      "line_sha256": "2378f7c1a39c265fa6a25fda282130a50eab905f1bf5617fec072b89715b02eb",
+      "line_text": "### Что происходит при предобучении: предсказание следующего токена",
       "kind": "heading"
     },
-    "chapter8.md:483": {
+    "chapter8.md:485": {
       "line_sha256": "252652391d94ed76c81281ef121dcb5abc65bc321972aaa62f9cf15805b728cb",
       "line_text": "## Алгоритм RL: от 16 rollout до одного обновления параметров",
       "kind": "heading"
     },
-    "chapter8.md:505": {
+    "chapter8.md:507": {
       "line_sha256": "7a9d549989e73cfac383c951864fef0312e67bfd81f9e08272576cef96ae59ba",
       "line_text": "### Почему в RL для LLM обычно предпочитают On-Policy",
       "kind": "heading"
@@ -790,72 +790,72 @@
       "line_text": "### Суть Mid-training: продолжение обучения на целевом распределении",
       "kind": "heading"
     },
-    "chapter8.md:518": {
+    "chapter8.md:520": {
       "line_sha256": "0282bf51ab05de0d8448acdef383829430dfcd9b224a429186f8c20904edd2cf",
       "line_text": "#### Почему численные ошибки могут разрушить даже кажущееся On-Policy-обучение",
       "kind": "heading"
     },
-    "chapter8.md:531": {
+    "chapter8.md:533": {
       "line_sha256": "3d2d94b8ed61caa1e3bba563b9c8a0511cf484db3c492e176f590454e7e14f34",
       "line_text": "## Среда RL: от оценивания к симуляции",
       "kind": "heading"
     },
-    "chapter8.md:535": {
+    "chapter8.md:537": {
       "line_sha256": "c2a98d3b408402beac3b17fb61be030c4041a260259e84e2f56e2fdaff3583b1",
       "line_text": "### Среда: тренировочная площадка модели",
       "kind": "heading"
     },
-    "chapter8.md:545": {
+    "chapter8.md:547": {
       "line_sha256": "30056c944f083e2c6881ffdbc1015e2a232466efbd593a59067cac7822ae65aa",
       "line_text": "### Что делать, если среду невозможно создать: поручить модели её роль",
       "kind": "heading"
     },
-    "chapter8.md:555": {
+    "chapter8.md:557": {
       "line_sha256": "0e1532c55b13a752ec1573a3f3ee0e22345734d79099c3c7b61ba921d868ef75",
       "line_text": "### Изоляция среды, распределения задач и оценивания",
       "kind": "heading"
     },
-    "chapter8.md:565": {
+    "chapter8.md:567": {
       "line_sha256": "0fa0fac4fba1ebdc85510d41233f871297917373c98bfc6dc714786423a0b995",
       "line_text": "## От однократного к многоэтапному взаимодействию: сценарии задач и распределение заслуг",
       "kind": "heading"
     },
     "chapter8.md:57": {
-      "line_sha256": "43a9c6d16e3ec7861aa2295298f2826aa9e5bfd8fb013df5e53fd309588c0a1b",
-      "line_text": "### Суть SFT: то же «предсказание следующего слова», но с другими данными",
+      "line_sha256": "5c980cfd4b2b7e17f6275e2492cc996e6c87ea9a33ecde342ef05ff58abe49a5",
+      "line_text": "### Суть SFT: то же «предсказание следующего токена», но с другими данными",
       "kind": "heading"
     },
-    "chapter8.md:611": {
+    "chapter8.md:613": {
       "line_sha256": "0dadecebce21ad9ed7f051391e3165376a39ff04111a05fa76725e4fef378208",
       "line_text": "## Проектирование вознаграждения: как превратить цель задачи в обучающий сигнал",
       "kind": "heading"
     },
-    "chapter8.md:615": {
+    "chapter8.md:617": {
       "line_sha256": "d5bbebfab01aca48d80d47c43141c8fa16b00c47c81dffd7ad524632f90d241f",
       "line_text": "### Откуда поступает вознаграждение: правила, человеческие предпочтения и оценка моделью",
       "kind": "heading"
     },
-    "chapter8.md:625": {
+    "chapter8.md:627": {
       "line_sha256": "405e8be34746ff20f35030943c6e9f6a7a1c3833fa919b4ec153ed04b09cd119",
       "line_text": "### Когда выдаётся вознаграждение: за результат или за процесс",
       "kind": "heading"
     },
-    "chapter8.md:635": {
+    "chapter8.md:637": {
       "line_sha256": "29b1cbbbd073590927e7a863ef26c68e7928d5d70190fd955a069365f9bcd978",
       "line_text": "### Сколько информации должно выражать вознаграждение: скаляр, вектор и генеративная диагностика",
       "kind": "heading"
     },
-    "chapter8.md:645": {
+    "chapter8.md:647": {
       "line_sha256": "e644c53ededda4713be13887f705b6a8408b0743f255cdd10af72cb6005c13e5",
       "line_text": "### Правильного результата недостаточно: ограничения пути и RLVP",
       "kind": "heading"
     },
-    "chapter8.md:671": {
+    "chapter8.md:673": {
       "line_sha256": "0cb6f5c8196c550655f1a9293304b0e893f20078ac5ec3cab669225fca4afa1d",
       "line_text": "## Дистилляция: повышение эффективности выборки",
       "kind": "heading"
     },
-    "chapter8.md:679": {
+    "chapter8.md:681": {
       "line_sha256": "5eabe7c8439378bb0de5fe03d69b3ebc1f1dc888bcf0901d7855a4059bc26953",
       "line_text": "### Дистилляция на данных текущей политики: плотный надзор из одной траектории rollout",
       "kind": "heading"
@@ -865,17 +865,17 @@
       "line_text": "### Когда сначала требуется укрепить основу, а затем применять SFT/RL",
       "kind": "heading"
     },
-    "chapter8.md:712": {
+    "chapter8.md:714": {
       "line_sha256": "7d98c62f3061fdb1201e69ecc0de4f104a8b7ef36a6f22d39caf08033a88217b",
       "line_text": "### Что делать без более сильного учителя: самодистилляция на данных текущей политики",
       "kind": "heading"
     },
-    "chapter8.md:734": {
+    "chapter8.md:736": {
       "line_sha256": "f2ad3913b621b11f00c3a354e839524e8ec5607a8b48714c1d68f95085b2f250",
       "line_text": "## От проблемных случаев к постобучению",
       "kind": "heading"
     },
-    "chapter8.md:779": {
+    "chapter8.md:781": {
       "line_sha256": "eae28204f5ce30f8ee00b026c002fc9cb43db6babe35a5082ebd924cbbd1cc10",
       "line_text": "### Случай 3: частые сбои при редактировании файлов",
       "kind": "heading"
@@ -910,17 +910,17 @@
       "line_text": "#### Пример: самоэволюция DeepSeek Harness посредством принципа «всё является плагином»",
       "kind": "heading"
     },
-    "chapter9.md:250": {
+    "chapter9.md:252": {
       "line_sha256": "ca91d1bf1e936f48341f357185b72cdcf9b361767ea17b6f53381af690b720b3",
       "line_text": "### Преобразование опыта в параметры",
       "kind": "heading"
     },
-    "chapter9.md:258": {
+    "chapter9.md:260": {
       "line_sha256": "63c2e56babec3ea9df446115a8721d989fc69b883d4aabdb80c56bb262a096be",
       "line_text": "### От обновления артефактов к обновлению «метода обновления»",
       "kind": "heading"
     },
-    "chapter9.md:288": {
+    "chapter9.md:290": {
       "line_sha256": "420c174772f1b01d383232cee5052fa20f347b4fb81f1219bde7806674545fb3",
       "line_text": "## Построение замкнутого цикла непрерывной эволюции для длительной работы",
       "kind": "heading"
@@ -930,17 +930,17 @@
       "line_text": "# Непрерывная эволюция AI-агента",
       "kind": "heading"
     },
-    "chapter9.md:331": {
+    "chapter9.md:333": {
       "line_sha256": "8a9d56727600b2ff7828ec2ee67453b6399df311c47d39ac556e7069b935dd18",
       "line_text": "### Границы проверяемого замкнутого цикла: когда «завершение» не означает «прогресс»",
       "kind": "heading"
     },
-    "chapter9.md:344": {
+    "chapter9.md:346": {
       "line_sha256": "2bcbc9d54076ab138a1cd54a034092c8e0effb4b856d64cba4f53d3da1be55fd",
       "line_text": "### Границы безопасности непрерывной эволюции",
       "kind": "heading"
     },
-    "chapter9.md:354": {
+    "chapter9.md:356": {
       "line_sha256": "fdf93176da5b65680632b7f2bc969f20b0c8dd453992d3361b72adbc7e4916ff",
       "line_text": "### Обучение во сне: консолидация, забывание и поддержание актуальности возможностей",
       "kind": "heading"

@@ -146,7 +146,7 @@ raw episode
   -> promote or rollback
 ```
 
-Источник: `references/source-book/chapter3.md:17`, `references/source-book/chapter9.md:58`, `references/source-book/chapter9.md:258`.
+Источник: `references/source-book/chapter3.md:17`, `references/source-book/chapter9.md:58`, `references/source-book/chapter9.md:260`.
 
 ## 7. Eval card
 
