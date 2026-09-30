@@ -504,6 +504,43 @@ class SourceLockTests(unittest.TestCase):
         self.assertIn("anchor is not a heading", result.stdout)
         self.assertIn("chapter1.md:15", result.stdout)
 
+    def test_accepts_anchor_on_editorial_note_line(self) -> None:
+        with repository_copy() as copied_root:
+            book_lines = (
+                (
+                    copied_root
+                    / SKILL_DIRECTORY
+                    / "references"
+                    / "source-book"
+                    / "chapter8.md"
+                )
+                .read_text(encoding="utf-8")
+                .splitlines()
+            )
+            note_line = next(
+                number
+                for number, line in enumerate(book_lines, start=1)
+                if line.startswith("*Уточнение русского издания:")
+            )
+            skill_path = copied_root / SKILL_DIRECTORY / "SKILL.md"
+            skill_path.write_text(
+                skill_path.read_text(encoding="utf-8")
+                + f"\n\nПометка: `references/source-book/chapter8.md:{note_line}`.\n",
+                encoding="utf-8",
+            )
+            subprocess.run(
+                [sys.executable, str(copied_root / "scripts" / "build_source_lock.py")],
+                cwd=copied_root,
+                check=True,
+                capture_output=True,
+            )
+            lock = json.loads(self.lock_path(copied_root).read_text(encoding="utf-8"))
+
+            result = run_validator(copied_root)
+
+        self.assertEqual("note", lock["anchors"][f"chapter8.md:{note_line}"]["kind"])
+        self.assertEqual(0, result.returncode, result.stdout + result.stderr)
+
     def test_accepts_inline_anchor_listed_in_allowlist(self) -> None:
         with repository_copy() as copied_root:
             skill_path = copied_root / SKILL_DIRECTORY / "SKILL.md"

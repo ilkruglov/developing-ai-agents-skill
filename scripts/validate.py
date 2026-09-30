@@ -98,6 +98,9 @@ CHAPTER_QUOTE = re.compile(
     re.MULTILINE,
 )
 CHAPTER_QUOTE_MARKER = re.compile(r"^>\s*«", re.MULTILINE)
+# Адресные якоря без allowlist: заголовок раздела и строка редакционной пометки
+# русского издания. Обычный абзац требует явного обоснования в allowed_inline.
+ANCHOR_KINDS = frozenset({"heading", "note"})
 CHAPTERS_DIRECTORY = SKILL_DIRECTORY / "references" / "chapters"
 SKILL_LINE_LIMIT = 300
 REFERENCE_PATH = re.compile(r"references/[A-Za-z0-9._/-]+\.md")
@@ -851,10 +854,11 @@ def validate_source_lock(root: Path, lock: dict, errors: list[str]) -> None:
                     f"anchor missing from lock: {key} (referenced in {relative_path})"
                 )
                 continue
-            if entry.get("kind") != "heading" and key not in allowed_keys:
+            if entry.get("kind") not in ANCHOR_KINDS and key not in allowed_keys:
                 errors.append(
                     f"anchor is not a heading: {key} (referenced in {relative_path}); "
-                    "point at a section heading or add it to allowed_inline "
+                    "point at a section heading or an editorial note, or add it "
+                    "to allowed_inline "
                     "with a reason"
                 )
             if source_path not in line_cache:

@@ -17,11 +17,24 @@ LOCAL_SOURCE_ANCHOR = re.compile(
     r"(?P<start>\d+)(?:-(?P<end>\d+))?"
 )
 HEADING = re.compile(r"^(?P<hashes>#{1,6})\s")
+# Строка редакционной пометки русского издания: у автора — «…», уточнение,
+# источник. Пометка — самостоятельная строка с устойчивым маркером, поэтому на
+# неё можно ссылаться так же адресно, как на заголовок.
+EDITORIAL_NOTE = re.compile(r"^[\s>]*\*Уточнение русского издания:")
 
 _DASHES = str.maketrans({"–": "-", "—": "-", "―": "-", "−": "-"})
 _QUOTES = str.maketrans(
     {"«": '"', "»": '"', "“": '"', "”": '"', "„": '"', "‘": "'", "’": "'"}
 )
+
+
+def anchor_kind(line: str) -> str:
+    """Вид строки якоря: заголовок, редакционная пометка или обычный абзац."""
+    if HEADING.match(line):
+        return "heading"
+    if EDITORIAL_NOTE.match(line):
+        return "note"
+    return "inline"
 
 
 def anchor_key(path: str, start: int) -> str:

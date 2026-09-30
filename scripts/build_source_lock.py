@@ -14,11 +14,11 @@ import json
 from pathlib import Path
 
 from source_anchors import (
-    HEADING,
     LOCAL_SOURCE_ANCHOR,
     LOCK_RELATIVE_PATH,
     SKILL_DIRECTORY,
     anchor_key,
+    anchor_kind,
     iter_skill_documents,
 )
 
@@ -48,7 +48,7 @@ def build_lock(root: Path) -> dict:
             anchors[anchor_key(match.group("path"), start)] = {
                 "line_sha256": hashlib.sha256(line.encode("utf-8")).hexdigest(),
                 "line_text": line[:LINE_TEXT_LIMIT],
-                "kind": "heading" if HEADING.match(line) else "inline",
+                "kind": anchor_kind(line),
             }
     return {
         "schema_version": 1,
