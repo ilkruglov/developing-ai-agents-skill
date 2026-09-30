@@ -14,209 +14,22 @@
   "russian_translation": {
     "attribution": "Русский перевод: community edition",
     "repository": "https://github.com/ilkruglov/ai-agent-book",
-    "commit": "dc8d50b0966f8ffae59d9ea625edb255d83d63a3",
-    "local_editorial_corrections": [
-      {
-        "file": "chapter3.md",
-        "changes": [
-          "SSE4.2 string-comparison instruction attribution",
-          "Contextual Retrieval experimental costs and relative failure-rate reductions"
-        ],
-        "sources": [
-          "https://www.intel.com/content/dam/develop/external/us/en/documents/d9156103-705230.pdf",
-          "https://www.anthropic.com/engineering/contextual-retrieval"
-        ]
-      },
-      {
-        "file": "chapter4.md",
-        "changes": [
-          "Conditional prefix cache reuse; provider constraints and invalidation boundary",
-          "High-dimensional embedding terminology and tool invocation direction",
-          "Idempotency is not check-then-act or model approval; preserve keys and reconcile uncertain outcomes"
-        ],
-        "sources": [
-          "https://platform.claude.com/docs/en/build-with-claude/prompt-caching",
-          "https://aws.amazon.com/builders-library/making-retries-safe-with-idempotent-APIs/",
-          "https://docs.stripe.com/api/idempotent_requests"
-        ]
-      },
-      {
-        "file": "chapter5.md",
-        "changes": [
-          "Execution and sandbox/rollback guarantees scoped",
-          "Retry identity and neutral trajectory preserve effect state; transparent parameter validation",
-          "Search/LSP and structured patch capabilities corrected",
-          "Airline insurance condition and post-booking restriction corrected; example scope disclosed",
-          "STEP geometry separated from parametric history and CAM"
-        ],
-        "sources": [
-          "https://cursor.com/blog/secure-codebase-indexing",
-          "https://code.claude.com/docs/en/plugins-reference#lspservers",
-          "https://developers.openai.com/api/docs/guides/tools-apply-patch",
-          "https://github.com/sierra-research/tau-bench/blob/main/tau_bench/envs/airline/wiki.md",
-          "https://help.autodesk.com/view/fusion360/ENU/?caas=caas%2Fsfdcarticles%2Fsfdcarticles%2FImported-files-do-not-contain-timeline-features-in-Fusion-360.html",
-          "https://cadquery.readthedocs.io/en/latest/importexport.html"
-        ]
-      },
-      {
-        "file": "chapter6.md",
-        "changes": [
-          "External webhooks distinguished from internal lifecycle hooks",
-          "Isolation scoped to configuration and external effects",
-          "Cancellation request distinguished from confirmed termination and rollback",
-          "Provisional ASR permits safe precomputation, not irreversible effects",
-          "Demo image scaling targets are not model training provenance; DOM targets require revalidation",
-          "Teleoperation success is diagnostic evidence, not proof that hardware is irrelevant",
-          "MPS attributed to Step-Audio R1.1 Realtime rather than text-output R1",
-          "Pine result attributed to the vendor and the cited tau-squared voice benchmark"
-        ],
-        "sources": [
-          "https://docs.openclaw.ai/automation/cron-jobs/webhooks",
-          "https://docs.docker.com/engine/security/",
-          "https://docs.python.org/3/library/asyncio-task.html#task-cancellation",
-          "https://github.com/anthropics/claude-quickstarts/blob/main/computer-use-demo/computer_use_demo/tools/computer.py",
-          "https://github.com/stepfun-ai/Step-Audio-R1",
-          "https://www.19pine.ai/blog/pine-ai-the-most-natural-human-computer-interface-is-your-voice"
-        ]
-      },
-      {
-        "file": "chapter7.md",
-        "changes": [
-          "Model swap and small-sample prompt experiments are diagnostic evidence, not unique-cause proofs",
-          "Binary reward can include process checks; tau2 NL assertions use an LLM",
-          "Five-component environment taxonomy and SWE-bench coverage/selection limits",
-          "Judge length correlation, identity grounding, canary and trusted-verifier boundaries",
-          "Recoverability is not absence of earlier error; repeated seeds require task-clustered analysis",
-          "OpenVLA adaptation and visual backbone; GRPO uses group-relative rewards",
-          "Engineering patterns separated from unverified product attribution; typed analytics and cached safety-flag limits",
-          "Evaluation reset and training/holdout boundaries",
-          "Detailed deterministic diagnostics do not require an LLM judge; simulation and regression coverage are not guarantees",
-          "TTFT includes queue/network contributions; first reasoning token and first visible answer token are distinct measurement boundaries",
-          "Token counts 1113, 3668, 9544 and 5248 use spaces for thousands, not decimal commas"
-        ],
-        "sources": [
-          "https://github.com/sierra-research/tau2-bench/blob/main/src/tau2/evaluator/evaluator.py",
-          "https://github.com/sierra-research/tau2-bench/blob/main/src/tau2/evaluator/evaluator_nl_assertions.py",
-          "https://openai.com/index/introducing-swe-bench-verified/",
-          "https://github.com/openvla/openvla",
-          "https://arxiv.org/abs/2402.03300",
-          "https://docs.nvidia.com/nim/benchmarking/llm/1.0.0/metrics.html"
-        ]
-      },
-      {
-        "file": "chapter8.md",
-        "changes": [
-          "Autoregressive token terminology; SFT loss masking is configurable and does not stop all context gradients",
-          "SFT can acquire knowledge; pretraining does not impose a mathematically fixed representation ceiling",
-          "LoRA parameter share, target layers and learning rate are configuration- and experiment-dependent",
-          "Malformed output can receive a format penalty; DeepSeek-R1 cold-start distinct from R1-Zero",
-          "Orpheus emotional tags distinguished from Sesame CSM text/audio context",
-          "Multilingual SFT attribution requires ablation; distillation gains and rights are not universal guarantees",
-          "Independent eval instances versus OOD task types; training feedback versus hidden final evaluation",
-          "PPO example averages losses across all rollouts rather than updating from only the final trajectory; executable two-rollout regression",
-          "AdaptThink sampling and empirical constraint limits; GeneralPoints sequential revision, percentage points and visual attribution limits; PPO clipping is not a hard policy-distance bound",
-          "SimpleVLA pushcut is pushing rather than cutting; LIBERO-Long result scope; V-IRL separate distribution shifts",
-          "Simulator bias is a risk, not a strict capability ceiling; hidden evaluation boundaries; environment tokens excluded from policy loss, not from context gradients",
-          "Equal group rewards remove GRPO advantages but not every loss gradient; penalty needs varying violations; ORM and PRM name reward models",
-          "Distillation teacher usefulness and compute scope; context feedback can guide behavior; matching aggregate tokenizer/model percentages do not establish a quality ceiling",
-          "Q-learning TD backup direction and current-greedy versus truly optimal actions; one LLM trajectory is not an estimated success rate",
-          "Figures8-1,2,3,5: room versus full Markov state; illustrative grid separated from game measurements; tabular limitations not universal RL limits",
-          "Figures8-6,8,10,11,12 redesigned for readable text and consistency with corrected prose; figure11 caption no longer implies mandatory Mid-training/SFT/RL sequence",
-          "MiniMind historical eight-GPU timings and loss-threshold steps scoped; retained VLM blind assessment does not substantiate QK-Norm+Muon superiority; fixed source versus future reproduction distinguished",
-          "Figures9,14,15,16: hidden dimension768; GeneralPoints revision; reward does not establish causal credit; tool observations separate from reward and weight updates",
-          "ReTool AIME2024 paper results separated from AIME2025 repository experiment; reported wall time does not measure sample efficiency",
-          "AWorld teaching4B versus paper32B and VeRL versus SWIFT distinguished; rollout14.6x versus full-cycle11.7x timing",
-          "API training safety and feasibility scoped; Mid-training/SFT not mandatory; gamma and distillation support assumptions qualified",
-          "Early-section/table cost generalizations removed; loss magnitude distinguished from parameter update; repeated mandatory Mid-training and single-turn GeneralPoints claims corrected",
-          "Orpheus/Sesame intro aligned with documented interfaces; single-trajectory causality and provider-refusal anecdotes scoped"
-        ],
-        "sources": [
-          "https://arxiv.org/html/2509.09674v1",
-          "https://thinkingmachines.ai/blog/on-policy-distillation/",
-          "https://arxiv.org/html/2505.13417v1",
-          "https://arxiv.org/html/2501.17161v1",
-          "https://huggingface.co/docs/trl/main/en/sft_trainer",
-          "https://thinkingmachines.ai/blog/lora/",
-          "https://github.com/deepseek-ai/DeepSeek-R1",
-          "https://aclanthology.org/2024.acl-long.296/",
-          "https://github.com/canopyai/Orpheus-TTS",
-          "https://github.com/SesameAILabs/csm",
-          "https://github.com/bojieli/ai-agent-book/tree/c3352738f4b6fe42fe34e3cf6a79bcb424a133b8/chapter8/MiniMind-pretrain/validation/runs",
-          "https://arxiv.org/html/2504.11536v1",
-          "https://arxiv.org/html/2508.20404v1"
-        ],
-        "review_status": "Manuscript and diagram review complete; PDF locally promoted. Chapter8 audio assembled,decoded,ASR-reviewed; provider history audited. Historical experiments not independently rerun."
-      },
-      {
-        "file": "chapter9.md",
-        "changes": [
-          "Transfer to human is not universally a failure: retained telecom reward explicitly requires transfer in a successful task",
-          "14/114 to22/114 with zero observed paired regressions is a single-run result, not a general guarantee",
-          "Behavioral count reductions are evidence consistent with a mechanism, not unique causal proof",
-          "Airline escalation conditions scoped to the experiment's custom policy",
-          "DeepSeek process-local definitions distinguished from persistent installed plugins; composition is not a security boundary or external rollback; worktree/PR is release guidance"
-        ],
-        "sources": [
-          "https://github.com/bojieli/ai-agent-book/tree/c3352738f4b6fe42fe34e3cf6a79bcb424a133b8/chapter9/tau2-escalation-experience/validation",
-          "https://github.com/bojieli/ai-agent-book/blob/c3352738f4b6fe42fe34e3cf6a79bcb424a133b8/chapter9/prompt-auto-optimization/prompts/system_prompt_manual.txt",
-          "https://github.com/deepseek-ai/deepseek-harness/blob/master/packages/extensions/cordis-host-runner/README.md"
-        ],
-        "review_status": "Manuscript and five diagrams reviewed; narration adapted. Targeted primary-source verification complete; historical experiments not rerun. Chapter9 audio assembled,decoded,ASR-reviewed; provider history audited.557-page PDF locally promoted."
-      },
-      {
-        "file": "chapter10.md",
-        "changes": [
-          "Independent contexts do not imply process/resource/fault isolation",
-          "New evidence is one benefit hypothesis, not the sole criterion; self-correction and fair-budget comparisons scoped",
-          "Cancellation versus confirmed stop; stale progress versus live state; atomic optimistic writes and isolated working directories",
-          "Tree-wide enforced cost limits; API key alone not a spending cap",
-          "VFS consistency and path visibility are backend-dependent; Swarm preserves messages on handoff",
-          "First verified success applies to alternatives; incomplete search not absence; voting not formal BFT",
-          "MAST expert subset versus full dataset and agreement versus accuracy; ChatDev gain15.6percentage points on32ProgramDev-v0tasks",
-          "Moltbook registrations do not prove autonomous participants; reflection is not evidence of self-awareness; no universal emergence threshold",
-          "Messaging topology/durability, schema visibility/authorization and SOP/centralization distinguished",
-          "LoopX validated-slot quota not actual compute spending; pseudocode labelled explicitly"
-        ],
-        "sources": [
-          "https://arxiv.org/abs/2406.01297",
-          "https://arxiv.org/abs/2604.02460",
-          "https://pkg.go.dev/context#CancelFunc",
-          "https://git-scm.com/docs/git-worktree",
-          "https://docs.aws.amazon.com/AmazonS3/latest/userguide/Welcome.html#ConsistencyModel",
-          "https://github.com/openai/swarm#instructions",
-          "https://arxiv.org/html/2503.13657v3",
-          "https://www.wiz.io/blog/exposed-moltbook-database-reveals-millions-of-api-keys"
-        ],
-        "review_status": "44source lines and8figures corrected. Audio51chunks,9379.186939seconds,16709credits; assembled and fully decoded, all423ASR differences reviewed, provider confirms eleven_v4. No human listening claim. Eight changed figures visually checked in564page staging PDF. Local only; final PDF promotion awaits appendix edits."
-      },
-      {
-        "file": "afterword.md",
-        "changes": [
-          "Decode speed is not end-to-end latency or simultaneous perception/action",
-          "Fixed model weights distinguished from contextual and external-memory adaptation; private information may be absent or stale",
-          "Improved models do not replace executable authorization, consent, isolation and budget enforcement",
-          "52.8 to66.5 attributed to LangChain on Terminal-Bench2.0 with GPT-5.2-Codex, including changed reasoning configuration",
-          "Taalas fixed base model supports LoRA; vendor-reported speed and quantization-quality caveat"
-        ],
-        "sources": [
-          "https://www.langchain.com/blog/improving-deep-agents-with-harness-engineering",
-          "https://taalas.com/the-path-to-ubiquitous-ai/",
-          "https://mimo.xiaomi.com/blog/mimo-tilert-1000tps"
-        ],
-        "review_status": "Full45line source read; seven lines corrected and bundled copy synchronized.14750character oral text adapted with two substantive notes. Audio6chunks,1002.44898seconds,1783credits; assembled, decoded and provider-audited; all46ASR differences reviewed. No human listening claim.564page staging PDF includes source corrections. Vendor benchmarks not rerun."
-      },
-      {
-        "file": "reference-answers.md",
-        "changes": [
-          "Chapter10 answers synchronized: manager selection measured rather than strongest-model mandate",
-          "Verified winner before cooperative cancellation of alternative attempts; acknowledgments and late effects accounted",
-          "Atomic critical section for filesystem invariants; version control distinguished from backups",
-          "Multi-agent benefits scoped to evidence; external tools not exclusive to multiple agents",
-          "Budget enforced by runtime; short plan and mandatory checks preserved at low step budgets"
-        ],
-        "review_status": "Full416line source and414line oral draft read;57source lines corrected and bundled copy synchronized. Corrections additionally cover evaluation independence, retry assumptions, LoRA limits, teacher access, weak-to-strong evidence, process rewards, pushcut meaning and simulation consent. Companion chapter12 index synchronized;204anchors rebuilt. Book240tests and skill64tests passed. Audio40chunks,7361.462857seconds,13074credits: assembled, decoded and provider-audited; all421ASR differences reviewed. No human listening claim. Corrected565page PDF locally promoted after provenance/smoke checks and sampled appendix-page visual review; SHA256 e3092c64b4fbf48954462af857ce752f06624611e74a1757257df54957ca9344. No GitHub publication."
-      }
-    ]
+    "commit": "994acb6e275d546674f109b2a5f50c2bc5f63773",
+    "editorial_corrections": {
+      "from_commit": "dc8d50b0966f8ffae59d9ea625edb255d83d63a3",
+      "summary": [
+        "chapter3.md: SSE4.2 string-comparison attribution; Contextual Retrieval costs and failure-rate reductions scoped to the published experiment",
+        "chapter4.md: tool trigger types; KV-cache invalidation starts at the changed position; high-dimensional embedding space; idempotency needs a stable key for one logical operation and server-side guarantees, not check-then-act or model approval; uncertain outcomes are reconciled or escalated",
+        "chapter5.md: execution success is not proof of correctness; sandbox, snapshot and rollback guarantees scoped; a timeout may be an uncertain outcome, retries need idempotency or reconciliation; a repeated call fingerprint is a loop signal, not proof; malformed parameters are rejected or transparently normalized; provider switch keeps internal call identity and effect state; search, LSP and apply_patch capabilities; airline insurance example scoped; STEP geometry versus parametric history and CAM",
+        "chapter6.md: external webhooks versus internal hooks; VM and container isolation scoped; cancellation request versus confirmed stop and rollback; provisional ASR allows only safe precomputation; element-ID grounding limits; screenshot scaling targets are demo settings, not training resolutions; teleoperation success is diagnostic evidence; MPS belongs to Step-Audio R1.1 Realtime; Pine result attributed to the vendor on the τ²-bench voice track",
+        "chapter7.md: model swaps and ablations give diagnostic evidence, not unique causes; binary reward can include process checks; tau2 NL assertions use an LLM; five environment components; SWE-bench Verified selection and FAIL_TO_PASS/PASS_TO_PASS coverage; trusted provenance of log lines; canary GUID limits; judge length correlation and identity grounding; recoverability versus absence of earlier errors; Elo limits; TTFT measurement boundaries; thousands separators in token counts; task-clustered paired analysis over seeds; typed analytics and cached safety-flag limits; evaluation reset and training/holdout boundaries; OpenVLA adaptation scope; simulation fidelity",
+        "chapter8.md: next-token terminology; stage costs and roles depend on model and data, Mid-training and SFT are not mandatory; loss value versus parameter update; SFT loss masking is configurable and does not stop context gradients; SFT can teach facts; LoRA parameter share and target layers are configuration-dependent; malformed output can get a format penalty; DeepSeek-R1 cold start versus R1-Zero; pretraining is not a fixed representation ceiling; MiniMind timings, loss-threshold steps and blind-judge evidence scoped, hidden size 768; Orpheus tags versus Sesame CSM context; multilingual SFT attribution needs ablation; distillation gains, teacher choice and data rights are not universal; independent evaluation instances versus OOD task types, training feedback versus hidden final evaluation; single-trajectory causality; PPO example averages losses over all rollouts, clipping is not a hard bound; AdaptThink sampling and constraint limits; GeneralPoints sequential revision, percentage points and visual attribution limits; SimpleVLA pushcut and LIBERO-Long scope; simulator mismatch is a risk, real environments need permissions; environment tokens are excluded from policy loss but stay in context; ReTool AIME 2024 paper results versus AIME 2025 repository run; AWorld teaching 4B model and VeRL versus paper 32B model, rollout 14.6x versus full cycle 11.7x; ORM/PRM, gamma and GRPO zero-advantage limits; sample efficiency versus wall time; on-policy distillation efficiency scope; matching tokenizer percentages do not set a quality ceiling",
+        "chapter9.md: distilled rules are behavioral, not executable; 14/114 to 22/114 with no observed regressions is a single-run result; transfer to a human is not always a failure; reductions from 1049 to 163 and from 904 to 174 are consistent with the mechanism but not proof; airline escalation conditions belong to the experiment's policy; DeepSeek Harness process-local definitions versus persistent plugins, composition is not a security boundary, worktree and pull request are the recommended release process",
+        "chapter10.md: new evidence is an important criterion but not the only one, context separation, specialization and parallelism are measured too, comparisons fix a chosen resource; self-correction findings scoped; independent contexts do not imply process, resource or fault isolation; schema visibility versus Harness-enforced authorization; VFS consistency and path visibility are backend-dependent; messaging topology and delivery; notifications versus authoritative status; progress-file staleness is not proof of a hang; cancellation signal versus confirmed stop; LoopX slot quota versus actual spend; first verified success applies to alternative attempts, winner committed atomically; incomplete search is not absence; SOP versus centralized control; Swarm handoff keeps message history; A2A does not require untrusted parties; MAST expert subset and agreement versus accuracy; ChatDev gain of 15.6 percentage points on 32 ProgramDev-v0 tasks; crash versus Byzantine failures; atomic optimistic writes and isolated worktrees; tree-wide enforced cost limits; emergence, Moltbook registrations and reflection claims scoped",
+        "afterword.md: decode speed is not end-to-end latency or simultaneous perception and action; fixed weights versus context and external-memory adaptation; private information may be absent or stale; better models do not replace authorization, consent, isolation and budget checks; 52.8% to 66.5% attributed to LangChain on Terminal-Bench 2.0 with GPT-5.2-Codex and a changed reasoning mode; Taalas fixed base model supports LoRA, vendor-reported speed and quantization quality caveat",
+        "reference-answers.md: answers synchronized with the corrected chapters: cost model of growing context, cache rebuild after compression and Skill placement; executable workflow checks, untrusted structured arguments and allowed-action limits; source snapshots, memory conflicts and retention consent; verification of irreversible actions without retrying uncertain outcomes; frontend sandbox, code guards, classifier authority, event deduplication and cancellation; voice, GUI grounding and realtime safety boundaries; judge calibration, hidden environments, Pass@k versus Pass^k and simulator transfer; general-data share, LoRA rank, KL, distillation signals, process rewards, weak-to-strong evidence, pushcut meaning and OOD checks; real-user consent; manager model choice, verified winner before cancellation, atomic critical sections, scoped multi-agent benefits and runtime-enforced budgets"
+      ]
+    }
   },
   "bundled_sources": {
     "directory": "plugins/developing-ai-agents/skills/developing-ai-agents/references/source-book",

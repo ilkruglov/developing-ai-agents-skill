@@ -2,7 +2,7 @@
   "schema_version": 1,
   "book": {
     "upstream_commit": "c3352738f4b6fe42fe34e3cf6a79bcb424a133b8",
-    "translation_commit": "dc8d50b0966f8ffae59d9ea625edb255d83d63a3"
+    "translation_commit": "994acb6e275d546674f109b2a5f50c2bc5f63773"
   },
   "anchors": {
     "afterword.md:15": {
