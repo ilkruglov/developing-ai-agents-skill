@@ -105,7 +105,7 @@
 | amount | decimal | да | 1250.00 | > 0, не больше суммы заказа |
 | currency | string | да | "RUB" | совпадает с валютой заказа |
 | reason_code | enum | да | "damaged_goods" | из справочника причин |
-| idempotency_key | string | да | "refund-ORD-2026-88412-1" | уникален на попытку |
+| idempotency_key | string | да | "refund-ORD-2026-88412-1" | стабилен для одной логической операции, сохраняется до отправки |
 
 ## Схема выхода
 {"transaction_id": "TRX-...", "status": "completed|pending",
