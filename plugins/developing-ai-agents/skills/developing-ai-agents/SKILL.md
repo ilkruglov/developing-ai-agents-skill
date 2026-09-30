@@ -100,7 +100,7 @@ description: Use when designing, implementing, reviewing, debugging, or evaluati
 
 Тесты надёжности покрывают: повторную и внеочередную доставку события, поздний успех после таймаута, аварийную остановку с последующим возобновлением, отмену до и после фиксации побочного эффекта.
 
-Подробно: [chapters/ch05](references/chapters/ch05-coding-agents.md). Источники: `references/source-book/chapter5.md:174`, `references/source-book/chapter6.md:31`.
+Подробно: [chapters/ch05](references/chapters/ch05-coding-agents.md). Источники: `references/source-book/chapter5.md:181`, `references/source-book/chapter6.md:31`.
 
 ## Контекст
 
@@ -127,7 +127,7 @@ description: Use when designing, implementing, reviewing, debugging, or evaluati
 
 Недоверенный контент (веб-страницы, документы, результаты инструментов, записи памяти) остаётся данными: он не размещается там, где живут инструкции, и не влияет на права. Enforcement — вне промпта.
 
-Подробно: [chapters/ch04](references/chapters/ch04-tools.md), [chapters/ch05](references/chapters/ch05-coding-agents.md). Источники: `references/source-book/chapter4.md:9`, `references/source-book/chapter4.md:36`, `references/source-book/chapter4.md:135`, `references/source-book/chapter2.md:732`, `references/source-book/chapter9.md:346`.
+Подробно: [chapters/ch04](references/chapters/ch04-tools.md), [chapters/ch05](references/chapters/ch05-coding-agents.md). Источники: `references/source-book/chapter4.md:11`, `references/source-book/chapter4.md:38`, `references/source-book/chapter4.md:137`, `references/source-book/chapter2.md:732`, `references/source-book/chapter9.md:356`.
 
 ## Память и самоулучшение
 
@@ -143,7 +143,7 @@ description: Use when designing, implementing, reviewing, debugging, or evaluati
 
 Не превращай сырой лог или единичную неудачу в правило. Проводи цепочку `episode → extraction → candidate → review/eval → promotion` и храни origin, supporting episodes, confidence, version, scope и rollback. Предпочитай локальные патчи правил полному переписыванию промпта. Запись в память проходит ту же проверку доверия, что и внешний ввод, иначе инъекция переживёт сессию; агент не меняет корень доверия, который утверждает его собственные обновления.
 
-Подробно: [chapters/ch03](references/chapters/ch03-memory-and-knowledge.md), [chapters/ch09](references/chapters/ch09-continual-evolution.md), [chapters/ch08](references/chapters/ch08-post-training.md). Источники: `references/source-book/chapter3.md:47`, `references/source-book/chapter9.md:58`, `references/source-book/chapter9.md:260`, `references/source-book/chapter9.md:346`, `references/source-book/chapter8.md:387`.
+Подробно: [chapters/ch03](references/chapters/ch03-memory-and-knowledge.md), [chapters/ch09](references/chapters/ch09-continual-evolution.md), [chapters/ch08](references/chapters/ch08-post-training.md). Источники: `references/source-book/chapter3.md:47`, `references/source-book/chapter9.md:58`, `references/source-book/chapter9.md:270`, `references/source-book/chapter9.md:356`, `references/source-book/chapter8.md:458`.
 
 ## Построй eval-loop до оптимизации
 
@@ -157,7 +157,7 @@ description: Use when designing, implementing, reviewing, debugging, or evaluati
 
 Если данных ещё нет, дай instrumentation plan и эксперимент; не заявляй улучшение заранее.
 
-Подробно: [chapters/ch07](references/chapters/ch07-evaluation.md). Источники: `references/source-book/chapter7.md:165`, `references/source-book/chapter7.md:132`, `references/source-book/chapter7.md:675`, `references/source-book/chapter7.md:721`.
+Подробно: [chapters/ch07](references/chapters/ch07-evaluation.md). Источники: `references/source-book/chapter7.md:169`, `references/source-book/chapter7.md:136`, `references/source-book/chapter7.md:716`, `references/source-book/chapter7.md:766`.
 
 ## Realtime и multi-agent
 
@@ -175,7 +175,7 @@ Race-тесты обязательны и покрывают: перебиван
 
 В сравнении single-agent и multi-agent отдельно проверяй каскадные ошибки: внедри правдоподобное неверное upstream evidence и измерь `false_accept`, `cascade_depth` и итоговый вред. `handoff failure` эту проверку не заменяет.
 
-Подробно: [chapters/ch06](references/chapters/ch06-interaction.md), [chapters/ch10](references/chapters/ch10-multi-agent.md). Источники: `references/source-book/chapter6.md:315`, `references/source-book/chapter6.md:418`, `references/source-book/chapter10.md:13`, `references/source-book/chapter10.md:525`.
+Подробно: [chapters/ch06](references/chapters/ch06-interaction.md), [chapters/ch10](references/chapters/ch10-multi-agent.md). Источники: `references/source-book/chapter6.md:323`, `references/source-book/chapter6.md:429`, `references/source-book/chapter10.md:13`, `references/source-book/chapter10.md:579`.
 
 ## Формат результата
 

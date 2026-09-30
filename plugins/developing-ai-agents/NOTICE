@@ -10,7 +10,10 @@ Original source commit: c3352738f4b6fe42fe34e3cf6a79bcb424a133b8
 
 Русский перевод: community edition
 Репозиторий перевода: https://github.com/ilkruglov/ai-agent-book
-Translation source commit: 994acb6e275d546674f109b2a5f50c2bc5f63773
+Translation source commit: e10bb46b19710153a4a5a19630bcefdfe983723c
+Русское издание содержит помеченные редакционные уточнения: отступления
+от текста автора отмечены строкой «Уточнение русского издания» с исходной
+формулировкой автора и источником.
 
 Изменения включают структурирование книжных принципов как Agent Skill,
 инженерные конспекты, локальные source anchors, eval-наборы, benchmark и

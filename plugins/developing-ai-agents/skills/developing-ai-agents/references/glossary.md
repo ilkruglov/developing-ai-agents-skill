@@ -88,7 +88,7 @@
 
 **Экстернализация** — перенос знания или процедуры из скрытого/временного состояния модели в проверяемый внешний носитель.
 
-Источники терминов: `references/source-book/chapter1.md:13`, `references/source-book/chapter1.md:266`, `references/source-book/chapter2.md:437`, `references/source-book/chapter2.md:767`, `references/source-book/chapter3.md:247`, `references/source-book/chapter7.md:307`, `references/source-book/chapter9.md:58`, `references/source-book/chapter6.md:315`, `references/source-book/chapter10.md:13`.
+Источники терминов: `references/source-book/chapter1.md:13`, `references/source-book/chapter1.md:266`, `references/source-book/chapter2.md:437`, `references/source-book/chapter2.md:767`, `references/source-book/chapter3.md:247`, `references/source-book/chapter7.md:331`, `references/source-book/chapter9.md:58`, `references/source-book/chapter6.md:323`, `references/source-book/chapter10.md:13`.
 
 **False accept** — доля случаев, когда проверяющая роль приняла заведомо неверное утверждение. Основная метрика качества независимой проверки: высокий показатель означает, что проверка формальна.
 

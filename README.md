@@ -140,6 +140,9 @@ claude plugin validate . --strict
 - Оригинал: [bojieli/ai-agent-book](https://github.com/bojieli/ai-agent-book).
 - Русский перевод: [ilkruglov/ai-agent-book](https://github.com/ilkruglov/ai-agent-book),
   «Русский перевод: community edition».
+  Русское издание содержит помеченные редакционные уточнения: отступления от
+  текста автора отмечены строкой «Уточнение русского издания» с исходной
+  формулировкой автора и источником.
 
 Версии исходных материалов — в [`SOURCE.json`](SOURCE.json), уведомление об
 авторстве — в [`NOTICE`](NOTICE). Лицензия Apache 2.0, см.

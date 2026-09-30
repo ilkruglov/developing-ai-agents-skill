@@ -97,7 +97,7 @@ state_n + context projection
 
 **Проверка:** принудительно остановить run на нескольких этапах; восстановить его в новом процессе; сравнить итог и соблюдение constraints с непрерывным baseline.
 
-Источники: `references/source-book/chapter2.md:860`, `references/source-book/chapter5.md:60`, `references/source-book/chapter5.md:174`, `references/source-book/chapter9.md:290`.
+Источники: `references/source-book/chapter2.md:860`, `references/source-book/chapter5.md:65`, `references/source-book/chapter5.md:181`, `references/source-book/chapter9.md:300`.
 
 ## 4. Progressive Context Reduction
 
@@ -147,7 +147,7 @@ model intent -> schema -> policy -> approval? -> sandboxed executor
 
 **Проверка:** prompt injection, path/scope escape, secret exfiltration, network egress, duplicate request, timeout, partial side effect, forged tool result.
 
-Источники: `references/source-book/chapter1.md:469`, `references/source-book/chapter4.md:36`, `references/source-book/chapter4.md:272`, `references/source-book/chapter6.md:103`, `references/source-book/chapter9.md:346`.
+Источники: `references/source-book/chapter1.md:469`, `references/source-book/chapter4.md:38`, `references/source-book/chapter4.md:282`, `references/source-book/chapter6.md:105`, `references/source-book/chapter9.md:356`.
 
 ## 6. Tool/Skill/Knowledge Carrier Selection
 
@@ -169,7 +169,7 @@ model intent -> schema -> policy -> approval? -> sandboxed executor
 
 **Проверка:** carrier должен иметь schema/version/provenance, isolated test и lifecycle удаления/rollback.
 
-Источники: `references/source-book/chapter3.md:92`, `references/source-book/chapter4.md:40`, `references/source-book/chapter9.md:99`, `references/source-book/chapter9.md:260`.
+Источники: `references/source-book/chapter3.md:92`, `references/source-book/chapter4.md:42`, `references/source-book/chapter9.md:99`, `references/source-book/chapter9.md:270`.
 
 ## 7. Evidence-Gated Self-Improvement
 
@@ -195,7 +195,7 @@ Candidate имеет `candidate_id`, type, version, source episodes, scope, expi
 
 **Проверка:** hidden holdout, temporal split, poisoned episodes, conflicting experiences, stale tool version, deletion request и transitive rollback всех derived artifacts.
 
-Источники: `references/source-book/chapter9.md:58`, `references/source-book/chapter9.md:77`, `references/source-book/chapter9.md:21`, `references/source-book/chapter9.md:356`, `references/source-book/chapter9.md:99`, `references/source-book/chapter9.md:260`, `references/source-book/chapter9.md:346`.
+Источники: `references/source-book/chapter9.md:58`, `references/source-book/chapter9.md:77`, `references/source-book/chapter9.md:21`, `references/source-book/chapter9.md:366`, `references/source-book/chapter9.md:99`, `references/source-book/chapter9.md:270`, `references/source-book/chapter9.md:356`.
 
 ## 8. Evaluation Flywheel
 
@@ -225,7 +225,7 @@ production traces -> taxonomy -> representative tasks
 
 **Проверка:** reproduce baseline; force one known failure; ensure metric detects it; test rollback before release.
 
-Источники: `references/source-book/chapter7.md:165`, `references/source-book/chapter7.md:206`, `references/source-book/chapter7.md:132`, `references/source-book/chapter7.md:675`, `references/source-book/chapter7.md:721`, `references/source-book/chapter7.md:784`.
+Источники: `references/source-book/chapter7.md:169`, `references/source-book/chapter7.md:212`, `references/source-book/chapter7.md:136`, `references/source-book/chapter7.md:716`, `references/source-book/chapter7.md:766`, `references/source-book/chapter7.md:831`.
 
 ## 9. Proposer–Verifier with Independent Evidence
 
@@ -243,7 +243,7 @@ Proposer отдаёт claim + artifact + evidence pointers. Verifier получ�
 
 **Проверка:** inject plausible wrong proposal; verifier обязан обнаружить его по source/test. Измерь correlated error rate и false accept.
 
-Источники: `references/source-book/chapter4.md:272`, `references/source-book/chapter7.md:291`, `references/source-book/chapter10.md:48`, `references/source-book/chapter10.md:196`.
+Источники: `references/source-book/chapter4.md:282`, `references/source-book/chapter7.md:307`, `references/source-book/chapter10.md:48`, `references/source-book/chapter10.md:222`.
 
 ## 10. Manager + Isolated Workers
 
@@ -261,7 +261,7 @@ Manager создаёт contract: objective, allowed scope, inputs, expected arti
 
 **Проверка:** lost worker, duplicate completion, stale handoff, conflicting writes, wrong manager synthesis и cascading error.
 
-Источники: `references/source-book/chapter2.md:1092`, `references/source-book/chapter10.md:104`, `references/source-book/chapter10.md:135`, `references/source-book/chapter10.md:168`, `references/source-book/chapter10.md:286`, `references/source-book/chapter10.md:525`.
+Источники: `references/source-book/chapter2.md:1092`, `references/source-book/chapter10.md:114`, `references/source-book/chapter10.md:149`, `references/source-book/chapter10.md:186`, `references/source-book/chapter10.md:322`, `references/source-book/chapter10.md:579`.
 
 ## 11. Fast/Slow Realtime Loop
 
@@ -285,7 +285,7 @@ Cancellation разделяй:
 
 **Проверка:** partial ASR correction, пользователь перебил до/после tool call, slow result пришёл после нового turn, TTS уже начал воспроизведение, сеть потеряна в середине stream.
 
-Источники: `references/source-book/chapter6.md:315`, `references/source-book/chapter6.md:360`, `references/source-book/chapter6.md:406`, `references/source-book/chapter6.md:418`, `references/source-book/chapter6.md:440`.
+Источники: `references/source-book/chapter6.md:323`, `references/source-book/chapter6.md:368`, `references/source-book/chapter6.md:417`, `references/source-book/chapter6.md:429`, `references/source-book/chapter6.md:453`.
 
 ## 12. Source-Grounded Recommendation
 
@@ -328,7 +328,7 @@ Cancellation разделяй:
 
 **Проверка:** запросы с точными кодами и с перефразировкой; документ, разорванный разбиением; отсутствие ответа в базе; конфликтующие версии документа; попытка инъекции через содержимое проиндексированного документа.
 
-Источники: `references/source-book/chapter3.md:247`, `references/source-book/chapter3.md:389`, `references/source-book/chapter3.md:546`, `references/source-book/chapter3.md:598`.
+Источники: `references/source-book/chapter3.md:247`, `references/source-book/chapter3.md:389`, `references/source-book/chapter3.md:548`, `references/source-book/chapter3.md:600`.
 
 ## 14. Sessionless Resumable Worker
 
@@ -349,7 +349,7 @@ Cancellation разделяй:
 
 **Проверка:** остановка процесса на каждом этапе с последующим возобновлением; расхождение записи и фактического состояния; повторная доставка одного и того же сообщения; параллельный запуск двух исполнителей на одном перечне.
 
-Источники: `references/source-book/chapter5.md:60`, `references/source-book/chapter9.md:290`.
+Источники: `references/source-book/chapter5.md:65`, `references/source-book/chapter9.md:300`.
 
 ## 15. Post-Training Decision Gate
 
@@ -378,7 +378,7 @@ Cancellation разделяй:
 
 **Проверка:** сравнение с альтернативой на уровне Harness при равном бюджете; устойчивость на состояниях вне демонстраций; доля нарушений ограничений отдельно от доли успеха.
 
-Источники: `references/source-book/chapter8.md:28`, `references/source-book/chapter8.md:387`, `references/source-book/chapter8.md:533`, `references/source-book/chapter8.md:647`, `references/source-book/chapter9.md:58`.
+Источники: `references/source-book/chapter8.md:31`, `references/source-book/chapter8.md:458`, `references/source-book/chapter8.md:632`, `references/source-book/chapter8.md:772`, `references/source-book/chapter9.md:58`.
 
 ## 16. Untrusted Content Firewall
 
@@ -406,4 +406,4 @@ Cancellation разделяй:
 
 **Проверка:** инъекция в читаемый документ, в результат инструмента и в записываемую память; попытка эскалации прав через содержимое; проверка, что триада разорвана; тест на сохранение вредоносной инструкции между сессиями.
 
-Источники: `references/source-book/chapter2.md:732`, `references/source-book/chapter4.md:272`, `references/source-book/chapter5.md:311`, `references/source-book/chapter9.md:346`.
+Источники: `references/source-book/chapter2.md:732`, `references/source-book/chapter4.md:282`, `references/source-book/chapter5.md:336`, `references/source-book/chapter9.md:356`.

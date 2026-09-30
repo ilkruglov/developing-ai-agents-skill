@@ -97,7 +97,7 @@ approval: required_for_high_risk
 
 Не отдавай агенту секреты «на всякий случай». Не смешивай read и destructive write в одном широком tool. Возвращай причину, `retryable` и remediation вместо неструктурированного stack trace.
 
-Источник: `references/source-book/chapter4.md:9`, `references/source-book/chapter1.md:469`.
+Источник: `references/source-book/chapter4.md:11`, `references/source-book/chapter1.md:469`.
 
 ## 5. Context lifecycle
 
@@ -146,7 +146,7 @@ raw episode
   -> promote or rollback
 ```
 
-Источник: `references/source-book/chapter3.md:17`, `references/source-book/chapter9.md:58`, `references/source-book/chapter9.md:260`.
+Источник: `references/source-book/chapter3.md:17`, `references/source-book/chapter9.md:58`, `references/source-book/chapter9.md:270`.
 
 ## 7. Eval card
 
@@ -175,7 +175,7 @@ rollback: tested version switch
 
 Для LLM-as-a-Judge: слепой порядок вариантов, точная rubric, калибровка на размеченной человеком выборке, проверка position/verbosity bias.
 
-Источник: `references/source-book/chapter7.md:165`, `references/source-book/chapter7.md:132`, `references/source-book/chapter7.md:780`.
+Источник: `references/source-book/chapter7.md:169`, `references/source-book/chapter7.md:136`, `references/source-book/chapter7.md:827`.
 
 ## 8. Realtime voice
 
@@ -187,7 +187,7 @@ rollback: tested version switch
 
 Fast path отвечает, подтверждает и поддерживает turn-taking. Slow path получает versioned snapshot и возвращает structured result. Перед публикацией сверяй `turn_id/state_version`; при barge-in отменяй TTS, generation и side-effecting work по отдельным правилам.
 
-Источник: `references/source-book/chapter6.md:315`.
+Источник: `references/source-book/chapter6.md:323`.
 
 ## 9. Multi-agent
 
@@ -203,4 +203,4 @@ Fast path отвечает, подтверждает и поддерживает
 
 Data plane: versioned artifacts/files. Control plane: задачи, сообщения, статусы, отмена. При общей FS нужны ownership, worktree или optimistic lock. Проверяй конфликт записи и каскадное усиление ошибки.
 
-Источник: `references/source-book/chapter10.md:13`, `references/source-book/chapter10.md:104`.
+Источник: `references/source-book/chapter10.md:13`, `references/source-book/chapter10.md:114`.
